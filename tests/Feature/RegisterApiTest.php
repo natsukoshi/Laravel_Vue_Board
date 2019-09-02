@@ -13,23 +13,26 @@ class RegisterApiTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic feature test example.
+     *
      *
      * @return void
      */
-    public function testExample()
+    public function should_ユーザをテーブルに保存できる()
     {
-        $user = new User();
-        $user->name = 'abc';
-        $user->email = 'abc@me.com';
-        $user->password = 'abcdefg123';
+        $data = [
+            'name' => 'vuesplash user',
+            'email' => 'dummy@email.com',
+            'password' => 'test1234',
+            'password_confirmation' => 'test1234',
+        ];
 
-        $savedUser = $user->save();
+        $response = $this->json('POST', route('register'), $data);
 
-        $this->assertTrue($savedUser);
+        $user = User::first();
+        $this->assertEquals($data['name'], $user->name);
 
-        $userInfo = User::where('name', 'abc')->first();
-        var_dump($userInfo);
-
+        $response
+            ->assertStatus(201)
+            ->assertJson(['name' => $user->name]);
     }
 }
