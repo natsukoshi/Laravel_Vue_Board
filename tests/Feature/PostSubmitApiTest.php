@@ -19,6 +19,7 @@ class PostSubmitApiTest extends TestCase
     public function should_APIを使って投稿できる()
     {
         $testMessage = 'test message';
+
         $response = $this
             ->json('POST', route('post.create'),
             [
@@ -30,11 +31,10 @@ class PostSubmitApiTest extends TestCase
         $response->assertStatus(201);
 
         $post = Post::first();
-        var_dump($post);
+        // var_dump($post);
 
         //投稿したメッセージが一致すること
         $this->assertEquals($post->message, $testMessage);
     }
-
 
 }

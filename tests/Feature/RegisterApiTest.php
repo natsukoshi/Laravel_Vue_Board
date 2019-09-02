@@ -15,7 +15,7 @@ class RegisterApiTest extends TestCase
     /**
      *
      *
-     * @return void
+     * @test
      */
     public function should_ユーザをテーブルに保存できる()
     {
