@@ -19,6 +19,11 @@ class RegisterApiTest extends TestCase
      */
     public function should_ユーザをテーブルに保存できる()
     {
+        // ここで処理を止め、テストが未完成であるという印をつけます。
+        $this->markTestIncomplete(
+            'このテストは、まだ実装されていません。'
+        );
+
         $data = [
             'name' => 'vuesplash user',
             'email' => 'dummy@email.com',
