@@ -24,3 +24,6 @@ Route::post('/posts', 'PostController@create')->name('post.create');
 
 // 投稿一覧
 Route::get('/posts', 'PostController@index')->name('post.index');
+
+//ユーザ登録
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
