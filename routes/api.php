@@ -30,3 +30,6 @@ Route::post('/register', 'Auth\RegisterController@register')->name('register');
 
 //ログイン　コントローラーは自前ではない
 Route::post('/login', 'Auth\LoginController@login')->name('login');
+
+//ログアウト　コントローラーは自前ではない
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');

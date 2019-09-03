@@ -45,4 +45,16 @@ class LoginController extends Controller
     {
         return $user;
     }
+
+    // ログアウト後のレスポンス ステータスコード200だけを返す
+    // AuthenticatesUsersトレイトのメソッドの上書き
+    protected function loggedOut(Request $request)
+    {
+        // セッションを再生成する→logoutメソッドで同じことをしているため不要
+        // $request->session()->regenerate();
+
+        // データとしては空で、ステータスコード200だけを返す
+        // (jsonメソッドのデフォルト値が200になっている）
+        return response()->json();
+    }
 }
