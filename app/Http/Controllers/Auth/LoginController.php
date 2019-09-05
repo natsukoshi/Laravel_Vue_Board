@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;  //追加
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -43,6 +44,7 @@ class LoginController extends Controller
     // AuthenticatesUsersトレイトのメソッドの上書き
     protected function authenticated(Request $request, $user)
     {
+        \Log::channel('single')->debug("返り値user：" . $user);
         return $user;
     }
 

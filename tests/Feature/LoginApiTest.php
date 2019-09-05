@@ -33,6 +33,7 @@ class LoginApiTest extends TestCase
         ];
 
         $response = $this->json('POST', route('login'), $loginInfo);
+        var_dump($response->content()); //JSONを取り出す
 
         $response
             ->assertStatus(200)

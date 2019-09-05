@@ -60,7 +60,23 @@ export default {
 
       // トップページに移動する
       this.$router.push("/");
-    }
+    },
+    async login() {
+        console.log(this.loginForm)
+      // authストアのloginアクションを呼び出す
+      await this.$store.dispatch("auth/login", this.loginForm);
+
+      // トップページに移動する
+      this.$router.push("/");
+    },
+    async logout() {
+        console.log('logoutメソッド')
+      // authストアのloginアクションを呼び出す
+      await this.$store.dispatch("auth/logout");
+
+      // トップページに移動する
+      this.$router.push("/");
+    },
   }
 };
 </script>

@@ -35,6 +35,7 @@ import store from './store'
 // ルートコンポーネントをインポートする
 import App from './App.vue'
 
+import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
 
 new Vue({
   el: '#app',
