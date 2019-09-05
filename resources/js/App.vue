@@ -1,9 +1,8 @@
-// ルートコンポーネント
 <template>
     <div>
         <main>
             <div class="container">
-                 <router-view></router-view>
+                  <RouterView />
             </div>
         </main>
     </div>

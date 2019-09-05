@@ -30,6 +30,8 @@ import Vue from 'vue'
 
 // ルーティングの定義をインポートする
 import router from './router'
+// ストアのインデックスをインポートする
+import store from './store'
 // ルートコンポーネントをインポートする
 import App from './App.vue'
 
@@ -37,6 +39,7 @@ import App from './App.vue'
 new Vue({
   el: '#app',
   router, //ルーティング定義の読み込み
+  store, //ストアの使用宣言
   components: { App }, //ルートコンポーネントの使用宣言
   template: '<App />'   //ルートコンポーネントの描画
 })

@@ -1,5 +1,6 @@
 <template>
     <div>
+    <div> User：{{user.name}}</div>
         <div class="postRaw" v-for="post in posts" :key="post.id">
              ID:{{ post.id }}「{{ post.message }}」
         </div>
@@ -17,7 +18,8 @@ export default {
   data () {
     return {
       posts: [],
-      messasgeContent: ''
+      messasgeContent: '',
+      user: '' //仮　削除予定
     }
   },
   methods: {
@@ -37,10 +39,21 @@ export default {
         })
 
         //to-do 投稿エラーだった場合の処理
+
         this.messasgeContent = '';
-
-
         this.fetchPosts();
+    },
+  //仮　削除予定
+    async getUser () {
+        const response = await axios.post('/api/login',{
+            email: 'tanaka@gmail.com',
+            password: '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
+        })
+
+        //to-do 投稿エラーだった場合の処理
+
+        this.user = response.data.user;
+
     }
   },
   watch: {
@@ -50,6 +63,15 @@ export default {
       },
       immediate: true
     }
-  }
+  },
+//   mounted: async function() {
+//       await axios.post('/api/login',{
+//             email: 'tanaka@gmail.com',
+//             password: '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
+//         }).then(function(response){
+//         this.user = response.data.user;
+
+//         }.bind(this))
+//           }
 }
 </script>
