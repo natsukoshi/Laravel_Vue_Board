@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -44,7 +44,7 @@ class LoginController extends Controller
     // AuthenticatesUsersトレイトのメソッドの上書き
     protected function authenticated(Request $request, $user)
     {
-        \Log::channel('single')->debug("返り値user：" . $user);
+        // \Log::channel('single')->debug("返り値user：" . $user);
         return $user;
     }
 

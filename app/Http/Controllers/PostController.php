@@ -15,7 +15,7 @@ class PostController extends Controller
     {
         // 認証が必要
         $this->middleware('auth')
-            ->except(['index']); //指定したメソッドだけ除外
+            ->except(['index', 'user']); //指定したメソッドだけ除外
     }
 
     /**
@@ -53,10 +53,16 @@ class PostController extends Controller
 
     /**
      * ログイン済みのユーザを取得
-     * @return App\User
+     * @return App\User or 空文字
      */
     public function user(){
-        return Auth::user();
+        if(Auth::check()){
+            \Log::channel('single')->debug('ログインしてる');
+            return Auth::user();
+        }else{
+            \Log::channel('single')->debug('ログインしてない');
+            return '';
+        }
     }
 
 
