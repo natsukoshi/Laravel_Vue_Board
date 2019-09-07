@@ -15,7 +15,7 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            // $table->bigIncrements('user_id');
+            $table->unsignedInteger('user_id');
             $table->text('message');
             $table->timestamps();
         });
@@ -30,4 +30,6 @@ class CreatePostsTable extends Migration
     {
         Schema::dropIfExists('posts');
     }
+
+
 }

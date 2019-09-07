@@ -33,3 +33,6 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 
 //ログアウト　コントローラーは自前ではない
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+//ログイン済みユーザの取得
+Route::get('/user', 'PostController@user')->name('user');

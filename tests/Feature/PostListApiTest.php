@@ -25,14 +25,27 @@ class PostListApiTest extends TestCase
         $response = $this->json('GET', route('post.index') );
 
         //DBから直接データを取得
-        $posts = Post::orderBy('CREATED_AT', 'desc')->get();
+        $posts = Post::with(['user'])->orderBy('CREATED_AT', 'desc')->get();
+
+        // foreach($posts as $post){
+        //     var_dump($post->id);
+        //     var_dump($post->message);
+        // }
+         // data項目の期待値
+         $expected_data = $posts->map(function ($post) {
+            return [
+                'id' => $post->id,
+                'message' => $post->message,
+                'user' => [
+                    'name' => $post->user->name,
+                ],
+            ];
+        })
+        ->all();
 
         foreach($posts as $post){
-            var_dump($post->id);
-            var_dump($post->message);
-
+            var_dump('ID:' . $post->id . ' NAME:' . $post->user->name);
         }
-
 
         $response->assertStatus(200)
             // レスポンスJSONのdata項目に含まれる要素が5つであること

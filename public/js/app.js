@@ -1742,12 +1742,19 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1760,21 +1767,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      isLoggedin: false,
-      userName: this.$store.user
+    return {// isLoggedin: false,
+      // userName:  'tanaka'
     };
   },
-  computed: {
-    setUser: function setUser() {
-      if (this.$store.user != null) {
-        this.isLoggedin = true;
-        this.userName = this.$store.user.name;
-      }
-    }
-  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('auth', ['username', 'isLoggedin'])),
   methods: {
     logout: function () {
       var _logout = _asyncToGenerator(
@@ -1993,7 +1994,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -2011,6 +2019,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   //   components: {/* 中略 */},
@@ -2156,15 +2165,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }(),
       immediate: true
     }
-  } //   mounted: async function() {
-  //       await axios.post('/api/login',{
-  //             email: 'tanaka@gmail.com',
-  //             password: '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
-  //         }).then(function(response){
-  //         this.user = response.data.user;
-  //         }.bind(this))
-  //           }
-
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])('auth', ['isLoggedin']))
 });
 
 /***/ }),
@@ -38232,16 +38234,17 @@ var render = function() {
     "header",
     { staticClass: "header" },
     [
-      _vm.isLoggedin === true
+      _vm.isLoggedin
         ? _c("div", [
-            _vm._v(_vm._s(_vm.isLoggedin) + "\n      "),
             _c("button", { on: { click: _vm.logout } }, [_vm._v("Logout")])
           ])
-        : _c("RouterLink", { attrs: { to: "/login" } }, [
-            _vm._v("\n    Login / Register\n  ")
-          ]),
+        : _vm._e(),
       _vm._v(" "),
-      _c("p", [_vm._v("User:" + _vm._s(_vm.userName))])
+      _c("RouterLink", { attrs: { to: "/login" } }, [
+        _vm._v("\n    Login / Register\n  ")
+      ]),
+      _vm._v(" "),
+      _c("p", [_vm._v("User:" + _vm._s(_vm.username))])
     ],
     1
   )
@@ -38496,8 +38499,8 @@ var render = function() {
       _vm._l(_vm.posts, function(post) {
         return _c("div", { key: post.id, staticClass: "postRaw" }, [
           _vm._v(
-            "\n         ID:" +
-              _vm._s(post.id) +
+            "\n         Name:" +
+              _vm._s(post.user.name) +
               "「" +
               _vm._s(post.message) +
               "」\n    "
@@ -38505,40 +38508,42 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _c(
-        "form",
-        {
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.postMessage($event)
-            }
-          }
-        },
-        [
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.messasgeContent,
-                expression: "messasgeContent"
-              }
-            ],
-            domProps: { value: _vm.messasgeContent },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+      _vm.isLoggedin
+        ? _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.postMessage($event)
                 }
-                _vm.messasgeContent = $event.target.value
               }
-            }
-          }),
-          _vm._v(" "),
-          _c("button", [_vm._v("メッセージ送信")])
-        ]
-      )
+            },
+            [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.messasgeContent,
+                    expression: "messasgeContent"
+                  }
+                ],
+                domProps: { value: _vm.messasgeContent },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.messasgeContent = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("button", [_vm._v("メッセージ送信")])
+            ]
+          )
+        : _vm._e()
     ],
     2
   )
@@ -54696,6 +54701,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_4__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -54749,12 +54755,9 @@ new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -54803,17 +54806,15 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-
-
-
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"); // Ajaxリクエストであることを示すヘッダーを付与する
-
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.interceptors.request.use(function (config) {
-  // クッキーからトークンを取り出してヘッダーに添付する
-  config.headers['X-XSRF-TOKEN'] = Object(_util__WEBPACK_IMPORTED_MODULE_0__["getCookieValue"])('XSRF-TOKEN');
-  return config;
-});
+// import { getCookieValue } from './util'
+// window.axios = require('axios')
+// // Ajaxリクエストであることを示すヘッダーを付与する
+// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+// window.axios.interceptors.request.use(config => {
+//   // クッキーからトークンを取り出してヘッダーに添付する
+//   config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
+//   return config
+// })
 
 /***/ }),
 
@@ -55090,7 +55091,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var state = {
   user: null
 };
-var getters = {};
+var getters = {
+  username: function username(state) {
+    return state.user ? state.user.name : '';
+  },
+  isLoggedin: function isLoggedin(state) {
+    return !!state.user;
+  }
+};
 var mutations = {
   // ステートの値を更新する
   // ミューテーションの第一引数はstateで固定
@@ -55229,50 +55237,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);
-
-/***/ }),
-
-/***/ "./resources/js/util.js":
-/*!******************************!*\
-  !*** ./resources/js/util.js ***!
-  \******************************/
-/*! exports provided: getCookieValue */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookieValue", function() { return getCookieValue; });
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-/**
- * クッキーの値を取得する
- * @param {String} searchKey 検索するキー
- * @returns {String} キーに対応する値
- */
-function getCookieValue(searchKey) {
-  if (typeof searchKey === 'undefined') {
-    return '';
-  }
-
-  var val = '';
-  document.cookie.split(';').forEach(function (cookie) {
-    var _cookie$split = cookie.split('='),
-        _cookie$split2 = _slicedToArray(_cookie$split, 2),
-        key = _cookie$split2[0],
-        value = _cookie$split2[1];
-
-    if (key === searchKey) {
-      return val = value;
-    }
-  });
-  return val;
-}
 
 /***/ }),
 

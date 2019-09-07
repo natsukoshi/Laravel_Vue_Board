@@ -1,30 +1,36 @@
 <template>
   <header class="header">
-    <div v-if="isLoggedin === true">{{isLoggedin}}
+    <div v-if="isLoggedin">
         <button @click="logout">Logout</button>
     </div>
-    <RouterLink to="/login" v-else>
+    <RouterLink to="/login">
       Login / Register
     </RouterLink>
-    <p>User:{{userName}}</p>
+
+    <p >User:{{ username }}</p>
   </header>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            isLoggedin: false,
-            userName:  this.$store.user
+            // isLoggedin: false,
+            // userName:  'tanaka'
         }
     },
     computed: {
-    setUser () {
-        if(this.$store.user != null){
-            this.isLoggedin = true;
-            this.userName = this.$store.user.name;
-        }
-    }
+        ...mapGetters('auth', [
+            'username',
+            'isLoggedin'
+        ])
+        // username () {
+        //     return this.$store.getters['auth/username']
+        // },
+        // isLoggedin() {
+        //     return this.$sotre.getters['auth/isLoggedin']
+        // }
   },
   methods: {
     async logout () {

@@ -5,7 +5,10 @@ const state = {
     user: null
 }
 
-const getters = {}
+const getters = {
+    username: state => state.user ? state.user.name : '',
+    isLoggedin: state => !! state.user,
+}
 
 const mutations = {
     // ステートの値を更新する

@@ -2,9 +2,9 @@
     <div>
     <div> User：{{user.name}}</div>
         <div class="postRaw" v-for="post in posts" :key="post.id">
-             ID:{{ post.id }}「{{ post.message }}」
+             Name:{{ post.user.name }}「{{ post.message }}」
         </div>
-        <form @submit.prevent="postMessage">
+        <form @submit.prevent="postMessage" v-if="isLoggedin">
             <textarea v-model="messasgeContent"></textarea>
             <button>メッセージ送信</button>
         </form>
@@ -12,6 +12,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex'
 
 export default {
 //   components: {/* 中略 */},
@@ -64,14 +65,10 @@ export default {
       immediate: true
     }
   },
-//   mounted: async function() {
-//       await axios.post('/api/login',{
-//             email: 'tanaka@gmail.com',
-//             password: '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
-//         }).then(function(response){
-//         this.user = response.data.user;
-
-//         }.bind(this))
-//           }
+  computed: {
+    ...mapGetters('auth', [
+        'isLoggedin'
+    ])
+  },
 }
 </script>
