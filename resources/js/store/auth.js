@@ -36,6 +36,14 @@ const actions = {
     async logout (context) {
         const response = await axios.post('/api/logout')
         context.commit('setUser', null)
+    },
+    // ログイン済みのユーザを取得する。（ログイン状態を維持するため）
+    async loggedinUser (context) {
+        //　ログイン済みならユーザ情報を、ログインしていないなら空文字が返る
+        const response = await axios.get('/api/user')
+        //ログインしていなら、state:userの初期値のnullとする
+        const userInfo = response.data !== '' ? response.data : null
+        context.commit('setUser', userInfo)
     }
 }
 

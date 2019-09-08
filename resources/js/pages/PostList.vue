@@ -1,6 +1,5 @@
 <template>
     <div>
-    <div> User：{{user.name}}</div>
         <div class="postRaw" v-for="post in posts" :key="post.id">
              Name:{{ post.user.name }}「{{ post.message }}」
         </div>

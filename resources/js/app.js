@@ -37,10 +37,19 @@ import App from './App.vue'
 
 import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
 
-new Vue({
-  el: '#app',
-  router, //ルーティング定義の読み込み
-  store, //ストアの使用宣言
-  components: { App }, //ルートコンポーネントの使用宣言
-  template: '<App />'   //ルートコンポーネントの描画
-})
+
+
+const createApp = async () => {
+    // インスタンス生成前にログインチェックを行う
+    await store.dispatch('auth/loggedinUser')
+
+    new Vue({
+    el: '#app',
+    router, //ルーティング定義の読み込み
+    store, //ストアの使用宣言
+    components: { App }, //ルートコンポーネントの使用宣言
+    template: '<App />'   //ルートコンポーネントの描画
+    })
+}
+
+createApp()

@@ -53,7 +53,7 @@ class LoginController extends Controller
     protected function loggedOut(Request $request)
     {
         // セッションを再生成する→logoutメソッドで同じことをしているため不要
-        $request->session()->regenerate();
+        // $request->session()->regenerate();
 
         // データとしては空で、ステータスコード200だけを返す
         // (jsonメソッドのデフォルト値が200になっている）

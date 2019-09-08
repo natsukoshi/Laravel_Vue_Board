@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 // });
 
 
-
 // メッセージ投稿
 Route::post('/posts', 'PostController@create')->name('post.create');
 

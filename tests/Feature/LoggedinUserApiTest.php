@@ -43,7 +43,7 @@ class LoggedinUserApiTest extends TestCase
 
         $response = $this->json('GET', route('user'));
 
-        // $response->assertStatus(200);
+        $response->assertStatus(200);
         $this->assertEquals("", $response->content());
     }
 }

@@ -5,6 +5,9 @@ import VueRouter from 'vue-router'
 import PostList from './pages/PostList.vue'
 import Login from './pages/Login.vue'
 
+// ストア
+import store from './store'
+
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 Vue.use(VueRouter)
@@ -17,7 +20,15 @@ const routes = [
   },
   {
     path: '/login',
-    component: Login
+    component: Login,
+    // ログイン済みでloginページにアクセスした場合、indexへリダイレクト(ページコンポーネントを切り替える)
+    beforeEnter (to, from, next) { // ページコンポーネントが切り替わる直前に呼び出される関数
+        if (store.getters['auth/isLoggedin']) {
+          next('/')
+        } else {
+          next()
+        }
+      }
   }
 ]
 
