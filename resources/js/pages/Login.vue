@@ -1,6 +1,14 @@
 <template>
 <div>
   <h1>Login</h1>
+  <div v-if="loginErrors" class="error">
+    <ul v-if="loginErrors.email">
+        <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+    </ul>
+    <ul v-if="loginErrors.password">
+        <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+    </ul>
+  </div>
   <form @submit.prevent="login">
     <label for="login-email">Email</label>
     <input type="text" id="login-email" v-model="loginForm.email">
@@ -38,6 +46,8 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -53,6 +63,12 @@ export default {
       }
     }
   },
+  computed: {
+      ...mapState({
+        apiStatus: state => state.auth.apiStatus,
+        loginErrors: state => state.auth.loginErrorMessages,
+      })
+  },
   methods: {
     async register() {
       // authストアのresigterアクションを呼び出す
@@ -61,22 +77,39 @@ export default {
       // トップページに移動する
       this.$router.push("/");
     },
+
     async login() {
         console.log(this.loginForm)
       // authストアのloginアクションを呼び出す
-      await this.$store.dispatch("auth/login", this.loginForm);
+      console.log('ログイン　アクション呼び出し前')
 
-      // トップページに移動する
-      this.$router.push("/");
+      await this.$store.dispatch("auth/login", this.loginForm);
+      console.log('ログイン　アクション呼び出し完了')
+
+        if (this.apiStatus) {
+        // トップページに移動する <router-link :to="/">と等価
+        this.$router.push("/");
+        }
     },
+
     async logout() {
         console.log('logoutメソッド')
-      // authストアのloginアクションを呼び出す
+      // authストアのloginアクションを呼び出す。
+      //　auth.jsのapiStatusが更新されると、computedのapiStatusも更新される
       await this.$store.dispatch("auth/logout");
 
-      // トップページに移動する
-      this.$router.push("/");
+      if (this.apiStatus) {
+        // トップページに移動する <router-link :to="/">と等価
+        this.$router.push('/')
+      }
     },
+
+    clearError () {
+        // this.$store.commit('auth/setLoginErrorMessages', null)
+    }
+  },
+  created() {
+      this.clearError()
   }
 };
 </script>

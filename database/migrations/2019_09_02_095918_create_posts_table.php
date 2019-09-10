@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id');
             $table->text('message');
+            $table->string('title', 255);
             $table->timestamps();
         });
     }

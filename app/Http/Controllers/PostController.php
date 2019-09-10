@@ -26,6 +26,7 @@ class PostController extends Controller
     public function create(Request $request){
         $post = new Post;
         $post->message = $request->message;
+        $post->title = $request->title;
         // $post->user_id = $request->user_id;
 
         // Auth::user()：現在認証されているユーザの取得
@@ -57,10 +58,10 @@ class PostController extends Controller
      */
     public function user(){
         if(Auth::check()){
-            \Log::channel('single')->debug('ログインしてる');
+            // \Log::channel('single')->debug('ログインしてる');
             return Auth::user();
         }else{
-            \Log::channel('single')->debug('ログインしてない');
+            // \Log::channel('single')->debug('ログインしてない');
             return '';
         }
     }

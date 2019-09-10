@@ -36,6 +36,7 @@ class PostListApiTest extends TestCase
             return [
                 'id' => $post->id,
                 'message' => $post->message,
+                'title' => $post->title,
                 'user' => [
                     'name' => $post->user->name,
                 ],
@@ -43,9 +44,9 @@ class PostListApiTest extends TestCase
         })
         ->all();
 
-        foreach($posts as $post){
-            var_dump('ID:' . $post->id . ' NAME:' . $post->user->name);
-        }
+        // foreach($posts as $post){
+        //     var_dump('ID:' . $post->id . ' NAME:' . $post->user->name);
+        // }
 
         $response->assertStatus(200)
             // レスポンスJSONのdata項目に含まれる要素が5つであること

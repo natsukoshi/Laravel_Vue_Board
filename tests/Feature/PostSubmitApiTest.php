@@ -27,12 +27,14 @@ class PostSubmitApiTest extends TestCase
     public function should_APIを使って投稿できる（ユーザ認証有り）()
     {
         $testMessage = 'test message';
+        $testTitle = "test title";
 
         //　指定したユーザで認証してポスト
         $response = $this->actingAs($this->user)
             ->json('POST', route('post.create'),
             [
                 'message' => $testMessage,
+                'title' => $testTitle
             ]
         );
 
@@ -41,8 +43,9 @@ class PostSubmitApiTest extends TestCase
 
         $post = Post::first();
 
-        //投稿したメッセージが一致すること
+        //投稿したメッセージとタイトルが一致すること
         $this->assertEquals($post->message, $testMessage);
+        $this->assertEquals($post->title, $testTitle);
 
         //投稿者が一致すること
         $this->assertEquals($post->user_id, $this->user->id);

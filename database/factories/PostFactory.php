@@ -14,6 +14,7 @@ $factory->define(App\Post::class, function (Faker $faker) {
         'user_id' => function () {
             return factory(App\User::class)->create()->id;
         },
+        'title' => $faker->asciify('Dammy Title *****'),
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
     ];

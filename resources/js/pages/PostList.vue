@@ -1,20 +1,24 @@
 <template>
     <div>
         <div class="postRaw" v-for="post in posts" :key="post.id">
-             Name:{{ post.user.name }}「{{ post.message }}」
+             Name:{{ post.user.name }} Title:{{ post.title}}<br>
+             {{ post.message }}
         </div>
-        <form @submit.prevent="postMessage" v-if="isLoggedin">
-            <textarea v-model="messasgeContent"></textarea>
-            <button>メッセージ送信</button>
-        </form>
+        <p>
+        <Postform v-on:reloadPosts="fetchPosts" />
+        </p>
     </div>
 </template>
 <script>
 import axios from 'axios';
+import Postform from '../components/Postform.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-//   components: {/* 中略 */},
+    components: {
+    Postform,
+
+  },
   data () {
     return {
       posts: [],
@@ -23,6 +27,7 @@ export default {
     }
   },
   methods: {
+    //投稿を全て取得する
     async fetchPosts () {
       const response = await axios.get('/api/posts');
 
@@ -33,6 +38,7 @@ export default {
 
       this.posts = response.data.data;
     },
+    //フォームのメッセージを投稿する
     async postMessage () {
         const response = await axios.post('/api/posts',{
             message: this.messasgeContent
@@ -43,18 +49,6 @@ export default {
         this.messasgeContent = '';
         this.fetchPosts();
     },
-  //仮　削除予定
-    async getUser () {
-        const response = await axios.post('/api/login',{
-            email: 'tanaka@gmail.com',
-            password: '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
-        })
-
-        //to-do 投稿エラーだった場合の処理
-
-        this.user = response.data.user;
-
-    }
   },
   watch: {
     $route: {
@@ -65,7 +59,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', [
+    //　store/authのステートを取得
+    ...mapGetters('auth', [ //ストア内のパスを指定
         'isLoggedin'
     ])
   },
