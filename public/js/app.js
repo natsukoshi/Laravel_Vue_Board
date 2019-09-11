@@ -1993,20 +1993,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       loginForm: {
-        email: '',
-        password: ''
+        email: "",
+        password: ""
       },
       registerForm: {
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '' // フィールド名＋_confirmationで同じ値かチェックする
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "" // フィールド名＋_confirmationで同じ値かチェックする
 
       }
     };
@@ -2017,6 +2029,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     loginErrors: function loginErrors(state) {
       return state.auth.loginErrorMessages;
+    },
+    registerErrors: function registerErrors(state) {
+      return state.auth.registerErrorMessages;
     }
   })),
   methods: {
@@ -2032,8 +2047,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return this.$store.dispatch("auth/register", this.registerForm);
 
               case 2:
-                // トップページに移動する
-                this.$router.push("/");
+                if (this.apiStatus) {
+                  this.$router.push("/");
+                }
 
               case 3:
               case "end":
@@ -2059,19 +2075,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 0:
                 console.log(this.loginForm); // authストアのloginアクションを呼び出す
 
-                console.log('ログイン　アクション呼び出し前');
-                _context2.next = 4;
+                _context2.next = 3;
                 return this.$store.dispatch("auth/login", this.loginForm);
 
-              case 4:
-                console.log('ログイン　アクション呼び出し完了');
-
+              case 3:
                 if (this.apiStatus) {
                   // トップページに移動する <router-link :to="/">と等価
                   this.$router.push("/");
                 }
 
-              case 6:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -2093,7 +2106,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                console.log('logoutメソッド'); // authストアのloginアクションを呼び出す。
+                console.log("logoutメソッド"); // authストアのloginアクションを呼び出す。
                 //　auth.jsのapiStatusが更新されると、computedのapiStatusも更新される
 
                 _context3.next = 3;
@@ -2102,7 +2115,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 3:
                 if (this.apiStatus) {
                   // トップページに移動する <router-link :to="/">と等価
-                  this.$router.push('/');
+                  this.$router.push("/");
                 }
 
               case 4:
@@ -2119,7 +2132,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return logout;
     }(),
-    clearError: function clearError() {// this.$store.commit('auth/setLoginErrorMessages', null)
+    clearError: function clearError() {
+      this.$store.commit("auth/setLoginErrorMessages", null);
     }
   },
   created: function created() {
@@ -38560,6 +38574,8 @@ var render = function() {
           }
         }),
         _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
         _c("label", { attrs: { for: "login-password" } }, [_vm._v("Password")]),
         _vm._v(" "),
         _c("input", {
@@ -38583,15 +38599,39 @@ var render = function() {
           }
         }),
         _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
         _c("button", { attrs: { type: "submit" } }, [_vm._v("Login")])
       ]
     ),
     _vm._v(" "),
-    _c("p", [_vm._v("Email:" + _vm._s(_vm.loginForm.email))]),
-    _vm._v(" "),
     _c("p", [_vm._v("Password:" + _vm._s(_vm.loginForm.password))]),
     _vm._v(" "),
     _c("h1", [_vm._v("Register")]),
+    _vm._v(" "),
+    _vm.registerErrors
+      ? _c("div", { staticClass: "error" }, [
+          _vm.registerErrors.email
+            ? _c(
+                "ul",
+                _vm._l(_vm.registerErrors.email, function(msg) {
+                  return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+                }),
+                0
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.registerErrors.password
+            ? _c(
+                "ul",
+                _vm._l(_vm.registerErrors.password, function(msg) {
+                  return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+                }),
+                0
+              )
+            : _vm._e()
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c(
       "form",
@@ -38715,8 +38755,6 @@ var render = function() {
         _c("button", { attrs: { type: "submit" } }, [_vm._v("Register")])
       ]
     ),
-    _vm._v(" "),
-    _c("p", [_vm._v("Email:" + _vm._s(_vm.registerForm.email))]),
     _vm._v(" "),
     _c("p", [_vm._v("Password:" + _vm._s(_vm.registerForm.password))])
   ])
@@ -55486,7 +55524,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var state = {
   user: null,
   apiStatus: null,
-  loginErrorMessages: null
+  loginErrorMessages: null,
+  registerErrorMessages: null
 };
 var getters = {
   username: function username(state) {
@@ -55505,8 +55544,11 @@ var mutations = {
   setApiStatus: function setApiStatus(state, status) {
     state.apiStatus = status;
   },
-  setloginErrorMessages: function setloginErrorMessages(state, messsages) {
+  setLoginErrorMessages: function setLoginErrorMessages(state, messsages) {
     state.loginErrorMessages = messsages;
+  },
+  setRegisterErrorMessages: function setRegisterErrorMessages(state, messsages) {
+    state.registerErrorMessages = messsages;
   }
 };
 var actions = {
@@ -55540,12 +55582,19 @@ var actions = {
               return _context.abrupt("return", false);
 
             case 9:
-              context.commit('setApiStatus', false); // あるストアモジュールから別のモジュール(グローバル名前空間)のミューテーションを
-              // commit する場合は第三引数に { root: true } を追加します。
+              context.commit('setApiStatus', false);
 
-              context.commit('error/setStatusCode', response.status, {
-                root: true
-              });
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_2__["UNPROCESSABLE_ENTITY"]) {
+                console.log('エラーの場合の処理:' + response.status);
+                context.commit('setRegisterErrorMessages', response.data.errors);
+                console.log(response.data.errors);
+              } else {
+                // あるストアモジュールから別のモジュール(グローバル名前空間)のミューテーションを
+                // commit する場合は第三引数に { root: true } を追加します。
+                context.commit('error/setStatusCode', response.status, {
+                  root: true
+                });
+              }
 
             case 11:
             case "end":
@@ -55571,20 +55620,17 @@ var actions = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              console.log('ログイン　アクション実行中');
               context.commit('setApiStatus', null);
-              _context2.next = 4;
+              _context2.next = 3;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/login', data)["catch"](function (err) {
                 return err.response || err;
               });
 
-            case 4:
+            case 3:
               response = _context2.sent;
-              //.catch( function(err) { return ( err.response || err) } )
-              console.log('ログイン　API　POST後');
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
-                _context2.next = 10;
+                _context2.next = 8;
                 break;
               }
 
@@ -55592,12 +55638,12 @@ var actions = {
               context.commit('setUser', response.data);
               return _context2.abrupt("return", false);
 
-            case 10:
+            case 8:
               context.commit('setApiStatus', false);
 
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_2__["UNPROCESSABLE_ENTITY"]) {
                 console.log('エラーの場合の処理:' + response.status);
-                context.commit('setloginErrorMessages', response.data.errors);
+                context.commit('setLoginErrorMessages', response.data.errors);
                 console.log(response.data.errors);
               } else {
                 context.commit('error/setStatusCode', response.status, {
@@ -55605,7 +55651,7 @@ var actions = {
                 });
               }
 
-            case 12:
+            case 10:
             case "end":
               return _context2.stop();
           }
