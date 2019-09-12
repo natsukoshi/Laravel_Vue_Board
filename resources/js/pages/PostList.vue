@@ -1,12 +1,19 @@
 <template>
     <div>
-        <div class="postRaw" v-for="post in posts" :key="post.id">
-             Name:{{ post.user.name }} Title:{{ post.title}}<br>
-             {{ post.message }}
-        </div>
         <p>
         <Postform v-on:reloadPosts="fetchPosts" />
         </p>
+        <div class="postRaw" v-for="post in posts" :key="post.id">
+             Name:{{ post.user.name }}<br>
+             <router-link to="{name:'post',params:{id: ${post.id}} }">Title:{{ post.title}}</router-link> <br>
+             <router-link to="{name:'post', params:{id:this.num} }">Title:{{ post.title}}</router-link> <br>
+             <router-link to="post/6">Title:{{ post.title}}</router-link> <br>
+             <router-link to="`post/${ post.id }`">Title:{{ post.title}}</router-link> <br>
+             <router-link v-bind:to="`post/${ post.id }`">Title:{{ post.title}}</router-link> <br>
+
+             {{ post.message }}
+             {{ `post/${ post.id }` }}
+        </div>
     </div>
 </template>
 <script>
@@ -23,7 +30,8 @@ export default {
     return {
       posts: [],
       messasgeContent: '',
-      user: '' //仮　削除予定
+      user: '', //仮　削除予定
+      num: 6,
     }
   },
   methods: {

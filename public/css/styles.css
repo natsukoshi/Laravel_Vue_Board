@@ -1,11 +1,83 @@
+body{
+    font-family: "Hiragino Kaku Gothic ProN", YuGothic, "Yu Gothic", Verdana, Meiryo, sans-serif;
+}
+.container{
+    margin-top: 20px;
+}
+
 .postRaw {
     font-size: 16px;
-    width: 300px;
+    width: 600px;
     /* height: 30px; */
     margin: auto;
-    border-bottom: solid 2px rgb(255, 255, 255);
-    background-color: rgb(198, 232, 255);
+    /* border-bottom: solid 1px rgb(255, 255, 255); */
+    /* background-color: rgb(198, 232, 255); */
+    padding: 0.5em 1em;
+    margin: 0.5em 0;
+    font-weight: bold;
+    color: #6091d3;/*文字色*/
+    background: #FFF;
+    border: solid 2px #6091d3;/*線*/
+    border-radius: 5px;/*角の丸み*/
 }
 .error {
     color: rgb(219, 76, 76);
+}
+.header{
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    height: 56px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #6091d3;
+    color: #FFF;
+    box-shadow: 2px 2px 3px 1px rgb(143, 143, 143);
+    -moz-box-shadow: 2px 2px 3px 1px rgb(143, 143, 143);
+    -webkit-box-shadow: 2px 2px 3px 1px rgb(143, 143, 143);
+}
+.header > .login-logout > a{
+    color: #FFF;
+}
+.login-logout{
+    text-align: right;
+    border-style: none;
+    background-color: #6091d3;
+    color: #FFF;
+    display: block;
+    margin: 0 0 0 auto;
+}
+.login-logout:hover{
+    opacity: 0.8;
+    border-style: none;
+}
+.username{
+    text-align: left;
+}
+
+
+.post_form {
+    position: relative;
+	width: 80%;
+    /* margin: 10px 3%; */
+    margin: 30px auto 50px auto;
+    font-size: 18px;
+}
+
+.post_form input, textarea {
+	font: 15px/24px sans-serif;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 8px 0;
+	padding: 0.3em;
+	transition: 0.3s;
+	border: 1px solid #1b2538;
+	border-radius: 4px;
+	outline: none;
+}
+
+.post_form input:focus, textarea:focus {
+    /* border-color: #da3c41; */
+    border: 1.5px solid #da3c41;
 }

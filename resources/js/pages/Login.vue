@@ -118,6 +118,8 @@ export default {
 
     clearError() {
       this.$store.commit("auth/setLoginErrorMessages", null);
+      this.$store.commit("auth/setRegisterErrorMessages", null);
+
     }
   },
   created() {

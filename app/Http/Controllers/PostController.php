@@ -15,7 +15,7 @@ class PostController extends Controller
     {
         // 認証が必要
         $this->middleware('auth')
-            ->except(['index', 'user']); //指定したメソッドだけ除外
+            ->except(['index', 'user', 'detaile']); //指定したメソッドだけ除外
     }
 
     /**
@@ -24,6 +24,14 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request){
+
+        $validateRule = [
+            'message' => 'required',
+            'title' => 'required | max:255',
+        ];
+
+        $this->validate($request, $validateRule);
+
         $post = new Post;
         $post->message = $request->message;
         $post->title = $request->title;
@@ -65,6 +73,20 @@ class PostController extends Controller
             return '';
         }
     }
+
+    /**
+     * 指定されたIDの投稿の詳細（投稿と返信）を取得します
+     * @return App\Post or 404エラー
+     */
+    public function detaile(string $id){
+        $post = Post::where('id', $id)->with(['user'])->first();
+
+        // ??　はNULL合体演算子　前半の式が存在するときその式を、存在しないときは後半の式を返す
+        return $post ?? abort(404);
+    }
+
+
+
 
 
 }

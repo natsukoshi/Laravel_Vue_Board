@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import PostList from './pages/PostList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/Error.vue'
+import PostDetaile from './pages/PostDetaile.vue'
 
 // ストア
 import store from './store'
@@ -34,6 +35,11 @@ const routes = [
   {//システムエラーページ
     path: '/500',
     component: SystemError
+  },
+   {//投稿の詳細ページ
+    path: '/post/:id',
+    name: 'post',
+    component: PostDetaile,
   },
 
 ]
