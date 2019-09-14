@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Post;
+use App\Reply;
 use App\User;
 
 class PostController extends Controller
@@ -79,14 +80,45 @@ class PostController extends Controller
      * @return App\Post or 404エラー
      */
     public function detaile(string $id){
-        $post = Post::where('id', $id)->with(['user'])->first();
+        $post = Post::where('id', $id)->with(['user', 'reply'])->first();
+
+        \Log::channel('single')->debug($post);
+
 
         // ??　はNULL合体演算子　前半の式が存在するときその式を、存在しないときは後半の式を返す
         return $post ?? abort(404);
     }
 
 
+    /**
+     * 返信を投稿
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reply(Request $request){
 
+        $validateRule = [
+            'message' => 'required',
+            'title' => 'required | max:255',
+            'parent_id' => 'required',
+        ];
+
+        $this->validate($request, $validateRule);
+
+        $reply = new Reply;
+        $reply->message = $request->message;
+        $reply->title = $request->title;
+        $reply->parent_id = $request->parent_id;
+        // $post->user_id = $request->user_id;
+
+        // Auth::user()：現在認証されているユーザの取得
+        //    ->posts()：リレーションシップ\Illuminate\Database\Eloquent\Relations\HasManyが返る
+        //      ->save(<Model>)：Attach a model instance to the parent model.
+        Auth::user()->replies()->save($reply);
+
+        // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
+        return response($reply, 201);
+    }
 
 
 }

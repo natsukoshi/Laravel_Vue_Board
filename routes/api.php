@@ -27,6 +27,9 @@ Route::get('/posts', 'PostController@index')->name('post.index');
 //特定の投稿とそれに対する返信を取得
 Route::get('/posts/{id}', 'PostController@detaile')->name('post.detaile');
 
+//特定の投稿に対する返信を投稿
+Route::post('/posts/{id}', 'PostController@reply')->name('post.reply');
+
 //ユーザ登録 コントローラーは自前ではない
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 

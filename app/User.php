@@ -47,4 +47,14 @@ class User extends Authenticatable
         return $this->hasMany('App\Post');
                         // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
     }
+
+    /**
+     * リレーションシップ - repliesテーブル　投稿の投稿者を取得する
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany('App\Reply');
+                        // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
+    }
 }

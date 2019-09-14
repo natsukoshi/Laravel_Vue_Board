@@ -3,10 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Post;
 
-class Post extends Model
+class Reply extends Post
 {
-    /**
+     /**
      * リレーションシップ - usersテーブル　投稿の投稿者を取得する
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
@@ -16,13 +17,15 @@ class Post extends Model
                         // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
     }
 
-    /**
-     * リレーションシップ - replysテーブル　投稿についている返信を取得する
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     /**
+     * リレーションシップ - postsテーブル　返信元の投稿を取得する
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
-    public function reply()
+    public function parentPost()
     {
-        return $this->hasMany('App\Reply', 'parent_id', 'id');
+        return $this->belongsTo('App\Post', 'parent_post_id', 'id');
                         // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
     }
+
+
 }

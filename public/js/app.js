@@ -2214,6 +2214,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -2224,10 +2226,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       posts: [],
-      messasgeContent: '',
-      user: '',
-      //仮　削除予定
-      num: 6
+      messasgeContent: ''
     };
   },
   methods: {
@@ -2243,17 +2242,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 console.log(postID);
                 _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/post/".concat(postID));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts/".concat(postID));
 
               case 3:
                 response = _context.sent;
-                //   if (response.status !== OK) {
+                console.log(response.data); //   if (response.status !== OK) {
                 //     this.$store.commit('error/setCode', response.status)
                 //     return false
                 //   }
-                this.posts = response.data.data;
 
-              case 5:
+                this.posts = response.data;
+
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -2314,7 +2314,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               switch (_context3.prev = _context3.next) {
                 case 0:
                   _context3.next = 2;
-                  return this.fetchPost($route.params.id);
+                  return this.fetchPost(this.$route.params.id);
 
                 case 2:
                 case "end":
@@ -2366,10 +2366,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
 //
 //
 //
@@ -39015,10 +39011,26 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", [_c("Postform")], 1),
-    _vm._v("\n    詳細ページ\n    " + _vm._s(_vm.$route.params.id) + "\n\n")
-  ])
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "postRaw" }, [
+        _vm._v("\n    Title:" + _vm._s(_vm.posts.title)),
+        _c("br"),
+        _vm._v("\n    Name:" + _vm._s(_vm.posts.user.name)),
+        _c("br"),
+        _vm._v("\n    Message:" + _vm._s(_vm.posts.message)),
+        _c("br")
+      ]),
+      _vm._v(" "),
+      _c("h2", [_vm._v("返信フォーム")]),
+      _vm._v(" "),
+      _c("Postform")
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39053,34 +39065,6 @@ var render = function() {
           { key: post.id, staticClass: "postRaw" },
           [
             _vm._v("\n         Name:" + _vm._s(post.user.name)),
-            _c("br"),
-            _vm._v(" "),
-            _c(
-              "router-link",
-              { attrs: { to: "{name:'post',params:{id: ${post.id}} }" } },
-              [_vm._v("Title:" + _vm._s(post.title))]
-            ),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c(
-              "router-link",
-              { attrs: { to: "{name:'post', params:{id:this.num} }" } },
-              [_vm._v("Title:" + _vm._s(post.title))]
-            ),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("router-link", { attrs: { to: "post/6" } }, [
-              _vm._v("Title:" + _vm._s(post.title))
-            ]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("router-link", { attrs: { to: "`post/${ post.id }`" } }, [
-              _vm._v("Title:" + _vm._s(post.title))
-            ]),
-            _vm._v(" "),
             _c("br"),
             _vm._v(" "),
             _c("router-link", { attrs: { to: "post/" + post.id } }, [

@@ -1,11 +1,13 @@
 <template>
     <div>
-    <p>
+        <router-link to="/">Topへ戻る</router-link>
+        <div class="postRaw">
+        Title:{{ posts.title }}<br>
+        Name:{{ posts.user.name }}<br>
+        Message:{{ posts.message }}<br>
+        </div>
+        <h2>返信フォーム</h2>
         <Postform />
-        </p>
-        詳細ページ
-        {{ $route.params.id }}
-
     </div>
 </template>
 
@@ -23,15 +25,14 @@ export default {
     return {
       posts: [],
       messasgeContent: '',
-      user: '', //仮　削除予定
-      num: 6,
     }
   },
   methods: {
     //投稿と返信を取得する
     async fetchPost (postID) {
         console.log(postID)
-      const response = await axios.get(`/api/post/${postID}`);
+      const response = await axios.get(`/api/posts/${postID}`);
+      console.log(response.data)
 
 
     //   if (response.status !== OK) {
@@ -39,7 +40,7 @@ export default {
     //     return false
     //   }
 
-      this.posts = response.data.data;
+      this.posts = response.data;
     },
     //フォームのメッセージを返信として投稿する
     async replyMessage () {
@@ -56,7 +57,7 @@ export default {
   watch: {
     $route: {
       async handler () {
-        await this.fetchPost($route.params.id)
+        await this.fetchPost(this.$route.params.id)
       },
       immediate: true
     }
