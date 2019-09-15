@@ -5,20 +5,34 @@ body{
     margin-top: 20px;
 }
 
-.postRaw {
+/* .postRaw {
     font-size: 16px;
     width: 600px;
-    /* height: 30px; */
     margin: auto;
-    /* border-bottom: solid 1px rgb(255, 255, 255); */
-    /* background-color: rgb(198, 232, 255); */
     padding: 0.5em 1em;
     margin: 0.5em 0;
     font-weight: bold;
-    color: #6091d3;/*文字色*/
+    color: #6091d3;
     background: #FFF;
-    border: solid 2px #6091d3;/*線*/
-    border-radius: 5px;/*角の丸み*/
+    border: solid 2px #6091d3;
+    border-radius: 5px;
+} */
+
+.postRaw {
+   padding: 0.5em 1em;
+    margin: 2em 0;
+    color: #5d627b;
+    background: white;
+    border-top: solid 5px #5d627b;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
+}
+
+.space {
+    white-space: pre-wrap;
+}
+.created_at{
+    font-size: 0.8em;
+    text-align: right;
 }
 .error {
     color: rgb(219, 76, 76);

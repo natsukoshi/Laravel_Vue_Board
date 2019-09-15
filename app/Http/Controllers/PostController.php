@@ -24,8 +24,8 @@ class PostController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request){
-
+    public function create(Request $request)
+    {
         $validateRule = [
             'message' => 'required',
             'title' => 'required | max:255',
@@ -36,7 +36,6 @@ class PostController extends Controller
         $post = new Post;
         $post->message = $request->message;
         $post->title = $request->title;
-        // $post->user_id = $request->user_id;
 
         // Auth::user()：現在認証されているユーザの取得
         //    ->posts()：リレーションシップ\Illuminate\Database\Eloquent\Relations\HasManyが返る
@@ -51,10 +50,10 @@ class PostController extends Controller
      * 投稿一覧取得
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-
+    public function index()
+    {
         $posts = Post::with(['user'])-> //リレーションシップuser＝投稿者情報も合わせて取得
-                orderBy('CREATED_AT', 'desc')->paginate();
+            orderBy('CREATED_AT', 'desc')->paginate();
 
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
         return $posts;
@@ -65,11 +64,12 @@ class PostController extends Controller
      * ログイン済みのユーザを取得
      * @return App\User or 空文字
      */
-    public function user(){
-        if(Auth::check()){
+    public function user()
+    {
+        if (Auth::check()) {
             // \Log::channel('single')->debug('ログインしてる');
             return Auth::user();
-        }else{
+        } else {
             // \Log::channel('single')->debug('ログインしてない');
             return '';
         }
@@ -79,11 +79,11 @@ class PostController extends Controller
      * 指定されたIDの投稿の詳細（投稿と返信）を取得します
      * @return App\Post or 404エラー
      */
-    public function detaile(string $id){
+    public function detaile(string $id)
+    {
         $post = Post::where('id', $id)->with(['user', 'reply'])->first();
 
         \Log::channel('single')->debug($post);
-
 
         // ??　はNULL合体演算子　前半の式が存在するときその式を、存在しないときは後半の式を返す
         return $post ?? abort(404);
@@ -95,20 +95,44 @@ class PostController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function reply(Request $request){
+    public function reply(Request $request, $id)
+    {
+        \Log::channel('single')->debug("reply呼ばれたよ");
+        \Log::channel('single')->debug($request);
+        \Log::channel('single')->debug("id:" . $id);
+        \Log::channel('single')->debug("parentID" . $id);
+
 
         $validateRule = [
             'message' => 'required',
             'title' => 'required | max:255',
-            'parent_id' => 'required',
+            'parentID' => 'required | exists:posts,id',
         ];
 
+        \Log::channel('single')->debug("replyバリデーション前");
+
         $this->validate($request, $validateRule);
+
+        \Log::channel('single')->debug("replyバリデーション後");
 
         $reply = new Reply;
         $reply->message = $request->message;
         $reply->title = $request->title;
-        $reply->parent_id = $request->parent_id;
+        $reply->parent_id = $request->parentID;
+
+        // $this->validate($id, $validateParentPost);
+        // $idの投稿が存在するかのチェック
+        $post = Post::find($id);
+        \Log::channel('single')->debug($post);
+
+        if (is_null($post)) {
+            var_dump('ポストの中身はnullです');
+            return response($reply, 422);
+        }
+
+        // \Log::channel('single')->debug("replyバリデーション後");
+
+
         // $post->user_id = $request->user_id;
 
         // Auth::user()：現在認証されているユーザの取得
@@ -119,6 +143,4 @@ class PostController extends Controller
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
         return response($reply, 201);
     }
-
-
 }

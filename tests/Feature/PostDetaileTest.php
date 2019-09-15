@@ -131,6 +131,38 @@ class PostDetaileTest extends TestCase
     }
 
 
+
+    /**
+     * @test
+     */
+    public function should_APIを使って存在しない投稿に返信したときにエラーの確認()
+    {
+        //テストデータを1つ生成
+        factory(Post::class, 1)->create();
+
+        //ひとつ取得
+        $post = Post::first();
+
+
+        $testMessage = 'test message';
+        $testTitle = "test title";
+
+        //　指定したユーザで認証して存在しないポスト
+        $response = $this->actingAs($this->user)
+                        ->json('POST', route('post.reply', [
+            'id' => 100,
+            'parent_id' => 100,
+            'message'   => $testMessage,
+            'title'   => $testTitle,
+        ] ));
+
+       //レスポンスが201(CREATED)であること
+       $response->assertStatus(422);
+
+       $reply = Reply::first();
+       $this->assertNull($reply);
+    }
+
     /**
      *
      */

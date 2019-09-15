@@ -1882,22 +1882,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      titleContent: '',
-      messasgeContent: '',
-      postErrors: ''
+      titleContent: "",
+      messasgeContent: "",
+      postErrors: ""
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
     apiStatus: function apiStatus(state) {
       return state.auth.apiStatus;
     }
-  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])('auth', ['isLoggedin'])),
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])("auth", ["isLoggedin", "whichPage", "parentPostID"])),
   methods: {
     postMessage: function () {
       var _postMessage = _asyncToGenerator(
@@ -1908,33 +1912,62 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/posts', {
+                console.log(this.whichPage);
+                _context.t0 = this.whichPage;
+                _context.next = _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["POST_PAGE"] ? 4 : _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["REPLY_PAGE"] ? 9 : 14;
+                break;
+
+              case 4:
+                console.log("投稿");
+                _context.next = 7;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", {
                   title: this.titleContent,
                   message: this.messasgeContent
                 })["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 2:
+              case 7:
                 response = _context.sent;
+                return _context.abrupt("break", 14);
+
+              case 9:
+                console.log("返信");
+                _context.next = 12;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.parentPostID), {
+                  title: this.titleContent,
+                  message: this.messasgeContent,
+                  parentID: this.parentPostID
+                })["catch"](function (err) {
+                  return err.response || err;
+                });
+
+              case 12:
+                response = _context.sent;
+                return _context.abrupt("break", 14);
+
+              case 14:
+                console.log("エラー判定前"); //バリデーションエラー
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 6;
+                  _context.next = 19;
                   break;
                 }
 
+                console.log("バリデーションエラー");
                 this.postErrors = response.data.errors;
                 return _context.abrupt("return");
 
-              case 6:
-                //to-do 投稿エラーだった場合の処理
+              case 19:
+                console.log("エラー判定後"); //to-do 投稿エラーだった場合の処理
                 // エラーレスポンスを受け取ったときエラーページへ飛ばす
-                this.titleContent = '';
-                this.messasgeContent = '';
-                this.$emit('reloadPosts');
 
-              case 9:
+                this.titleContent = "";
+                this.messasgeContent = "";
+                console.log("emit前");
+                this.$emit("reloadPosts");
+
+              case 24:
               case "end":
                 return _context.stop();
             }
@@ -2191,6 +2224,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Postform.vue */ "./resources/js/components/Postform.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2216,6 +2250,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2225,8 +2275,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      posts: [],
-      messasgeContent: ''
+      posts: null,
+      messasgeContent: ""
     };
   },
   methods: {
@@ -2234,24 +2284,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     fetchPost: function () {
       var _fetchPost = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(postID) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(postID);
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts/".concat(postID));
+                _context.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts/".concat(this.$route.params.id))["catch"](function (err) {
+                  return err.response || err;
+                });
 
-              case 3:
+              case 2:
                 response = _context.sent;
-                console.log(response.data); //   if (response.status !== OK) {
-                //     this.$store.commit('error/setCode', response.status)
-                //     return false
-                //   }
+
+                // 取得エラー時の処理
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["NOT_FOUND"]) {
+                  this.$router.push("/404");
+                } else if (response.status === INTERNAL_SERVER_ERROR) {
+                  this.$router.push("/500");
+                }
 
                 this.posts = response.data;
+                console.log(this.posts.user.name);
 
               case 6:
               case "end":
@@ -2261,46 +2316,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, this);
       }));
 
-      function fetchPost(_x) {
+      function fetchPost() {
         return _fetchPost.apply(this, arguments);
       }
 
       return fetchPost;
-    }(),
-    //フォームのメッセージを返信として投稿する
-    replyMessage: function () {
-      var _replyMessage = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/post', {
-                  message: this.messasgeContent
-                });
-
-              case 2:
-                response = _context2.sent;
-                //to-do 投稿エラーだった場合の処理
-                this.messasgeContent = '';
-                this.fetchPosts();
-
-              case 5:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function replyMessage() {
-        return _replyMessage.apply(this, arguments);
-      }
-
-      return replyMessage;
     }()
   },
   watch: {
@@ -2308,20 +2328,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context2.prev = _context2.next) {
                 case 0:
-                  _context3.next = 2;
-                  return this.fetchPost(this.$route.params.id);
+                  _context2.next = 2;
+                  return this.$store.dispatch("auth/setParentPostID", this.$route.params.id);
 
                 case 2:
+                  _context2.next = 4;
+                  return this.fetchPost();
+
+                case 4:
+                  console.log("ストアに値をセットした" + this.$route.params.id);
+
+                case 5:
                 case "end":
-                  return _context3.stop();
+                  return _context2.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee2, this);
         }));
 
         function handler() {
@@ -2333,8 +2360,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       immediate: true
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])('auth', [//ストア内のパスを指定
-  'isLoggedin']))
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
+  "isLoggedin"]))
 });
 
 /***/ }),
@@ -2354,6 +2381,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Postform.vue */ "./resources/js/components/Postform.vue");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2380,6 +2408,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+
 
 
 
@@ -2390,10 +2420,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       posts: [],
-      messasgeContent: '',
-      user: '',
-      //仮　削除予定
-      num: 6
+      messasgeContent: ""
     };
   },
   methods: {
@@ -2408,17 +2435,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/posts');
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts");
 
               case 2:
                 response = _context.sent;
+                //to-do 投稿エラーだった場合の処理
                 //   if (response.status !== OK) {
                 //     this.$store.commit('error/setCode', response.status)
                 //     return false
                 //   }
+                console.log("fetchPost呼ばれたよ");
                 this.posts = response.data.data;
 
-              case 4:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -2443,14 +2472,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/posts', {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", {
                   message: this.messasgeContent
                 });
 
               case 2:
                 response = _context2.sent;
                 //to-do 投稿エラーだった場合の処理
-                this.messasgeContent = '';
+                this.messasgeContent = "";
                 this.fetchPosts();
 
               case 5:
@@ -2468,7 +2497,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return postMessage;
     }()
   },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
+  "isLoggedin"])),
   watch: {
+    errorCode: {
+      //算出プロパティerrorCodeに変更があったときに
+      handler: function handler(val) {
+        //呼ばれるコールバック関数。valはerrorCode()によって新しく取得された値（変更後の値）
+        if (val === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
+          this.$router.push("/500");
+        }
+      },
+      immediate: true //インスタンス生成時にも実行する
+
+    },
     $route: {
       handler: function () {
         var _handler = _asyncToGenerator(
@@ -2478,10 +2520,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             while (1) {
               switch (_context3.prev = _context3.next) {
                 case 0:
-                  _context3.next = 2;
+                  console.log("fetchPost呼ぶ前");
+                  _context3.next = 3;
                   return this.fetchPosts();
 
-                case 2:
+                case 3:
+                  this.$store.commit("error/setStatusCode", null);
+
+                case 4:
                 case "end":
                   return _context3.stop();
               }
@@ -2495,11 +2541,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         return handler;
       }(),
-      immediate: true
+      immediate: true // $route () {
+      //      console.log('fetchPost呼ぶ前')
+      //   this.$store.commit('error/setStatusCode', null)
+      // }
+
     }
-  },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])('auth', [//ストア内のパスを指定
-  'isLoggedin']))
+  }
 });
 
 /***/ }),
@@ -38647,7 +38695,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("\n        タイトル："),
+            _vm._v("\n    タイトル：\n    "),
             _c("input", {
               directives: [
                 {
@@ -38668,8 +38716,9 @@ var render = function() {
                 }
               }
             }),
+            _vm._v(" "),
             _c("br"),
-            _vm._v("\n        メッセージ："),
+            _vm._v("メッセージ：\n    "),
             _c("textarea", {
               directives: [
                 {
@@ -38689,6 +38738,7 @@ var render = function() {
                 }
               }
             }),
+            _vm._v(" "),
             _c("br"),
             _vm._v(" "),
             _c("button", [_vm._v("メッセージ送信")])
@@ -38996,6 +39046,39 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Notfound.vue?vue&type=template&id=3757e398&":
+/*!******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/Notfound.vue?vue&type=template&id=3757e398& ***!
+  \******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm._v("\n  お探しのページは見つかりませんでした。\n  "),
+      _c("br"),
+      _vm._v(" "),
+      _c("router-link", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/PostDetaile.vue?vue&type=template&id=b0b4a70a&":
 /*!*********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/PostDetaile.vue?vue&type=template&id=b0b4a70a& ***!
@@ -39016,18 +39099,39 @@ var render = function() {
     [
       _c("router-link", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")]),
       _vm._v(" "),
-      _c("div", { staticClass: "postRaw" }, [
-        _vm._v("\n    Title:" + _vm._s(_vm.posts.title)),
-        _c("br"),
-        _vm._v("\n    Name:" + _vm._s(_vm.posts.user.name)),
-        _c("br"),
-        _vm._v("\n    Message:" + _vm._s(_vm.posts.message)),
-        _c("br")
-      ]),
+      _vm.posts
+        ? _c("div", { staticClass: "postRaw" }, [
+            _vm._v("\n    Title:" + _vm._s(_vm.posts.title) + "\n    "),
+            _c("br"),
+            _vm._v("\n    Name:" + _vm._s(_vm.posts.user.name) + "\n    "),
+            _c("br"),
+            _vm._v("\n    Message:" + _vm._s(_vm.posts.message) + "\n    "),
+            _c("br")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.posts && _vm.posts.reply
+        ? _c(
+            "div",
+            [
+              _c("h2", [_vm._v("返信")]),
+              _vm._v(" "),
+              _vm._l(_vm.posts.reply, function(rep) {
+                return _c("div", { key: rep.id, staticClass: "postRaw" }, [
+                  _vm._v("\n      Title:" + _vm._s(rep.title) + "\n      "),
+                  _c("br"),
+                  _vm._v("\n      Message:" + _vm._s(rep.message) + "\n      "),
+                  _c("br")
+                ])
+              })
+            ],
+            2
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("h2", [_vm._v("返信フォーム")]),
       _vm._v(" "),
-      _c("Postform")
+      _c("Postform", { on: { reloadPosts: _vm.fetchPost } })
     ],
     1
   )
@@ -39064,21 +39168,19 @@ var render = function() {
           "div",
           { key: post.id, staticClass: "postRaw" },
           [
-            _vm._v("\n         Name:" + _vm._s(post.user.name)),
-            _c("br"),
-            _vm._v(" "),
             _c("router-link", { attrs: { to: "post/" + post.id } }, [
               _vm._v("Title:" + _vm._s(post.title))
             ]),
             _vm._v(" "),
             _c("br"),
-            _vm._v(
-              "\n\n         " +
-                _vm._s(post.message) +
-                "\n         " +
-                _vm._s("post/" + post.id) +
-                "\n    "
-            )
+            _vm._v("\n    Name:" + _vm._s(post.user.name) + "\n    "),
+            _c("br"),
+            _vm._v(" "),
+            _c("div", { staticClass: "space" }, [_vm._v(_vm._s(post.message))]),
+            _vm._v(" "),
+            _c("div", { staticClass: "created_at" }, [
+              _vm._v("Time:" + _vm._s(post.created_at))
+            ])
           ],
           1
         )
@@ -55654,6 +55756,59 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/Notfound.vue":
+/*!*****************************************!*\
+  !*** ./resources/js/pages/Notfound.vue ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Notfound_vue_vue_type_template_id_3757e398___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Notfound.vue?vue&type=template&id=3757e398& */ "./resources/js/pages/Notfound.vue?vue&type=template&id=3757e398&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _Notfound_vue_vue_type_template_id_3757e398___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Notfound_vue_vue_type_template_id_3757e398___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/Notfound.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/Notfound.vue?vue&type=template&id=3757e398&":
+/*!************************************************************************!*\
+  !*** ./resources/js/pages/Notfound.vue?vue&type=template&id=3757e398& ***!
+  \************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notfound_vue_vue_type_template_id_3757e398___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Notfound.vue?vue&type=template&id=3757e398& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Notfound.vue?vue&type=template&id=3757e398&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notfound_vue_vue_type_template_id_3757e398___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notfound_vue_vue_type_template_id_3757e398___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/pages/PostDetaile.vue":
 /*!********************************************!*\
   !*** ./resources/js/pages/PostDetaile.vue ***!
@@ -55807,15 +55962,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_PostList_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/PostList.vue */ "./resources/js/pages/PostList.vue");
 /* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/js/pages/Login.vue");
 /* harmony import */ var _pages_Error_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Error.vue */ "./resources/js/pages/Error.vue");
-/* harmony import */ var _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/PostDetaile.vue */ "./resources/js/pages/PostDetaile.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _pages_Notfound_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Notfound.vue */ "./resources/js/pages/Notfound.vue");
+/* harmony import */ var _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/PostDetaile.vue */ "./resources/js/pages/PostDetaile.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
 
  // ページコンポーネントをインポートする
 
 
 
 
+
  // ストア
+
+ //定数
 
  // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
@@ -55824,14 +55984,19 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 
 var routes = [{
   path: '/',
-  component: _pages_PostList_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  component: _pages_PostList_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    // ページコンポーネントが切り替わる直前に呼び出される関数
+    _store__WEBPACK_IMPORTED_MODULE_7__["default"].dispatch("auth/setPage", _util__WEBPACK_IMPORTED_MODULE_8__["POST_PAGE"]);
+    next();
+  }
 }, {
   path: '/login',
   component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
   // ログイン済みでloginページにアクセスした場合、indexへリダイレクト(ページコンポーネントを切り替える)
   beforeEnter: function beforeEnter(to, from, next) {
     // ページコンポーネントが切り替わる直前に呼び出される関数
-    if (_store__WEBPACK_IMPORTED_MODULE_6__["default"].getters['auth/isLoggedin']) {
+    if (_store__WEBPACK_IMPORTED_MODULE_7__["default"].getters['auth/isLoggedin']) {
       next('/');
     } else {
       next();
@@ -55842,10 +56007,20 @@ var routes = [{
   path: '/500',
   component: _pages_Error_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }, {
+  //見つかりませんでしたエラーページ
+  path: '/404',
+  component: _pages_Notfound_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+}, {
   //投稿の詳細ページ
   path: '/post/:id',
   name: 'post',
-  component: _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    // ページコンポーネントが切り替わる直前に呼び出される関数
+    _store__WEBPACK_IMPORTED_MODULE_7__["default"].dispatch("auth/setPage", _util__WEBPACK_IMPORTED_MODULE_8__["REPLY_PAGE"]); // store.dispatch("auth/setParentPostID", id)
+
+    next();
+  }
 }]; // VueRouterインスタンスを作成する
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -55886,7 +56061,9 @@ var state = {
   user: null,
   apiStatus: null,
   loginErrorMessages: null,
-  registerErrorMessages: null
+  registerErrorMessages: null,
+  whichPage: null,
+  parentPostID: 0
 };
 var getters = {
   username: function username(state) {
@@ -55894,6 +56071,12 @@ var getters = {
   },
   isLoggedin: function isLoggedin(state) {
     return !!state.user;
+  },
+  whichPage: function whichPage(state) {
+    return state.whichPage;
+  },
+  parentPostID: function parentPostID(state) {
+    return state.parentPostID;
   }
 };
 var mutations = {
@@ -55910,6 +56093,12 @@ var mutations = {
   },
   setRegisterErrorMessages: function setRegisterErrorMessages(state, messsages) {
     state.registerErrorMessages = messsages;
+  },
+  setPage: function setPage(state, page) {
+    state.whichPage = page;
+  },
+  setParentPostID: function setParentPostID(state, postID) {
+    state.parentPostID = postID;
   }
 };
 var actions = {
@@ -56089,6 +56278,56 @@ var actions = {
     }
 
     return loggedinUser;
+  }(),
+  //現在のページをセットする
+  setPage: function () {
+    var _setPage = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(context, page) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              context.commit('setPage', page);
+
+            case 1:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    function setPage(_x7, _x8) {
+      return _setPage.apply(this, arguments);
+    }
+
+    return setPage;
+  }(),
+  //現在のページのpostIDをセットする
+  setParentPostID: function () {
+    var _setParentPostID = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(context, postID) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              context.commit('setParentPostID', postID);
+
+            case 1:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
+    }));
+
+    function setParentPostID(_x9, _x10) {
+      return _setParentPostID.apply(this, arguments);
+    }
+
+    return setParentPostID;
   }()
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -56163,7 +56402,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
 /*!******************************!*\
   !*** ./resources/js/util.js ***!
   \******************************/
-/*! exports provided: OK, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY, getCookieValue */
+/*! exports provided: OK, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY, NOT_FOUND, POST_PAGE, REPLY_PAGE, getCookieValue */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56172,6 +56411,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATED", function() { return CREATED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INTERNAL_SERVER_ERROR", function() { return INTERNAL_SERVER_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNPROCESSABLE_ENTITY", function() { return UNPROCESSABLE_ENTITY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NOT_FOUND", function() { return NOT_FOUND; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "POST_PAGE", function() { return POST_PAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REPLY_PAGE", function() { return REPLY_PAGE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookieValue", function() { return getCookieValue; });
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -56186,6 +56428,11 @@ var CREATED = 201;
 var INTERNAL_SERVER_ERROR = 500;
 var UNPROCESSABLE_ENTITY = 422; //Laravelではバリデーションエラー時に422を返す
 
+var NOT_FOUND = 404; //404エラー
+//フォーム用定数　どのフォームか判定用
+
+var POST_PAGE = 1;
+var REPLY_PAGE = 2;
 /**
  * クッキーの値を取得する
  * @param {String} searchKey 検索するキー
