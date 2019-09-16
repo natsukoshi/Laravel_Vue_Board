@@ -16,6 +16,9 @@ $factory->define(App\Reply::class, function (Faker $faker) {
         'parent_post_id' => function () {
             return factory(App\Post::class)->create()->id;
         },
+        'attachment_id' => function () {
+            return factory(App\Image::class)->create()->id;
+        },
         'title' => $faker->asciify('Dammy Title *****'),
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),

@@ -1885,6 +1885,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -38740,6 +38741,8 @@ var render = function() {
             }),
             _vm._v(" "),
             _c("br"),
+            _vm._v(" "),
+            _c("input", { attrs: { type: "file", name: "", id: "" } }),
             _vm._v(" "),
             _c("button", [_vm._v("メッセージ送信")])
           ]

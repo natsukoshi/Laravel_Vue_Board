@@ -17,8 +17,10 @@ class CreateReplysTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('parent_id');
+            $table->unsignedInteger('attachment_id')->nullable();
             $table->text('message');
             $table->string('title', 255);
+
             $table->timestamps();
         });
     }

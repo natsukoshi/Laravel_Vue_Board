@@ -14,6 +14,7 @@
       <br />メッセージ：
       <textarea v-model="messasgeContent"></textarea>
       <br />
+      <input type="file" name id />
       <button>メッセージ送信</button>
     </form>
   </div>

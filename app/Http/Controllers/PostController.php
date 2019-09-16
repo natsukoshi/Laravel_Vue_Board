@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\Reply;
 use App\User;
+use App\Image;
 
 class PostController extends Controller
 {
@@ -29,18 +30,37 @@ class PostController extends Controller
         $validateRule = [
             'message' => 'required',
             'title' => 'required | max:255',
+            'img' => 'file|mimes:jpg,jpeg,png,gif'
         ];
 
+
+        //todo エラーメッセージの日本語化　下記メソッドにメッセージを渡す
         $this->validate($request, $validateRule);
+
+        \Log::channel('single')->debug("バリデーション通過");
 
         $post = new Post;
         $post->message = $request->message;
         $post->title = $request->title;
+        $post->attachment_id = null;
+
+        //　todoエラーをキャッチする
+        // img保存,取得したImageモデルのIDを格納
+        if ($request->hasFile('img')) {
+            \Log::channel('single')->debug("ファイル保存する前");
+            $img = new Image;
+            $img->saveImage($request->file('img'));
+            $post->attachment_id = $img->id;
+        }
+
+        \Log::channel('single')->debug("POSTをDB保存する前");
 
         // Auth::user()：現在認証されているユーザの取得
         //    ->posts()：リレーションシップ\Illuminate\Database\Eloquent\Relations\HasManyが返る
         //      ->save(<Model>)：Attach a model instance to the parent model.
         Auth::user()->posts()->save($post);
+        \Log::channel('single')->debug("POSTをDB保存した後");
+
 
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
         return response($post, 201);
@@ -82,6 +102,8 @@ class PostController extends Controller
     public function detaile(string $id)
     {
         $post = Post::where('id', $id)->with(['user', 'reply'])->first();
+        // $post = Post::where('id', $id)->with(['user', 'reply.user'])->first();
+
 
         \Log::channel('single')->debug($post);
 
@@ -98,7 +120,7 @@ class PostController extends Controller
     public function reply(Request $request, $id)
     {
         \Log::channel('single')->debug("reply呼ばれたよ");
-        \Log::channel('single')->debug($request);
+        v\Log::channel('single')->debug($request);
         \Log::channel('single')->debug("id:" . $id);
         \Log::channel('single')->debug("parentID" . $id);
 

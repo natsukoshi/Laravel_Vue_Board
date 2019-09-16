@@ -8,13 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Post;
 use App\User;
-
+use Illuminate\Http\UploadedFile;
 
 class PostSubmitApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
@@ -28,20 +28,24 @@ class PostSubmitApiTest extends TestCase
     {
         $testMessage = 'test message';
         $testTitle = "test title";
+        $testImageFileName = 'image.jpg';
 
         //　指定したユーザで認証してポスト
         $response = $this->actingAs($this->user)
-            ->json('POST', route('post.create'),
-            [
-                'message' => $testMessage,
-                'title' => $testTitle
-            ]
-        );
+            ->json(
+                'POST',
+                route('post.create'),
+                [
+                    'message' => $testMessage,
+                    'title' => $testTitle,
+                    'img' => UploadedFile::fake()->image('image.jpg')
+                ]
+            );
 
         //レスポンスが201(CREATED)であること
         $response->assertStatus(201);
 
-        $post = Post::first();
+        $post = Post::with(['image'])->first();
 
         //投稿したメッセージとタイトルが一致すること
         $this->assertEquals($post->message, $testMessage);
@@ -50,7 +54,9 @@ class PostSubmitApiTest extends TestCase
         //投稿者が一致すること
         $this->assertEquals($post->user_id, $this->user->id);
 
+        //保存されたファイル名のファイルが存在すること
+        $this->assertFileExists(public_path() . "/img/" . $post->image->file_name);
+
         var_dump($post->user->name);
     }
-
 }

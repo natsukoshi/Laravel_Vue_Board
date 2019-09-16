@@ -14,7 +14,7 @@ class PostDetaileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
@@ -37,33 +37,33 @@ class PostDetaileTest extends TestCase
 
         //　指定したユーザで認証してポスト
         $response = $this->actingAs($this->user)
-                        ->json('POST', route('post.reply', [
-            'id' => $post->id,
-            'parent_id' => $post->id,
-            'message'   => $testMessage,
-            'title'   => $testTitle,
-        ] ));
+            ->json('POST', route('post.reply', [
+                'id' => $post->id,
+                'parent_id' => $post->id,
+                'message'   => $testMessage,
+                'title'   => $testTitle,
+            ]));
 
-       //レスポンスが201(CREATED)であること
-       $response->assertStatus(201);
+        //レスポンスが201(CREATED)であること
+        $response->assertStatus(201);
 
-       $reply = Reply::first();
+        $reply = Reply::first();
 
-       //投稿したメッセージとタイトルが一致すること
-       $this->assertEquals($reply->message, $testMessage);
-       $this->assertEquals($reply->title, $testTitle);
+        //投稿したメッセージとタイトルが一致すること
+        $this->assertEquals($reply->message, $testMessage);
+        $this->assertEquals($reply->title, $testTitle);
 
-       //投稿者が一致すること
-       $this->assertEquals($reply->user_id, $this->user->id);
+        //投稿者が一致すること
+        $this->assertEquals($reply->user_id, $this->user->id);
 
-    //    　指定したユーザで認証してポスト　2回め
-       $response = $this->actingAs($this->user)
-        ->json('POST', route('post.reply', [
-            'id' => $post->id,
-            'parent_id' => $post->id,
-            'message'   => $testMessage,
-            'title'   => $testTitle,
-        ] ));
+        //    　指定したユーザで認証してポスト　2回め
+        $response = $this->actingAs($this->user)
+            ->json('POST', route('post.reply', [
+                'id' => $post->id,
+                'parent_id' => $post->id,
+                'message'   => $testMessage,
+                'title'   => $testTitle,
+            ]));
 
         //レスポンスが201(CREATED)であること
         $response->assertStatus(201);
@@ -78,18 +78,18 @@ class PostDetaileTest extends TestCase
         $this->assertEquals($reply->user_id, $this->user->id);
 
 
-       //API経由でIDを指定して投稿を取得
-       $response = $this->json('GET', route('post.detaile', [
+        //API経由でIDを指定して投稿を取得
+        $response = $this->json('GET', route('post.detaile', [
             'id' => $post->id
-        ] ));
+        ]));
 
         // \var_dump($reply);
         // \var_dump($response);
 
         // todo 取得できたデータの構造を確認する
 
-         //取得できたデータを見やすい形式で出力する
-         $response->dump();
+        //取得できたデータを見やすい形式で出力する
+        $response->dump();
 
         $response->assertJsonStructure([
             "id",
@@ -106,7 +106,7 @@ class PostDetaileTest extends TestCase
                 "created_at",
                 "updated_at",
             ],
-                "reply" =>[
+            "reply" => [
                 [
                     "id",
                     "user_id",
@@ -128,6 +128,15 @@ class PostDetaileTest extends TestCase
             ],
         ]);
 
+
+        // $response->assertJsonFragment([
+        //     "reply" =>
+        //     [
+        //         "parent_id" => $post->id,
+        //         "message" => $testMessage,
+        //         "title" => $testTitle,
+        //     ]
+        // ]);
     }
 
 
@@ -149,18 +158,18 @@ class PostDetaileTest extends TestCase
 
         //　指定したユーザで認証して存在しないポスト
         $response = $this->actingAs($this->user)
-                        ->json('POST', route('post.reply', [
-            'id' => 100,
-            'parent_id' => 100,
-            'message'   => $testMessage,
-            'title'   => $testTitle,
-        ] ));
+            ->json('POST', route('post.reply', [
+                'id' => 100,
+                'parent_id' => 100,
+                'message'   => $testMessage,
+                'title'   => $testTitle,
+            ]));
 
-       //レスポンスが201(CREATED)であること
-       $response->assertStatus(422);
+        //レスポンスが201(CREATED)であること
+        $response->assertStatus(422);
 
-       $reply = Reply::first();
-       $this->assertNull($reply);
+        $reply = Reply::first();
+        $this->assertNull($reply);
     }
 
     /**
