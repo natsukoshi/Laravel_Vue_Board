@@ -1886,6 +1886,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1895,7 +1898,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       titleContent: "",
       messasgeContent: "",
-      postErrors: ""
+      postErrors: "",
+      uploadFile: ""
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
@@ -1908,58 +1912,71 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _postMessage = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response;
+        var response, formData, config;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 console.log(this.whichPage);
+                formData = new FormData();
+                formData.append("title", this.titleContent);
+                formData.append("message", this.messasgeContent);
+                formData.append("img", this.uploadFile);
+                console.log(this.uploadFile);
+                config = {
+                  headers: {
+                    "content-type": "multipart/form-data"
+                  }
+                };
+                console.log(formData);
                 _context.t0 = this.whichPage;
-                _context.next = _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["POST_PAGE"] ? 4 : _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["REPLY_PAGE"] ? 9 : 14;
+                _context.next = _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["POST_PAGE"] ? 11 : _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["REPLY_PAGE"] ? 16 : 21;
                 break;
 
-              case 4:
+              case 11:
                 console.log("投稿");
-                _context.next = 7;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", {
-                  title: this.titleContent,
-                  message: this.messasgeContent
-                })["catch"](function (err) {
+                _context.next = 14;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", //   title: this.titleContent,
+                //   message: this.messasgeContent,
+                //     img: this.uploadFile
+                formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 7:
+              case 14:
                 response = _context.sent;
-                return _context.abrupt("break", 14);
+                return _context.abrupt("break", 21);
 
-              case 9:
+              case 16:
                 console.log("返信");
-                _context.next = 12;
+                _context.next = 19;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.parentPostID), {
                   title: this.titleContent,
                   message: this.messasgeContent,
-                  parentID: this.parentPostID
+                  parentID: this.parentPostID,
+                  img: this.uploadFile
                 })["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 12:
+              case 19:
                 response = _context.sent;
-                return _context.abrupt("break", 14);
+                return _context.abrupt("break", 21);
 
-              case 14:
+              case 21:
                 console.log("エラー判定前"); //バリデーションエラー
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 19;
+                  _context.next = 27;
                   break;
                 }
 
                 console.log("バリデーションエラー");
                 this.postErrors = response.data.errors;
+                console.log(this.postErrors);
                 return _context.abrupt("return");
 
-              case 19:
+              case 27:
                 console.log("エラー判定後"); //to-do 投稿エラーだった場合の処理
                 // エラーレスポンスを受け取ったときエラーページへ飛ばす
 
@@ -1968,7 +1985,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log("emit前");
                 this.$emit("reloadPosts");
 
-              case 24:
+              case 32:
               case "end":
                 return _context.stop();
             }
@@ -1981,7 +1998,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return postMessage;
-    }()
+    }(),
+    // 画像のアップロード
+    selectedFile: function selectedFile(e) {
+      e.preventDefault(); //   const files = e.target.files;
+
+      this.uploadFile = e.target.files[0];
+      console.log(this.uploadFile);
+    }
   }
 });
 
@@ -2302,7 +2326,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 // 取得エラー時の処理
                 if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["NOT_FOUND"]) {
                   this.$router.push("/404");
-                } else if (response.status === INTERNAL_SERVER_ERROR) {
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
                   this.$router.push("/500");
                 }
 
@@ -2410,6 +2434,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2447,8 +2474,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 //   }
                 console.log("fetchPost呼ばれたよ");
                 this.posts = response.data.data;
+                console.log(this.posts);
 
-              case 5:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -38680,6 +38708,16 @@ var render = function() {
                 }),
                 0
               )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.postErrors.img
+            ? _c(
+                "ul",
+                _vm._l(_vm.postErrors.img, function(msg) {
+                  return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+                }),
+                0
+              )
             : _vm._e()
         ])
       : _vm._e(),
@@ -38742,7 +38780,10 @@ var render = function() {
             _vm._v(" "),
             _c("br"),
             _vm._v(" "),
-            _c("input", { attrs: { type: "file", name: "", id: "" } }),
+            _c("input", {
+              attrs: { type: "file", name: "img" },
+              on: { change: _vm.selectedFile }
+            }),
             _vm._v(" "),
             _c("button", [_vm._v("メッセージ送信")])
           ]
@@ -39178,6 +39219,14 @@ var render = function() {
             _c("br"),
             _vm._v("\n    Name:" + _vm._s(post.user.name) + "\n    "),
             _c("br"),
+            _vm._v(" "),
+            post.image
+              ? _c("div", { staticClass: "img" }, [
+                  _c("img", {
+                    attrs: { src: post.image.file_url, alt: "投稿画像" }
+                  })
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "space" }, [_vm._v(_vm._s(post.message))]),
             _vm._v(" "),

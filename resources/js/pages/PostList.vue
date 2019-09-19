@@ -8,6 +8,9 @@
       <br />
       Name:{{ post.user.name }}
       <br />
+      <div class="img" v-if="post.image">
+        <img v-bind:src="post.image.file_url" alt="投稿画像" />
+      </div>
       <div class="space">{{ post.message }}</div>
       <div class="created_at">Time:{{ post.created_at }}</div>
     </div>
@@ -41,6 +44,7 @@ export default {
       //   }
       console.log("fetchPost呼ばれたよ");
       this.posts = response.data.data;
+      console.log(this.posts);
     },
 
     //フォームのメッセージを投稿する

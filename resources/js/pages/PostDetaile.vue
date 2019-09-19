@@ -30,7 +30,7 @@
 import axios from "axios";
 import Postform from "../components/Postform.vue";
 import { mapGetters } from "vuex";
-import { NOT_FOUND } from "../util";
+import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "../util";
 
 export default {
   components: {

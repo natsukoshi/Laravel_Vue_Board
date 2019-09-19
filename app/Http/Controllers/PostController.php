@@ -27,11 +27,16 @@ class PostController extends Controller
      */
     public function create(Request $request)
     {
+
         $validateRule = [
             'message' => 'required',
-            'title' => 'required | max:255',
-            'img' => 'file|mimes:jpg,jpeg,png,gif'
+            'title' => 'required|max:255',
+            'img' => 'mimes:jpg,jpeg,png,gif'
         ];
+        // dd(request()->all());
+        //\Log::channel('single')->debug($request->img->extension());
+
+        \Log::channel('single')->debug("バリデーション通過前");
 
 
         //todo エラーメッセージの日本語化　下記メソッドにメッセージを渡す
@@ -43,6 +48,9 @@ class PostController extends Controller
         $post->message = $request->message;
         $post->title = $request->title;
         $post->attachment_id = null;
+
+        \Log::channel('single')->debug($request->hasFile('img') ? "OK" : "NG");
+        \Log::channel('single')->debug($request->file('img') ? "OK" : "NG");
 
         //　todoエラーをキャッチする
         // img保存,取得したImageモデルのIDを格納
@@ -72,7 +80,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['user'])-> //リレーションシップuser＝投稿者情報も合わせて取得
+        $posts = Post::with(['user', 'image'])-> //リレーションシップuser＝投稿者情報も合わせて取得
             orderBy('CREATED_AT', 'desc')->paginate();
 
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
@@ -120,7 +128,7 @@ class PostController extends Controller
     public function reply(Request $request, $id)
     {
         \Log::channel('single')->debug("reply呼ばれたよ");
-        v\Log::channel('single')->debug($request);
+        \Log::channel('single')->debug($request);
         \Log::channel('single')->debug("id:" . $id);
         \Log::channel('single')->debug("parentID" . $id);
 

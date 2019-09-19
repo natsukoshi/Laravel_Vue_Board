@@ -7,6 +7,9 @@
       <ul v-if="postErrors.message">
         <li v-for="msg in postErrors.message" :key="msg">{{ msg }}</li>
       </ul>
+      <ul v-if="postErrors.img">
+        <li v-for="msg in postErrors.img" :key="msg">{{ msg }}</li>
+      </ul>
     </div>
     <form @submit.prevent="postMessage" v-if="isLoggedin">
       タイトル：
@@ -14,7 +17,7 @@
       <br />メッセージ：
       <textarea v-model="messasgeContent"></textarea>
       <br />
-      <input type="file" name id />
+      <input type="file" name="img" @change="selectedFile" />
       <button>メッセージ送信</button>
     </form>
   </div>
@@ -30,7 +33,8 @@ export default {
     return {
       titleContent: "",
       messasgeContent: "",
-      postErrors: ""
+      postErrors: "",
+      uploadFile: ""
     };
   },
   computed: {
@@ -43,14 +47,29 @@ export default {
     async postMessage() {
       console.log(this.whichPage);
       let response;
+      const formData = new FormData();
+      formData.append("title", this.titleContent);
+      formData.append("message", this.messasgeContent);
+      formData.append("img", this.uploadFile);
+      console.log(this.uploadFile);
+      const config = { headers: { "content-type": "multipart/form-data" } };
+
+      console.log(formData);
+
       switch (this.whichPage) {
         case POST_PAGE:
           console.log("投稿");
           response = await axios
-            .post("/api/posts", {
-              title: this.titleContent,
-              message: this.messasgeContent
-            })
+            .post(
+              "/api/posts",
+
+              //   title: this.titleContent,
+              //   message: this.messasgeContent,
+              //     img: this.uploadFile
+              formData,
+
+              config
+            )
             .catch(err => err.response || err);
           break;
 
@@ -60,7 +79,8 @@ export default {
             .post(`/api/posts/${this.parentPostID}`, {
               title: this.titleContent,
               message: this.messasgeContent,
-              parentID: this.parentPostID
+              parentID: this.parentPostID,
+              img: this.uploadFile
             })
             .catch(err => err.response || err);
 
@@ -75,6 +95,7 @@ export default {
         console.log("バリデーションエラー");
 
         this.postErrors = response.data.errors;
+        console.log(this.postErrors);
         return;
       }
 
@@ -87,6 +108,14 @@ export default {
 
       console.log("emit前");
       this.$emit("reloadPosts");
+    },
+
+    // 画像のアップロード
+    selectedFile(e) {
+      e.preventDefault();
+      //   const files = e.target.files;
+      this.uploadFile = e.target.files[0];
+      console.log(this.uploadFile);
     }
   }
 };
