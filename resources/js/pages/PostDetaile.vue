@@ -7,16 +7,24 @@
       <br />
       Name:{{ posts.user.name }}
       <br />
+      <div class="img" v-if="posts.image">
+        <img v-bind:src="posts.image.file_url" alt="投稿画像" />
+      </div>
       Message:{{ posts.message }}
       <br />
     </div>
 
     <div v-if="posts && posts.reply">
       <h2>返信</h2>
-      <div class="postRaw" v-for="rep in posts.reply" :key="rep.id">
-        Title:{{ rep.title }}
+      <div class="postRaw" v-for="reply in posts.reply" :key="reply.id">
+        Title:{{ reply.title }}
         <br />
-        Message:{{ rep.message }}
+        Name:{{ reply.user.name }}
+        <br />
+        <div class="img" v-if="reply.image">
+          <img v-bind:src="reply.image.file_url" alt="投稿画像" />
+        </div>
+        Message:{{ reply.message }}
         <br />
       </div>
     </div>
@@ -59,7 +67,7 @@ export default {
       }
 
       this.posts = response.data;
-      console.log(this.posts.user.name);
+      console.log(this.posts.reply);
     }
   },
   watch: {

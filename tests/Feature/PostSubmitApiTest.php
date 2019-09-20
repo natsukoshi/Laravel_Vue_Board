@@ -55,7 +55,8 @@ class PostSubmitApiTest extends TestCase
         $this->assertEquals($post->user_id, $this->user->id);
 
         //保存されたファイル名のファイルが存在すること
-        $this->assertFileExists(public_path() . "/img/" . $post->image->file_name);
+        // dump(config("IMAGE_SAVE_PATH") . $post->image->file_name);
+        $this->assertFileExists("/home/vagrant/laravel/board/storage/app/public/img/" . $post->image->file_name);
 
         var_dump($post->user->name);
     }

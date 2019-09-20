@@ -47,41 +47,30 @@ export default {
     async postMessage() {
       console.log(this.whichPage);
       let response;
+      const config = { headers: { "content-type": "multipart/form-data" } };
+
       const formData = new FormData();
       formData.append("title", this.titleContent);
       formData.append("message", this.messasgeContent);
-      formData.append("img", this.uploadFile);
-      console.log(this.uploadFile);
-      const config = { headers: { "content-type": "multipart/form-data" } };
 
+      if (this.uploadFile !== "") {
+        formData.append("img", this.uploadFile);
+      }
       console.log(formData);
 
       switch (this.whichPage) {
         case POST_PAGE:
           console.log("投稿");
           response = await axios
-            .post(
-              "/api/posts",
-
-              //   title: this.titleContent,
-              //   message: this.messasgeContent,
-              //     img: this.uploadFile
-              formData,
-
-              config
-            )
+            .post("/api/posts", formData, config)
             .catch(err => err.response || err);
           break;
 
         case REPLY_PAGE:
           console.log("返信");
+          formData.append("parentID", this.parentPostID);
           response = await axios
-            .post(`/api/posts/${this.parentPostID}`, {
-              title: this.titleContent,
-              message: this.messasgeContent,
-              parentID: this.parentPostID,
-              img: this.uploadFile
-            })
+            .post(`/api/posts/${this.parentPostID}`, formData, config)
             .catch(err => err.response || err);
 
           break;

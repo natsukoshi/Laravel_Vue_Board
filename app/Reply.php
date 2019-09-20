@@ -33,7 +33,7 @@ class Reply extends Post
      */
     public function image()
     {
-        return $this->hasOne('App\Image', 'attached_id', 'attachment_id');
+        return $this->hasOne('App\Image', 'id', 'attachment_id');
         // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
     }
 }

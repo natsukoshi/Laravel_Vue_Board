@@ -80,10 +80,13 @@ class PostController extends Controller
      */
     public function index()
     {
+        \Log::channel('single')->debug("index呼ばれたよ");
+
         $posts = Post::with(['user', 'image'])-> //リレーションシップuser＝投稿者情報も合わせて取得
             orderBy('CREATED_AT', 'desc')->paginate();
 
-        // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
+        \Log::channel('single')->debug("indexでpost取得後");
+
         return $posts;
     }
 
@@ -109,7 +112,7 @@ class PostController extends Controller
      */
     public function detaile(string $id)
     {
-        $post = Post::where('id', $id)->with(['user', 'reply'])->first();
+        $post = Post::where('id', $id)->with(['user', 'image', 'reply.user', 'reply.image'])->first();
         // $post = Post::where('id', $id)->with(['user', 'reply.user'])->first();
 
 
@@ -132,11 +135,14 @@ class PostController extends Controller
         \Log::channel('single')->debug("id:" . $id);
         \Log::channel('single')->debug("parentID" . $id);
 
+        \Log::channel('single')->debug($request->hasFile('img') ? "OK" : "NG");
+        \Log::channel('single')->debug($request->file('img') ? "OK" : "NG");
 
         $validateRule = [
             'message' => 'required',
             'title' => 'required | max:255',
             'parentID' => 'required | exists:posts,id',
+            'img' => 'image|mimes:jpg,jpeg,png,gif'
         ];
 
         \Log::channel('single')->debug("replyバリデーション前");
@@ -149,6 +155,17 @@ class PostController extends Controller
         $reply->message = $request->message;
         $reply->title = $request->title;
         $reply->parent_id = $request->parentID;
+        $reply->attachment_id = null;
+
+
+        //　todoエラーをキャッチする
+        // img保存,取得したImageモデルのIDを格納
+        if ($request->hasFile('img')) {
+            \Log::channel('single')->debug("ファイル保存する前");
+            $img = new Image;
+            $img->saveImage($request->file('img'));
+            $reply->attachment_id = $img->id;
+        }
 
         // $this->validate($id, $validateParentPost);
         // $idの投稿が存在するかのチェック
@@ -156,7 +173,7 @@ class PostController extends Controller
         \Log::channel('single')->debug($post);
 
         if (is_null($post)) {
-            var_dump('ポストの中身はnullです');
+            \Log::channel('single')->debug('ポストの中身はnullです');
             return response($reply, 422);
         }
 

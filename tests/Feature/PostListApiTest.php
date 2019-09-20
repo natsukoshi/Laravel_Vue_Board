@@ -26,7 +26,7 @@ class PostListApiTest extends TestCase
 
         //DBから直接データを取得
         $posts = Post::with(['user', 'image'])->orderBy('CREATED_AT', 'desc')->get();
-        dump($posts);
+        // dump($posts);
 
         // foreach($posts as $post){
         //     var_dump($post->id);
@@ -48,7 +48,7 @@ class PostListApiTest extends TestCase
                 // ]
             ];
         })->all();
-        dump($expected_data);
+        // dump($expected_data);
 
         // foreach($posts as $post){
         //     var_dump('ID:' . $post->id . ' NAME:' . $post->user->name);

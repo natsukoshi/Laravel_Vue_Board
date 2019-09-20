@@ -1912,50 +1912,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _postMessage = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response, formData, config;
+        var response, config, formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 console.log(this.whichPage);
-                formData = new FormData();
-                formData.append("title", this.titleContent);
-                formData.append("message", this.messasgeContent);
-                formData.append("img", this.uploadFile);
-                console.log(this.uploadFile);
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
                   }
                 };
+                formData = new FormData();
+                formData.append("title", this.titleContent);
+                formData.append("message", this.messasgeContent);
+
+                if (this.uploadFile !== "") {
+                  formData.append("img", this.uploadFile);
+                }
+
                 console.log(formData);
                 _context.t0 = this.whichPage;
-                _context.next = _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["POST_PAGE"] ? 11 : _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["REPLY_PAGE"] ? 16 : 21;
+                _context.next = _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["POST_PAGE"] ? 10 : _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["REPLY_PAGE"] ? 15 : 21;
                 break;
 
-              case 11:
+              case 10:
                 console.log("投稿");
-                _context.next = 14;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", //   title: this.titleContent,
-                //   message: this.messasgeContent,
-                //     img: this.uploadFile
-                formData, config)["catch"](function (err) {
+                _context.next = 13;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 14:
+              case 13:
                 response = _context.sent;
                 return _context.abrupt("break", 21);
 
-              case 16:
+              case 15:
                 console.log("返信");
+                formData.append("parentID", this.parentPostID);
                 _context.next = 19;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.parentPostID), {
-                  title: this.titleContent,
-                  message: this.messasgeContent,
-                  parentID: this.parentPostID,
-                  img: this.uploadFile
-                })["catch"](function (err) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.parentPostID), formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
@@ -2290,6 +2286,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2331,7 +2335,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 this.posts = response.data;
-                console.log(this.posts.user.name);
+                console.log(this.posts.reply);
 
               case 6:
               case "end":
@@ -39149,6 +39153,14 @@ var render = function() {
             _c("br"),
             _vm._v("\n    Name:" + _vm._s(_vm.posts.user.name) + "\n    "),
             _c("br"),
+            _vm._v(" "),
+            _vm.posts.image
+              ? _c("div", { staticClass: "img" }, [
+                  _c("img", {
+                    attrs: { src: _vm.posts.image.file_url, alt: "投稿画像" }
+                  })
+                ])
+              : _vm._e(),
             _vm._v("\n    Message:" + _vm._s(_vm.posts.message) + "\n    "),
             _c("br")
           ])
@@ -39160,11 +39172,25 @@ var render = function() {
             [
               _c("h2", [_vm._v("返信")]),
               _vm._v(" "),
-              _vm._l(_vm.posts.reply, function(rep) {
-                return _c("div", { key: rep.id, staticClass: "postRaw" }, [
-                  _vm._v("\n      Title:" + _vm._s(rep.title) + "\n      "),
+              _vm._l(_vm.posts.reply, function(reply) {
+                return _c("div", { key: reply.id, staticClass: "postRaw" }, [
+                  _vm._v("\n      Title:" + _vm._s(reply.title) + "\n      "),
                   _c("br"),
-                  _vm._v("\n      Message:" + _vm._s(rep.message) + "\n      "),
+                  _vm._v(
+                    "\n      Name:" + _vm._s(reply.user.name) + "\n      "
+                  ),
+                  _c("br"),
+                  _vm._v(" "),
+                  reply.image
+                    ? _c("div", { staticClass: "img" }, [
+                        _c("img", {
+                          attrs: { src: reply.image.file_url, alt: "投稿画像" }
+                        })
+                      ])
+                    : _vm._e(),
+                  _vm._v(
+                    "\n      Message:" + _vm._s(reply.message) + "\n      "
+                  ),
                   _c("br")
                 ])
               })

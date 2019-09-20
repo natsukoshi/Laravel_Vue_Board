@@ -34,16 +34,20 @@ class PostDetaileTest extends TestCase
 
         $testMessage = 'test message';
         $testTitle = "test title";
+        $testImage = \Illuminate\Http\UploadedFile::fake()->image('image.png', 500, 500);
+        dump($testImage->extension());
 
         //　指定したユーザで認証してポスト
         $response = $this->actingAs($this->user)
             ->json('POST', route('post.reply', [
                 'id' => $post->id,
-                'parent_id' => $post->id,
+                'parentID' => $post->id,
                 'message'   => $testMessage,
                 'title'   => $testTitle,
+                'img' => $testImage
             ]));
 
+        $response->dump();
         //レスポンスが201(CREATED)であること
         $response->assertStatus(201);
 
@@ -89,7 +93,7 @@ class PostDetaileTest extends TestCase
         // todo 取得できたデータの構造を確認する
 
         //取得できたデータを見やすい形式で出力する
-        $response->dump();
+        // $response->dump();
 
         $response->assertJsonStructure([
             "id",
