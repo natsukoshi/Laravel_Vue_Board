@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -13,6 +14,18 @@ class Image extends Model
      */
     protected $appends = ['file_url'];
 
+
+
+    /**
+     * deleteをオーバーライドしている。画像の実ファイルを削除した後に、元のメソッドを呼ぶ。
+     * @return void
+     */
+    public function delete()
+    {
+        // Storage::delete(['file', 'otherFile']);($this->file_name);
+        Storage::disk('local')->delete(config("const.IMAGE_SAVE_PATH") . $this->file_name);
+        $this->delete();
+    }
 
     /**
      * 画像のパスを取得

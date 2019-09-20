@@ -41,3 +41,9 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 //ログイン済みユーザの取得
 Route::get('/user', 'PostController@user')->name('user');
+
+//指定したIDの返信投稿を削除する
+Route::delete('/reply/{id}', 'ReplyController@delete')->name('reply.delete');
+
+//指定したIDの返信投稿を削除する
+Route::delete('/posts/{id}', 'PostController@delete')->name('posts.delete');
