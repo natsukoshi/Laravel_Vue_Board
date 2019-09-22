@@ -39,13 +39,19 @@ class PostDetaileTest extends TestCase
 
         //　指定したユーザで認証してポスト
         $response = $this->actingAs($this->user)
-            ->json('POST', route('post.reply', [
-                'id' => $post->id,
-                'parentID' => $post->id,
-                'message'   => $testMessage,
-                'title'   => $testTitle,
-                'img' => $testImage
-            ]));
+            ->json(
+                'POST',
+                route('post.reply', [
+                    'id' => $post->id,
+
+                ]),
+                [
+                    'parentID' => $post->id,
+                    'message'   => $testMessage,
+                    'title'   => $testTitle,
+                    'img' => $testImage
+                ]
+            );
 
         $response->dump();
         //レスポンスが201(CREATED)であること
@@ -62,12 +68,17 @@ class PostDetaileTest extends TestCase
 
         //    　指定したユーザで認証してポスト　2回め
         $response = $this->actingAs($this->user)
-            ->json('POST', route('post.reply', [
-                'id' => $post->id,
-                'parent_id' => $post->id,
-                'message'   => $testMessage,
-                'title'   => $testTitle,
-            ]));
+            ->json(
+                'POST',
+                route('post.reply', [
+                    'id' => $post->id,
+                ]),
+                [
+                    'parentID' => $post->id,
+                    'message'   => $testMessage,
+                    'title'   => $testTitle,
+                ]
+            );
 
         //レスポンスが201(CREATED)であること
         $response->assertStatus(201);

@@ -17,14 +17,17 @@ class Image extends Model
 
 
     /**
-     * deleteをオーバーライドしている。画像の実ファイルを削除した後に、元のメソッドを呼ぶ。
+     * 画像の実ファイルを削除する
      * @return void
      */
-    public function delete()
+    public function deleteImageFile()
     {
         // Storage::delete(['file', 'otherFile']);($this->file_name);
-        Storage::disk('local')->delete(config("const.IMAGE_SAVE_PATH") . $this->file_name);
-        $this->delete();
+        // $result = Storage::disk('local')->delete(config("const.IMAGE_SAVE_PATH") . $this->file_name);
+        $result = Storage::disk('local')->delete("/public/img/" . $this->file_name);
+
+        $result ? \Log::channel('single')->debug("画像削除完了") : \Log::channel('single')->debug("画像削除できませんでした");
+        //$this->delete();
     }
 
     /**

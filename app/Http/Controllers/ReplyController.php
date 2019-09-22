@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests\DeleteReply;
+
 use App\Reply;
 use App\Image;
 
@@ -18,29 +20,41 @@ class ReplyController extends Controller
 
     /**
      * 返信削除
-     * @param Request $request
+     * @param App\Http\Requests\DeleteReply $request
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function delete(DeleteReply $request, $id)
     {
         \Log::channel('single')->debug("delete start");
         \Log::channel('single')->debug("ID:" . $request->id);
 
-        // $validateRule = [
-        //     'id' => 'required | exists:replies,id',
+        // $request->$validateRule = [
+        //     'id' => 'required|exists:replies,id',
         // ];
 
-        // //todo エラーメッセージの日本語化　下記メソッドにメッセージを渡す
+        // // //todo エラーメッセージの日本語化　下記メソッドにメッセージを渡す
         // $this->validate($request, $validateRule);
 
         \Log::channel('single')->debug("バリデーション通過");
         $reply = Reply::find($request->id);
 
+        //画像を削除した後に、DBレコードを削除
         if ($reply->attachment_id != null) {
-            $image = Image::find($request->attachment_id)->delete();
-        }
+            \Log::channel('single')->debug("画像消去attachment_id:" . $reply->attachment_id);
+            $image = Image::find($reply->attachment_id);
+            if ($image != null) {
+                \Log::channel('single')->debug("画像消去メソッドdeleteImageFile呼ばれます:");
 
-        \Log::channel('single')->debug("画像消去");
+                $image->deleteImageFile();
+
+                if (file_exists(config("IMAGE_SAVE_PATH") . $image->file_name)) {
+                    \Log::channel('single')->debug("画像削除完了");
+                } else {
+                    \Log::channel('single')->debug("画像削除 未　完了");
+                }
+                $image->delete();
+            }
+        }
 
         $reply->delete();
 

@@ -84,6 +84,7 @@ class PostController extends Controller
 
         $posts = Post::with(['user', 'image'])-> //リレーションシップuser＝投稿者情報も合わせて取得
             orderBy('CREATED_AT', 'desc')->paginate();
+        // orderBy('CREATED_AT', 'desc')->get();
 
         \Log::channel('single')->debug("indexでpost取得後");
 

@@ -26,7 +26,7 @@ class PostListApiTest extends TestCase
 
         //DBから直接データを取得
         $posts = Post::with(['user', 'image'])->orderBy('CREATED_AT', 'desc')->get();
-        // dump($posts);
+        dump($posts);
 
         // foreach($posts as $post){
         //     var_dump($post->id);
@@ -40,6 +40,11 @@ class PostListApiTest extends TestCase
                 'title' => $post->title,
                 "created_at" =>  $post->created_at,
                 "updated_at" =>  $post->updated_at,
+                "image" => $post->image,
+                'user_id' => $post->user_id,
+                'user' => $post->user,
+                'attachment_id' => $post->attachment_id,
+
                 // 'user' => [
                 //     'name' => $post->user->name,
                 // ],
@@ -48,6 +53,30 @@ class PostListApiTest extends TestCase
                 // ]
             ];
         })->all();
+
+        $expected_structure = [
+            "id",
+            "user_id",
+            "message",
+            "title",
+            "updated_at",
+            "created_at",
+            "user" => [
+                "id",
+                "name",
+                "email",
+                "email_verified_at",
+                "created_at",
+                "updated_at",
+            ],
+            "image" => [
+                "id",
+                "file_name",
+                "file_url",
+                "created_at",
+                "updated_at",
+            ]
+        ];
         // dump($expected_data);
 
         // foreach($posts as $post){
@@ -60,8 +89,12 @@ class PostListApiTest extends TestCase
             // ->assertJsonFragment([
             //     "data" => $expected_data,
             // ]);
-            ->assertJsonFragment([
-                "data" => $expected_data,
-            ]);
+            // ->assertJsonStructure(
+            //     $expected_structure,
+            // )
+            ->assertJsonFragment(
+                ["data" => $expected_data,]
+                // $expected_data,
+            );
     }
 }
