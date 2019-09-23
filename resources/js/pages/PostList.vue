@@ -13,7 +13,7 @@
       </div>
       <div class="space">{{ post.message }}</div>
       <div class="created_at">Time:{{ post.created_at }}</div>
-      <button class="delete_button" v-if="post.user.id == userID">削除</button>
+      <button class="delete_button" v-if="post.user.id == userID" @click="deletePost(post.id)">削除</button>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@
 import axios from "axios";
 import Postform from "../components/Postform.vue";
 import { mapGetters } from "vuex";
-import { POST_PAGE, INTERNAL_SERVER_ERROR } from "../util";
+import { POST_PAGE, INTERNAL_SERVER_ERROR, NOT_FOUND } from "../util";
 
 export default {
   components: {
@@ -58,6 +58,32 @@ export default {
 
       this.messasgeContent = "";
       this.fetchPosts();
+    },
+
+    // 投稿を削除する
+    async deletePost(targetID) {
+      console.log("削除開始");
+
+      const response = await axios
+        .delete(`/api/posts/${targetID}`)
+        .catch(function(err) {
+          return err.response || err;
+        });
+
+      // 取得エラー時の処理
+      if (response.status === NOT_FOUND) {
+        this.$router.push("/404");
+      } else if (response.status === INTERNAL_SERVER_ERROR) {
+        this.$router.push("/500");
+      }
+
+      console.log("削除後リロード");
+      this.tryMethod();
+      this.fetchPosts();
+      console.log("削除完了");
+    },
+    async tryMethod() {
+      console.log("ｔｒｙメソッド");
     }
   },
   computed: {

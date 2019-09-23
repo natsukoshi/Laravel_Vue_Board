@@ -200,29 +200,21 @@ class PostController extends Controller
      */
     public function delete(DeletePostRequest $request, $id)
     {
-        $post = Post::find($request->id);
+        $post = Post::where('id', $id)->with(['reply'])->first();
 
         //画像を削除した後に、DBレコードを削除
         if ($post->attachment_id != null) {
-            \Log::channel('single')->debug("画像消去attachment_id:" . $post->attachment_id);
             $image = Image::find($post->attachment_id);
             if ($image != null) {
-                \Log::channel('single')->debug("画像消去メソッドdeleteImageFile呼ばれます:");
-
-                $image->deleteImageFile();
-
-                if (file_exists(config("IMAGE_SAVE_PATH") . $image->file_name)) {
-                    \Log::channel('single')->debug("画像削除完了");
-                } else {
-                    \Log::channel('single')->debug("画像削除 未　完了");
-                }
                 $image->delete();
             }
         }
 
-        $post->delete();
-
         \Log::channel('single')->debug("リプライ削除");
+        foreach ($post->reply as $reply) {
+            $reply->delete();
+        }
+        $post->delete();
 
 
         // リソースの削除なので204(No Content)を返す

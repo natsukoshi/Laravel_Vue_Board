@@ -74,7 +74,7 @@ class Image extends Model
         $file->move(config("const.IMAGE_SAVE_PATH"), $imgFileName);
         // $file->storeAs(config("const.IMAGE_SAVE_PATH"), $imgFileName);
 
-        \Log::channel('single')->debug("Imageモデル：ファイル保存した後");
+        \Log::channel('single')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
 
         // $img = new App\Image;
         $this->file_name = $imgFileName;

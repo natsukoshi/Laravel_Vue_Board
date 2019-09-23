@@ -2582,6 +2582,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return postMessage;
+    }(),
+    // 投稿を削除する
+    deletePost: function () {
+      var _deletePost = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(targetID) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                console.log("削除開始");
+                _context3.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/posts/".concat(targetID))["catch"](function (err) {
+                  return err.response || err;
+                });
+
+              case 3:
+                response = _context3.sent;
+
+                // 取得エラー時の処理
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["NOT_FOUND"]) {
+                  this.$router.push("/404");
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
+                  this.$router.push("/500");
+                }
+
+                console.log("削除後リロード");
+                this.tryMethod();
+                this.fetchPosts();
+                console.log("削除完了");
+
+              case 9:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function deletePost(_x) {
+        return _deletePost.apply(this, arguments);
+      }
+
+      return deletePost;
+    }(),
+    tryMethod: function () {
+      var _tryMethod = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                console.log("ｔｒｙメソッド");
+
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+
+      function tryMethod() {
+        return _tryMethod.apply(this, arguments);
+      }
+
+      return tryMethod;
     }()
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
@@ -2606,13 +2675,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
                   console.log("fetchPost呼ぶ前");
-                  _context3.next = 3;
+                  _context5.next = 3;
                   return this.fetchPosts();
 
                 case 3:
@@ -2620,10 +2689,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 case 4:
                 case "end":
-                  return _context3.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee5, this);
         }));
 
         function handler() {
@@ -39341,7 +39410,18 @@ var render = function() {
             ]),
             _vm._v(" "),
             post.user.id == _vm.userID
-              ? _c("button", { staticClass: "delete_button" }, [_vm._v("削除")])
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "delete_button",
+                    on: {
+                      click: function($event) {
+                        return _vm.deletePost(post.id)
+                      }
+                    }
+                  },
+                  [_vm._v("削除")]
+                )
               : _vm._e()
           ],
           1

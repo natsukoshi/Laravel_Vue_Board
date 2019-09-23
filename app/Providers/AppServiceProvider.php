@@ -7,6 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use App\Observers\ImageObserver;
 use App\Image;
 
+use App\Observers\ReplyObserver;
+use App\Reply;
+
 
 
 class AppServiceProvider extends ServiceProvider
@@ -28,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        Reply::observe(ReplyObserver::class);
         Image::observe(ImageObserver::class);
     }
 }
