@@ -43,16 +43,15 @@ class ReplyController extends Controller
             \Log::channel('single')->debug("画像消去attachment_id:" . $reply->attachment_id);
             $image = Image::find($reply->attachment_id);
             if ($image != null) {
-                \Log::channel('single')->debug("画像消去メソッドdeleteImageFile呼ばれます:");
 
-                $image->deleteImageFile();
+                // $image->deleteImageFile();
+                $image->delete();
 
                 if (file_exists(config("IMAGE_SAVE_PATH") . $image->file_name)) {
                     \Log::channel('single')->debug("画像削除完了");
                 } else {
                     \Log::channel('single')->debug("画像削除 未　完了");
                 }
-                $image->delete();
             }
         }
 

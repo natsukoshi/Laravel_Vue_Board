@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\DeletePostRequest;
 
 use App\Post;
 use App\Reply;
@@ -190,5 +191,41 @@ class PostController extends Controller
 
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
         return response($reply, 201);
+    }
+
+    /**
+     * 投稿と紐づく返信を削除
+     * @param DeletePostRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(DeletePostRequest $request, $id)
+    {
+        $post = Post::find($request->id);
+
+        //画像を削除した後に、DBレコードを削除
+        if ($post->attachment_id != null) {
+            \Log::channel('single')->debug("画像消去attachment_id:" . $post->attachment_id);
+            $image = Image::find($post->attachment_id);
+            if ($image != null) {
+                \Log::channel('single')->debug("画像消去メソッドdeleteImageFile呼ばれます:");
+
+                $image->deleteImageFile();
+
+                if (file_exists(config("IMAGE_SAVE_PATH") . $image->file_name)) {
+                    \Log::channel('single')->debug("画像削除完了");
+                } else {
+                    \Log::channel('single')->debug("画像削除 未　完了");
+                }
+                $image->delete();
+            }
+        }
+
+        $post->delete();
+
+        \Log::channel('single')->debug("リプライ削除");
+
+
+        // リソースの削除なので204(No Content)を返す
+        return response($post, 204);
     }
 }

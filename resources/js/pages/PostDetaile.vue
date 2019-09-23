@@ -26,6 +26,13 @@
         </div>
         Message:{{ reply.message }}
         <br />
+
+        <button
+          class="delete_button"
+          v-if="reply.user.id == userID"
+          @click="deleteReply(reply.id)"
+        >削除</button>
+        {{reply.user.id}}:{{userID}}
       </div>
     </div>
 
@@ -44,12 +51,14 @@ export default {
   components: {
     Postform
   },
+
   data() {
     return {
       posts: null,
       messasgeContent: ""
     };
   },
+
   methods: {
     //投稿と返信を取得する
     async fetchPost() {
@@ -68,8 +77,29 @@ export default {
 
       this.posts = response.data;
       console.log(this.posts.reply);
+    },
+
+    //返信を削除する
+    async deleteReply(targetID) {
+      const response = await axios
+        .delete(`/api/reply/${targetID}`)
+        .catch(function(err) {
+          return err.response || err;
+        });
+
+      // 取得エラー時の処理
+      if (response.status === NOT_FOUND) {
+        this.$router.push("/404");
+      } else if (response.status === INTERNAL_SERVER_ERROR) {
+        this.$router.push("/500");
+      }
+
+      this.fetchPost();
+
+      console.log("削除完了");
     }
   },
+
   watch: {
     $route: {
       async handler() {
@@ -88,7 +118,10 @@ export default {
     ...mapGetters("auth", [
       //ストア内のパスを指定
       "isLoggedin"
-    ])
+    ]),
+    userID() {
+      return this.$store.getters["auth/userID"];
+    }
   }
 };
 </script>

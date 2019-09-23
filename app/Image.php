@@ -5,14 +5,29 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+// use App\Events\ImageDeleting;
+use Illuminate\Notifications\Notifiable;
+
 class Image extends Model
 {
+    // use Notifiable;
+    // /**
+    //  * モデルのイベントマップ
+    //  *
+    //  * @var array
+    //  */
+    // protected $dispatchesEvents = [
+    //     'deleting' => ImageDeleting::class,
+    // ];
+
+
     /**
      * モデルの配列形態に追加するアクセサ
      *
      * @var array
      */
     protected $appends = ['file_url'];
+
 
 
 

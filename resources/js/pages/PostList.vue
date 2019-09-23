@@ -13,6 +13,7 @@
       </div>
       <div class="space">{{ post.message }}</div>
       <div class="created_at">Time:{{ post.created_at }}</div>
+      <button class="delete_button" v-if="post.user.id == userID">削除</button>
     </div>
   </div>
 </template>
@@ -64,7 +65,11 @@ export default {
     ...mapGetters("auth", [
       //ストア内のパスを指定
       "isLoggedin"
-    ])
+    ]),
+
+    userID() {
+      return this.$store.getters["auth/userID"];
+    }
   },
   watch: {
     errorCode: {

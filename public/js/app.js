@@ -2294,6 +2294,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2350,6 +2357,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return fetchPost;
+    }(),
+    //返信を削除する
+    deleteReply: function () {
+      var _deleteReply = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(targetID) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/reply/".concat(targetID))["catch"](function (err) {
+                  return err.response || err;
+                });
+
+              case 2:
+                response = _context2.sent;
+
+                // 取得エラー時の処理
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["NOT_FOUND"]) {
+                  this.$router.push("/404");
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
+                  this.$router.push("/500");
+                }
+
+                this.fetchPost();
+                console.log("削除完了");
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function deleteReply(_x) {
+        return _deleteReply.apply(this, arguments);
+      }
+
+      return deleteReply;
     }()
   },
   watch: {
@@ -2357,16 +2406,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
-                  _context2.next = 2;
+                  _context3.next = 2;
                   return this.$store.dispatch("auth/setParentPostID", this.$route.params.id);
 
                 case 2:
-                  _context2.next = 4;
+                  _context3.next = 4;
                   return this.fetchPost();
 
                 case 4:
@@ -2374,10 +2423,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 case 5:
                 case "end":
-                  return _context2.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee3, this);
         }));
 
         function handler() {
@@ -2390,7 +2439,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
-  "isLoggedin"]))
+  "isLoggedin"]), {
+    userID: function userID() {
+      return this.$store.getters["auth/userID"];
+    }
+  })
 });
 
 /***/ }),
@@ -2423,6 +2476,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -2531,7 +2585,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }()
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
-  "isLoggedin"])),
+  "isLoggedin"]), {
+    userID: function userID() {
+      return this.$store.getters["auth/userID"];
+    }
+  }),
   watch: {
     errorCode: {
       //算出プロパティerrorCodeに変更があったときに
@@ -39191,7 +39249,29 @@ var render = function() {
                   _vm._v(
                     "\n      Message:" + _vm._s(reply.message) + "\n      "
                   ),
-                  _c("br")
+                  _c("br"),
+                  _vm._v(" "),
+                  reply.user.id == _vm.userID
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "delete_button",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteReply(reply.id)
+                            }
+                          }
+                        },
+                        [_vm._v("削除")]
+                      )
+                    : _vm._e(),
+                  _vm._v(
+                    "\n      " +
+                      _vm._s(reply.user.id) +
+                      ":" +
+                      _vm._s(_vm.userID) +
+                      "\n    "
+                  )
                 ])
               })
             ],
@@ -39258,7 +39338,11 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "created_at" }, [
               _vm._v("Time:" + _vm._s(post.created_at))
-            ])
+            ]),
+            _vm._v(" "),
+            post.user.id == _vm.userID
+              ? _c("button", { staticClass: "delete_button" }, [_vm._v("削除")])
+              : _vm._e()
           ],
           1
         )
@@ -56146,6 +56230,9 @@ var state = {
 var getters = {
   username: function username(state) {
     return state.user ? state.user.name : '';
+  },
+  userID: function userID(state) {
+    return state.user ? state.user.id : '';
   },
   isLoggedin: function isLoggedin(state) {
     return !!state.user;
