@@ -17,7 +17,7 @@
       <br />メッセージ：
       <textarea v-model="messasgeContent"></textarea>
       <br />
-      <input type="file" name="img" @change="selectedFile" />
+      <input type="file" name="img" @change="selectedFile" id="imgSelectForm" />
       <button>メッセージ送信</button>
     </form>
   </div>
@@ -57,28 +57,22 @@ export default {
         formData.append("img", this.uploadFile);
       }
       console.log(formData);
+      console.log(this.$route.params.id);
 
-      switch (this.whichPage) {
-        case POST_PAGE:
-          console.log("投稿");
-          response = await axios
-            .post("/api/posts", formData, config)
-            .catch(err => err.response || err);
-          break;
-
-        case REPLY_PAGE:
-          console.log("返信");
-          formData.append("parentID", this.parentPostID);
-          response = await axios
-            .post(`/api/posts/${this.parentPostID}`, formData, config)
-            .catch(err => err.response || err);
-
-          break;
-        default:
-        //todo エラー処理
+      // パラメータの有無によって切り分け
+      if (typeof this.$route.params.id === "undefined") {
+        console.log("投稿");
+        response = await axios
+          .post("/api/posts", formData, config)
+          .catch(err => err.response || err);
+      } else {
+        console.log("返信");
+        formData.append("parentID", this.parentPostID);
+        response = await axios
+          .post(`/api/posts/${this.parentPostID}`, formData, config)
+          .catch(err => err.response || err);
       }
 
-      console.log("エラー判定前");
       //バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {
         console.log("バリデーションエラー");
@@ -94,6 +88,11 @@ export default {
 
       this.titleContent = "";
       this.messasgeContent = "";
+      this.postErrors = "";
+      if (this.uploadFile != "") {
+        this.uploadFile = "";
+        document.getElementById("imgSelectForm").value = "";
+      }
 
       console.log("emit前");
       this.$emit("reloadPosts");
@@ -102,7 +101,6 @@ export default {
     // 画像のアップロード
     selectedFile(e) {
       e.preventDefault();
-      //   const files = e.target.files;
       this.uploadFile = e.target.files[0];
       console.log(this.uploadFile);
     }

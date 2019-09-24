@@ -1932,20 +1932,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }
 
                 console.log(formData);
-                _context.t0 = this.whichPage;
-                _context.next = _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["POST_PAGE"] ? 10 : _context.t0 === _util__WEBPACK_IMPORTED_MODULE_3__["REPLY_PAGE"] ? 15 : 21;
-                break;
+                console.log(this.$route.params.id); // パラメータの有無によって切り分け
 
-              case 10:
+                if (!(typeof this.$route.params.id === "undefined")) {
+                  _context.next = 15;
+                  break;
+                }
+
                 console.log("投稿");
-                _context.next = 13;
+                _context.next = 12;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 13:
+              case 12:
                 response = _context.sent;
-                return _context.abrupt("break", 21);
+                _context.next = 20;
+                break;
 
               case 15:
                 console.log("返信");
@@ -1957,13 +1960,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 19:
                 response = _context.sent;
-                return _context.abrupt("break", 21);
 
-              case 21:
-                console.log("エラー判定前"); //バリデーションエラー
-
+              case 20:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 27;
+                  _context.next = 25;
                   break;
                 }
 
@@ -1972,12 +1972,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log(this.postErrors);
                 return _context.abrupt("return");
 
-              case 27:
+              case 25:
                 console.log("エラー判定後"); //to-do 投稿エラーだった場合の処理
                 // エラーレスポンスを受け取ったときエラーページへ飛ばす
 
                 this.titleContent = "";
                 this.messasgeContent = "";
+                this.postErrors = "";
+
+                if (this.uploadFile != "") {
+                  this.uploadFile = "";
+                  document.getElementById("imgSelectForm").value = "";
+                }
+
                 console.log("emit前");
                 this.$emit("reloadPosts");
 
@@ -1997,8 +2004,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }(),
     // 画像のアップロード
     selectedFile: function selectedFile(e) {
-      e.preventDefault(); //   const files = e.target.files;
-
+      e.preventDefault();
       this.uploadFile = e.target.files[0];
       console.log(this.uploadFile);
     }
@@ -38912,7 +38918,7 @@ var render = function() {
             _c("br"),
             _vm._v(" "),
             _c("input", {
-              attrs: { type: "file", name: "img" },
+              attrs: { type: "file", name: "img", id: "imgSelectForm" },
               on: { change: _vm.selectedFile }
             }),
             _vm._v(" "),
