@@ -1,7 +1,7 @@
 // 認証用ストア
 
 import axios from 'axios'
-import { OK, UNPROCESSABLE_ENTITY } from '../util'
+import { OK, UNPROCESSABLE_ENTITY, CREATED } from '../util'
 
 const state = {
     user: null,
@@ -51,7 +51,7 @@ const actions = {
         const response = await axios.post('/api/register', data)
             .catch(function (err) { return (err.response || err) })
         console.log(response.data)
-        if (response.status === OK) {
+        if (response.status === CREATED) {
             context.commit('setApiStatus', true)
             context.commit('setUser', response.data)
             return false
