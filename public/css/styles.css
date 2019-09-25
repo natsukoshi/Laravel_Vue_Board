@@ -95,3 +95,28 @@ body{
     /* border-color: #da3c41; */
     border: 1.5px solid #da3c41;
 }
+
+/* ページネーション */
+.pagination {
+  display: inline-block;
+  margin: 5px auto;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination-block {
+    display: block;
+    text-align: center;
+}

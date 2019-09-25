@@ -23,6 +23,11 @@ const routes = [
     {
         path: '/',
         component: PostList,
+        props: route => {
+            const page = route.query.page
+            // pageというpropsを返却：queryのpageが数字以外の場合は1となる
+            return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+        }
     },
     {
         path: '/login',
@@ -48,6 +53,11 @@ const routes = [
         path: '/post/:id',
         name: 'post',
         component: PostDetaile,
+        props: route => {
+            const page = route.query.page
+            // pageというpropsを返却：queryのpageが数字以外の場合は1となる
+            return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+        }
     },
 
 ]

@@ -15,37 +15,53 @@
       <div class="created_at">Time:{{ post.created_at }}</div>
       <button class="delete_button" v-if="post.user.id == userID" @click="deletePost(post.id)">削除</button>
     </div>
+    <Pagination :currentPage="currentPage" :lastPage="lastPage" />
   </div>
 </template>
 <script>
 import axios from "axios";
 import Postform from "../components/Postform.vue";
+import Pagination from "../components/Pagination.vue";
 import { mapGetters } from "vuex";
 import { POST_PAGE, INTERNAL_SERVER_ERROR, NOT_FOUND } from "../util";
 
 export default {
   components: {
-    Postform
+    Postform,
+    Pagination
+  },
+  props: {
+    page: {
+      type: Number,
+      required: false,
+      default: 1
+    }
   },
   data() {
     return {
       posts: [],
-      messasgeContent: ""
+      messasgeContent: "",
+      currentPage: 0,
+      lastPage: 0
     };
   },
   methods: {
     //投稿を全て取得する
     async fetchPosts() {
-      const response = await axios.get("/api/posts");
+      const response = await axios.get(`/api/posts/?page=${this.page}`);
 
       //to-do 投稿エラーだった場合の処理
       //   if (response.status !== OK) {
       //     this.$store.commit('error/setCode', response.status)
       //     return false
       //   }
+      console.log("現在ページ：" + this.page);
       console.log("fetchPost呼ばれたよ");
       this.posts = response.data.data;
+      this.currentPage = response.data.current_page;
+      this.lastPage = response.data.last_page;
       console.log(this.posts);
+      console.log(response.data);
     },
 
     //フォームのメッセージを投稿する
