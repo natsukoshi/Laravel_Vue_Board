@@ -1906,7 +1906,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     apiStatus: function apiStatus(state) {
       return state.auth.apiStatus;
     }
-  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])("auth", ["isLoggedin", "whichPage", "parentPostID"])),
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])("auth", ["isLoggedin"])),
   methods: {
     postMessage: function () {
       var _postMessage = _asyncToGenerator(
@@ -1952,9 +1952,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 15:
                 console.log("返信");
-                formData.append("parentID", this.parentPostID);
+                formData.append("parentID", this.$route.params.id);
                 _context.next = 19;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.parentPostID), formData, config)["catch"](function (err) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.$route.params.id), formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
@@ -2418,16 +2418,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               switch (_context3.prev = _context3.next) {
                 case 0:
                   _context3.next = 2;
-                  return this.$store.dispatch("auth/setParentPostID", this.$route.params.id);
-
-                case 2:
-                  _context3.next = 4;
                   return this.fetchPost();
 
-                case 4:
-                  console.log("ストアに値をセットした" + this.$route.params.id);
-
-                case 5:
+                case 2:
                 case "end":
                   return _context3.stop();
               }
@@ -39321,9 +39314,15 @@ var render = function() {
                         })
                       ])
                     : _vm._e(),
-                  _vm._v(
-                    "\n      Message:" + _vm._s(reply.message) + "\n      "
-                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "space" }, [
+                    _vm._v(_vm._s(reply.message))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "created_at" }, [
+                    _vm._v("Time:" + _vm._s(reply.created_at))
+                  ]),
+                  _vm._v(" "),
                   _c("br"),
                   _vm._v(" "),
                   reply.user.id == _vm.userID
@@ -39339,14 +39338,7 @@ var render = function() {
                         },
                         [_vm._v("削除")]
                       )
-                    : _vm._e(),
-                  _vm._v(
-                    "\n      " +
-                      _vm._s(reply.user.id) +
-                      ":" +
-                      _vm._s(_vm.userID) +
-                      "\n    "
-                  )
+                    : _vm._e()
                 ])
               })
             ],
@@ -56232,12 +56224,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 
 var routes = [{
   path: '/',
-  component: _pages_PostList_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-  beforeEnter: function beforeEnter(to, from, next) {
-    // ページコンポーネントが切り替わる直前に呼び出される関数
-    _store__WEBPACK_IMPORTED_MODULE_7__["default"].dispatch("auth/setPage", _util__WEBPACK_IMPORTED_MODULE_8__["POST_PAGE"]);
-    next();
-  }
+  component: _pages_PostList_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
   path: '/login',
   component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -56262,13 +56249,7 @@ var routes = [{
   //投稿の詳細ページ
   path: '/post/:id',
   name: 'post',
-  component: _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-  beforeEnter: function beforeEnter(to, from, next) {
-    // ページコンポーネントが切り替わる直前に呼び出される関数
-    _store__WEBPACK_IMPORTED_MODULE_7__["default"].dispatch("auth/setPage", _util__WEBPACK_IMPORTED_MODULE_8__["REPLY_PAGE"]); // store.dispatch("auth/setParentPostID", id)
-
-    next();
-  }
+  component: _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
 }]; // VueRouterインスタンスを作成する
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -56309,9 +56290,7 @@ var state = {
   user: null,
   apiStatus: null,
   loginErrorMessages: null,
-  registerErrorMessages: null,
-  whichPage: null,
-  parentPostID: 0
+  registerErrorMessages: null
 };
 var getters = {
   username: function username(state) {
@@ -56322,12 +56301,6 @@ var getters = {
   },
   isLoggedin: function isLoggedin(state) {
     return !!state.user;
-  },
-  whichPage: function whichPage(state) {
-    return state.whichPage;
-  },
-  parentPostID: function parentPostID(state) {
-    return state.parentPostID;
   }
 };
 var mutations = {
@@ -56344,12 +56317,6 @@ var mutations = {
   },
   setRegisterErrorMessages: function setRegisterErrorMessages(state, messsages) {
     state.registerErrorMessages = messsages;
-  },
-  setPage: function setPage(state, page) {
-    state.whichPage = page;
-  },
-  setParentPostID: function setParentPostID(state, postID) {
-    state.parentPostID = postID;
   }
 };
 var actions = {
@@ -56529,56 +56496,6 @@ var actions = {
     }
 
     return loggedinUser;
-  }(),
-  //現在のページをセットする
-  setPage: function () {
-    var _setPage = _asyncToGenerator(
-    /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(context, page) {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              context.commit('setPage', page);
-
-            case 1:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-
-    function setPage(_x7, _x8) {
-      return _setPage.apply(this, arguments);
-    }
-
-    return setPage;
-  }(),
-  //現在のページのpostIDをセットする
-  setParentPostID: function () {
-    var _setParentPostID = _asyncToGenerator(
-    /*#__PURE__*/
-    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(context, postID) {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              context.commit('setParentPostID', postID);
-
-            case 1:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6);
-    }));
-
-    function setParentPostID(_x9, _x10) {
-      return _setParentPostID.apply(this, arguments);
-    }
-
-    return setParentPostID;
   }()
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

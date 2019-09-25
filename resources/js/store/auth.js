@@ -8,16 +8,12 @@ const state = {
     apiStatus: null,
     loginErrorMessages: null,
     registerErrorMessages: null,
-    whichPage: null,
-    parentPostID: 0,
 }
 
 const getters = {
     username: state => state.user ? state.user.name : '',
     userID: state => state.user ? state.user.id : '',
     isLoggedin: state => !!state.user,
-    whichPage: state => state.whichPage,
-    parentPostID: state => state.parentPostID,
 }
 
 const mutations = {
@@ -34,12 +30,6 @@ const mutations = {
     },
     setRegisterErrorMessages(state, messsages) {
         state.registerErrorMessages = messsages
-    },
-    setPage(state, page) {
-        state.whichPage = page
-    },
-    setParentPostID(state, postID) {
-        state.parentPostID = postID
     },
 }
 
@@ -111,16 +101,6 @@ const actions = {
         //ログインしていなら、state:userの初期値のnullとする
         const userInfo = response.data !== '' ? response.data : null
         context.commit('setUser', userInfo)
-    },
-
-    //現在のページをセットする
-    async setPage(context, page) {
-        context.commit('setPage', page)
-    },
-
-    //現在のページのpostIDをセットする
-    async setParentPostID(context, postID) {
-        context.commit('setParentPostID', postID)
     },
 
 }

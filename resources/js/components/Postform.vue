@@ -41,7 +41,7 @@ export default {
     ...mapState({
       apiStatus: state => state.auth.apiStatus
     }),
-    ...mapGetters("auth", ["isLoggedin", "whichPage", "parentPostID"])
+    ...mapGetters("auth", ["isLoggedin"])
   },
   methods: {
     async postMessage() {
@@ -67,9 +67,9 @@ export default {
           .catch(err => err.response || err);
       } else {
         console.log("返信");
-        formData.append("parentID", this.parentPostID);
+        formData.append("parentID", this.$route.params.id);
         response = await axios
-          .post(`/api/posts/${this.parentPostID}`, formData, config)
+          .post(`/api/posts/${this.$route.params.id}`, formData, config)
           .catch(err => err.response || err);
       }
 

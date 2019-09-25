@@ -23,10 +23,6 @@ const routes = [
     {
         path: '/',
         component: PostList,
-        beforeEnter(to, from, next) { // ページコンポーネントが切り替わる直前に呼び出される関数
-            store.dispatch("auth/setPage", POST_PAGE)
-            next()
-        }
     },
     {
         path: '/login',
@@ -52,11 +48,6 @@ const routes = [
         path: '/post/:id',
         name: 'post',
         component: PostDetaile,
-        beforeEnter(to, from, next) { // ページコンポーネントが切り替わる直前に呼び出される関数
-            store.dispatch("auth/setPage", REPLY_PAGE)
-            // store.dispatch("auth/setParentPostID", id)
-            next()
-        }
     },
 
 ]

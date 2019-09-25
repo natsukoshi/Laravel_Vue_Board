@@ -24,7 +24,8 @@
         <div class="img" v-if="reply.image">
           <img v-bind:src="reply.image.file_url" alt="投稿画像" />
         </div>
-        Message:{{ reply.message }}
+        <div class="space">{{ reply.message }}</div>
+        <div class="created_at">Time:{{ reply.created_at }}</div>
         <br />
 
         <button
@@ -32,7 +33,6 @@
           v-if="reply.user.id == userID"
           @click="deleteReply(reply.id)"
         >削除</button>
-        {{reply.user.id}}:{{userID}}
       </div>
     </div>
 
@@ -103,12 +103,8 @@ export default {
   watch: {
     $route: {
       async handler() {
-        await this.$store.dispatch(
-          "auth/setParentPostID",
-          this.$route.params.id
-        );
         await this.fetchPost();
-        console.log("ストアに値をセットした" + this.$route.params.id);
+        // console.log("ストアに値をセットした" + this.$route.params.id);
       },
       immediate: true
     }
