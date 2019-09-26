@@ -35,15 +35,14 @@ class PostDetaileTest extends TestCase
         $testMessage = 'test message';
         $testTitle = "test title";
         $testImage = \Illuminate\Http\UploadedFile::fake()->image('image.png', 500, 500);
-        dump($testImage->extension());
+        // dump($testImage->extension());
 
         //　指定したユーザで認証してポスト
         $response = $this->actingAs($this->user)
             ->json(
                 'POST',
-                route('post.reply', [
+                route('reply.create', [
                     'id' => $post->id,
-
                 ]),
                 [
                     'parentID' => $post->id,
@@ -70,7 +69,7 @@ class PostDetaileTest extends TestCase
         $response = $this->actingAs($this->user)
             ->json(
                 'POST',
-                route('post.reply', [
+                route('reply.create', [
                     'id' => $post->id,
                 ]),
                 [
@@ -173,7 +172,7 @@ class PostDetaileTest extends TestCase
 
         //　指定したユーザで認証して存在しないポスト
         $response = $this->actingAs($this->user)
-            ->json('POST', route('post.reply', [
+            ->json('POST', route('reply.create', [
                 'id' => 100,
                 'parent_id' => 100,
                 'message'   => $testMessage,

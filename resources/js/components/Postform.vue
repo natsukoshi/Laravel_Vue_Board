@@ -25,7 +25,7 @@
 <script>
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
-import { OK, UNPROCESSABLE_ENTITY } from "../util";
+import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "../util";
 import { POST_PAGE, REPLY_PAGE } from "../util";
 
 export default {
@@ -69,13 +69,20 @@ export default {
         console.log("返信");
         formData.append("parentID", this.$route.params.id);
         response = await axios
-          .post(`/api/posts/${this.$route.params.id}`, formData, config)
+          .post(`/api/reply/${this.$route.params.id}`, formData, config)
           .catch(err => err.response || err);
       }
 
       //バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {
         console.log("バリデーションエラー");
+
+        this.postErrors = response.data.errors;
+        console.log(this.postErrors);
+        return;
+      }
+      if(response.status === INTERNAL_SERVER_ERROR){
+          console.log("バリデーションエラー");
 
         this.postErrors = response.data.errors;
         console.log(this.postErrors);

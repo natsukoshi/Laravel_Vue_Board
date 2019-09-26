@@ -11,11 +11,28 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
+
+
+Route::prefix('auth')->middleware('guest')->group(function () {
+
+    // auth/{provider}
+    Route::get('/{provider}', 'Auth\OAuthController@socialOAuth')
+        ->where('provider', 'google')
+        ->name('socialOAuth');
+
+    // auth/{provider}/callback
+    Route::get('/{provider}/callback', 'Auth\OAuthController@handleProviderCallback')
+        ->where('provider', 'google')
+        ->name('oauthCallback');
+});
 
 //どのURLへアクセスしてもindexへ飛ぶ
 Route::get('/{any?}', function () {
     return view('index');
 })->where('any', '.+');
+
+
+Route::get('/home', function () {
+    return view('welcome');
+})->name('home');

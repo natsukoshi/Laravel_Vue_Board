@@ -1856,6 +1856,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     currentPage: {
@@ -1995,7 +1996,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log("返信");
                 formData.append("parentID", this.$route.params.id);
                 _context.next = 19;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts/".concat(this.$route.params.id), formData, config)["catch"](function (err) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/reply/".concat(this.$route.params.id), formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
@@ -2014,6 +2015,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _context.abrupt("return");
 
               case 25:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["INTERNAL_SERVER_ERROR"])) {
+                  _context.next = 30;
+                  break;
+                }
+
+                console.log("バリデーションエラー");
+                this.postErrors = response.data.errors;
+                console.log(this.postErrors);
+                return _context.abrupt("return");
+
+              case 30:
                 console.log("エラー判定後"); //to-do 投稿エラーだった場合の処理
                 // エラーレスポンスを受け取ったときエラーページへ飛ばす
 
@@ -2029,7 +2041,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log("emit前");
                 this.$emit("reloadPosts");
 
-              case 32:
+              case 37:
               case "end":
                 return _context.stop();
             }
@@ -2080,6 +2092,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
 //
 //
 //
@@ -2291,8 +2306,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Postform.vue */ "./resources/js/components/Postform.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Pagination.vue */ "./resources/js/components/Pagination.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2348,18 +2364,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Postform: _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Postform: _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Pagination: _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  props: {
+    page: {
+      type: Number,
+      required: false,
+      "default": 1
+    }
   },
   data: function data() {
     return {
-      posts: null,
-      messasgeContent: ""
+      post: null,
+      replies: null,
+      messasgeContent: "",
+      currentPage: 0,
+      lastPage: 0
     };
   },
   methods: {
@@ -2374,7 +2403,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts/".concat(this.$route.params.id))["catch"](function (err) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts/".concat(this.$route.params.id, "/?page=").concat(this.page))["catch"](function (err) {
                   return err.response || err;
                 });
 
@@ -2382,16 +2411,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context.sent;
 
                 // 取得エラー時の処理
-                if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["NOT_FOUND"]) {
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["NOT_FOUND"]) {
                   this.$router.push("/404");
-                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
                   this.$router.push("/500");
                 }
 
-                this.posts = response.data;
-                console.log(this.posts.reply);
+                console.log(response);
+                this.post = response.data.post;
+                this.replies = response.data.replies.data;
+                this.currentPage = response.data.replies.current_page;
+                this.lastPage = response.data.replies.last_page;
+                console.log(this.post);
+                console.log(this.replies);
 
-              case 6:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -2424,9 +2458,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context2.sent;
 
                 // 取得エラー時の処理
-                if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["NOT_FOUND"]) {
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["NOT_FOUND"]) {
                   this.$router.push("/404");
-                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
                   this.$router.push("/500");
                 }
 
@@ -2478,7 +2512,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       immediate: true
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])("auth", [//ストア内のパスを指定
   "isLoggedin"]), {
     userID: function userID() {
       return this.$store.getters["auth/userID"];
@@ -38883,7 +38917,20 @@ var render = function() {
         !_vm.isFirstPage
           ? _c(
               "router-link",
-              { attrs: { to: "/?page=" + (_vm.currentPage - 1) } },
+              { attrs: { to: "?page=" + (_vm.currentPage - 1), append: "" } },
+              [_vm._v("前ページ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.isFirstPage
+          ? _c(
+              "router-link",
+              {
+                attrs: {
+                  to: { query: { page: "" + (_vm.currentPage - 1) } },
+                  append: ""
+                }
+              },
               [_vm._v("前ページ")]
             )
           : _vm._e(),
@@ -38891,7 +38938,12 @@ var render = function() {
         !_vm.isLastPage
           ? _c(
               "router-link",
-              { attrs: { to: "/?page=" + (_vm.currentPage + 1) } },
+              {
+                attrs: {
+                  to: { query: { page: "" + (_vm.currentPage + 1) } },
+                  append: ""
+                }
+              },
               [_vm._v("次ページ")]
             )
           : _vm._e()
@@ -39315,10 +39367,21 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c("p", [_vm._v("Password:" + _vm._s(_vm.registerForm.password))])
+    _c("p", [_vm._v("Password:" + _vm._s(_vm.registerForm.password))]),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { attrs: { href: "/auth/google" } }, [
+      _c("button", [_vm._v("google認証")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -39378,32 +39441,32 @@ var render = function() {
     [
       _c("router-link", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")]),
       _vm._v(" "),
-      _vm.posts
+      _vm.post
         ? _c("div", { staticClass: "postRaw" }, [
-            _vm._v("\n    Title:" + _vm._s(_vm.posts.title) + "\n    "),
+            _vm._v("\n    Title:" + _vm._s(_vm.post.title) + "\n    "),
             _c("br"),
-            _vm._v("\n    Name:" + _vm._s(_vm.posts.user.name) + "\n    "),
+            _vm._v("\n    Name:" + _vm._s(_vm.post.user.name) + "\n    "),
             _c("br"),
             _vm._v(" "),
-            _vm.posts.image
+            _vm.post.image
               ? _c("div", { staticClass: "img" }, [
                   _c("img", {
-                    attrs: { src: _vm.posts.image.file_url, alt: "投稿画像" }
+                    attrs: { src: _vm.post.image.file_url, alt: "投稿画像" }
                   })
                 ])
               : _vm._e(),
-            _vm._v("\n    Message:" + _vm._s(_vm.posts.message) + "\n    "),
+            _vm._v("\n    Message:" + _vm._s(_vm.post.message) + "\n    "),
             _c("br")
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.posts && _vm.posts.reply
+      _vm.post && _vm.replies
         ? _c(
             "div",
             [
               _c("h2", [_vm._v("返信")]),
               _vm._v(" "),
-              _vm._l(_vm.posts.reply, function(reply) {
+              _vm._l(_vm.replies, function(reply) {
                 return _c("div", { key: reply.id, staticClass: "postRaw" }, [
                   _vm._v("\n      Title:" + _vm._s(reply.title) + "\n      "),
                   _c("br"),
@@ -39450,6 +39513,10 @@ var render = function() {
             2
           )
         : _vm._e(),
+      _vm._v(" "),
+      _c("Pagination", {
+        attrs: { currentPage: _vm.currentPage, lastPage: _vm.lastPage }
+      }),
       _vm._v(" "),
       _c("h2", [_vm._v("返信フォーム")]),
       _vm._v(" "),
@@ -55687,13 +55754,13 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
-/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -55724,6 +55791,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+ //axios使用時にCSRF対策用のトークンを付与
+
  // ルーティングの定義をインポートする
 
  // ストアのインデックスをインポートする
@@ -55731,7 +55800,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  // ルートコンポーネントをインポートする
 
 
- //axios使用時にCSRF対策用のトークンを付与
 
 var createApp =
 /*#__PURE__*/
@@ -55744,17 +55812,17 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch('auth/loggedinUser');
+            return _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch('auth/loggedinUser');
 
           case 2:
-            new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
+            new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
               el: '#app',
-              router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
+              router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
               //ルーティング定義の読み込み
-              store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
+              store: _store__WEBPACK_IMPORTED_MODULE_4__["default"],
               //ストアの使用宣言
               components: {
-                App: _App_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+                App: _App_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
               },
               //ルートコンポーネントの使用宣言
               template: '<App />' //ルートコンポーネントの描画

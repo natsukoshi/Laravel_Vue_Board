@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Requests\DeleteReply;
 
 use App\Reply;
 use App\Image;
+use App\Post;
 
 
 class ReplyController extends Controller
@@ -63,4 +66,95 @@ class ReplyController extends Controller
         // リソースの削除なので204(No Content)を返す
         return response($reply, 204);
     }
+
+
+    /**
+     * 返信を投稿
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request, $id)
+    {
+        \Log::channel('single')->debug("replyコントローラのreply呼ばれたよ");
+        \Log::channel('single')->debug($request);
+        \Log::channel('single')->debug("id:" . $id);
+        \Log::channel('single')->debug("parentID" . $id);
+
+        \Log::channel('single')->debug($request->hasFile('img') ? "hasFile" : "No file");
+        \Log::channel('single')->debug($request->file('img') ? "hasImage" : "No Image");
+
+        $validateRule = [
+            'message' => 'required',
+            'title' => 'required | max:255',
+            'parentID' => 'required | exists:posts,id',
+            'img' => 'image|mimes:jpg,jpeg,png,gif'
+        ];
+
+        \Log::channel('single')->debug("replyバリデーション前");
+
+        $this->validate($request, $validateRule);
+
+        \Log::channel('single')->debug("replyバリデーション後");
+
+        $reply = new Reply;
+        $reply->message = $request->message;
+        $reply->title = $request->title;
+        $reply->parent_id = $request->parentID;
+        $reply->attachment_id = null;
+
+
+        //　todoエラーをキャッチする
+        // img保存,取得したImageモデルのIDを格納
+        if ($request->hasFile('img')) {
+            \Log::channel('single')->debug("ファイル保存する前");
+            $img = new Image;
+            $img->saveImage($request->file('img'));
+            $reply->attachment_id = $img->id;
+        }
+
+        // $this->validate($id, $validateParentPost);
+        // $idの投稿が存在するかのチェック
+        $post = Post::find($id);
+        \Log::channel('single')->debug($post);
+
+        if (is_null($post)) {
+            \Log::channel('single')->debug('ポストの中身はnullです');
+            return response($reply, 422);
+        }
+
+        // \Log::channel('single')->debug("replyバリデーション後");
+
+
+        // $post->user_id = $request->user_id;
+
+
+        // Auth::user()：現在認証されているユーザの取得
+        //    ->posts()：リレーションシップ\Illuminate\Database\Eloquent\Relations\HasManyが返る
+        //      ->save(<Model>)：Attach a model instance to the parent model.
+        Auth::user()->replies()->save($reply);
+
+        \Log::channel('single')->debug("reply保存完了");
+
+        // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
+        return response($reply, 201);
+    }
+
+
+
+    // /**
+    //  * 投稿一覧取得
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function index()
+    // {
+    //     \Log::channel('single')->debug("index呼ばれたよ");
+
+    //     $posts = Post::with(['user', 'image'])-> //リレーションシップuser＝投稿者情報も合わせて取得
+    //         orderBy('CREATED_AT', 'desc')->paginate(5);
+    //     // orderBy('CREATED_AT', 'desc')->get();
+
+    //     \Log::channel('single')->debug("indexでpost取得後");
+
+    //     return $posts;
+    // }
 }

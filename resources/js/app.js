@@ -26,6 +26,8 @@
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
 import Vue from 'vue'
 
 // ルーティングの定義をインポートする
@@ -35,7 +37,7 @@ import store from './store'
 // ルートコンポーネントをインポートする
 import App from './App.vue'
 
-import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
+
 
 
 
@@ -44,11 +46,11 @@ const createApp = async () => {
     await store.dispatch('auth/loggedinUser')
 
     new Vue({
-    el: '#app',
-    router, //ルーティング定義の読み込み
-    store, //ストアの使用宣言
-    components: { App }, //ルートコンポーネントの使用宣言
-    template: '<App />'   //ルートコンポーネントの描画
+        el: '#app',
+        router, //ルーティング定義の読み込み
+        store, //ストアの使用宣言
+        components: { App }, //ルートコンポーネントの使用宣言
+        template: '<App />'   //ルートコンポーネントの描画
     })
 }
 

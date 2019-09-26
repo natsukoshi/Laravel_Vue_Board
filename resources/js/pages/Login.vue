@@ -12,10 +12,10 @@
     <form @submit.prevent="login">
       <label for="login-email">Email</label>
       <input type="text" id="login-email" v-model="loginForm.email" />
-      <br>
+      <br />
       <label for="login-password">Password</label>
       <input type="password" id="login-password" v-model="loginForm.password" />
-      <br>
+      <br />
       <button type="submit">Login</button>
     </form>
     <p>Password:{{loginForm.password}}</p>
@@ -53,6 +53,9 @@
       <button type="submit">Register</button>
     </form>
     <p>Password:{{registerForm.password}}</p>
+    <a href="/auth/google">
+      <button>google認証</button>
+    </a>
   </div>
 </template>
 
@@ -119,7 +122,6 @@ export default {
     clearError() {
       this.$store.commit("auth/setLoginErrorMessages", null);
       this.$store.commit("auth/setRegisterErrorMessages", null);
-
     }
   },
   created() {

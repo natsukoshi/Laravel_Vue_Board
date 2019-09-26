@@ -2,21 +2,21 @@
   <div>
     <router-link to="/">Topへ戻る</router-link>
 
-    <div v-if="posts" class="postRaw">
-      Title:{{ posts.title }}
+    <div v-if="post" class="postRaw">
+      Title:{{ post.title }}
       <br />
-      Name:{{ posts.user.name }}
+      Name:{{ post.user.name }}
       <br />
-      <div class="img" v-if="posts.image">
-        <img v-bind:src="posts.image.file_url" alt="投稿画像" />
+      <div class="img" v-if="post.image">
+        <img v-bind:src="post.image.file_url" alt="投稿画像" />
       </div>
-      Message:{{ posts.message }}
+      Message:{{ post.message }}
       <br />
     </div>
 
-    <div v-if="posts && posts.reply">
+    <div v-if="post && replies">
       <h2>返信</h2>
-      <div class="postRaw" v-for="reply in posts.reply" :key="reply.id">
+      <div class="postRaw" v-for="reply in replies" :key="reply.id">
         Title:{{ reply.title }}
         <br />
         Name:{{ reply.user.name }}
@@ -35,6 +35,7 @@
         >削除</button>
       </div>
     </div>
+    <Pagination :currentPage="currentPage" :lastPage="lastPage" />
 
     <h2>返信フォーム</h2>
     <Postform v-on:reloadPosts="fetchPost" />
@@ -44,18 +45,30 @@
 <script>
 import axios from "axios";
 import Postform from "../components/Postform.vue";
+import Pagination from "../components/Pagination.vue";
 import { mapGetters } from "vuex";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "../util";
 
 export default {
   components: {
-    Postform
+    Postform,
+    Pagination
+  },
+  props: {
+    page: {
+      type: Number,
+      required: false,
+      default: 1
+    }
   },
 
   data() {
     return {
-      posts: null,
-      messasgeContent: ""
+      post: null,
+      replies: null,
+      messasgeContent: "",
+      currentPage: 0,
+      lastPage: 0
     };
   },
 
@@ -63,7 +76,7 @@ export default {
     //投稿と返信を取得する
     async fetchPost() {
       const response = await axios
-        .get(`/api/posts/${this.$route.params.id}`)
+        .get(`/api/posts/${this.$route.params.id}/?page=${this.page}`)
         .catch(function(err) {
           return err.response || err;
         });
@@ -75,8 +88,13 @@ export default {
         this.$router.push("/500");
       }
 
-      this.posts = response.data;
-      console.log(this.posts.reply);
+      console.log(response);
+      this.post = response.data.post;
+      this.replies = response.data.replies.data;
+      this.currentPage = response.data.replies.current_page;
+      this.lastPage = response.data.replies.last_page;
+      console.log(this.post);
+      console.log(this.replies);
     },
 
     //返信を削除する
