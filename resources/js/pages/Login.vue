@@ -9,7 +9,7 @@
         <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
       </ul>
     </div>
-    <form @submit.prevent="login">
+    <form @submit.prevent="login" class="post_form">
       <label for="login-email">Email</label>
       <input type="text" id="login-email" v-model="loginForm.email" />
       <br />
@@ -29,7 +29,7 @@
         <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>
       </ul>
     </div>
-    <form @submit.prevent="register">
+    <form @submit.prevent="register" class="post_form">
       <p>
         <label for="register-name">Name</label>
         <input type="text" id="register-name" v-model="registerForm.name" />

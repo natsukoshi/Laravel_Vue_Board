@@ -35,8 +35,8 @@ class OAuthController extends Controller
     {
         \Log::channel('single')->debug("handleProviderCallback呼ばれました");
 
-        // $socialUser = Socialite::driver($provider)->stateless()->user();
-        $socialUser = Socialite::driver($provider)->user();
+        $socialUser = Socialite::driver($provider)->stateless()->user();
+        // $socialUser = Socialite::driver($provider)->user();
 
         \Log::channel('single')->debug("socialUserを取得しました");
 

@@ -122,15 +122,6 @@ class ReplyController extends Controller
             return response($reply, 422);
         }
 
-        // \Log::channel('single')->debug("replyバリデーション後");
-
-
-        // $post->user_id = $request->user_id;
-
-
-        // Auth::user()：現在認証されているユーザの取得
-        //    ->posts()：リレーションシップ\Illuminate\Database\Eloquent\Relations\HasManyが返る
-        //      ->save(<Model>)：Attach a model instance to the parent model.
         Auth::user()->replies()->save($reply);
 
         \Log::channel('single')->debug("reply保存完了");
@@ -138,23 +129,4 @@ class ReplyController extends Controller
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
         return response($reply, 201);
     }
-
-
-
-    // /**
-    //  * 投稿一覧取得
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function index()
-    // {
-    //     \Log::channel('single')->debug("index呼ばれたよ");
-
-    //     $posts = Post::with(['user', 'image'])-> //リレーションシップuser＝投稿者情報も合わせて取得
-    //         orderBy('CREATED_AT', 'desc')->paginate(5);
-    //     // orderBy('CREATED_AT', 'desc')->get();
-
-    //     \Log::channel('single')->debug("indexでpost取得後");
-
-    //     return $posts;
-    // }
 }

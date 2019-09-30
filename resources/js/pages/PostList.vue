@@ -4,7 +4,10 @@
       <Postform v-on:reloadPosts="fetchPosts" />
     </p>
     <div class="postRaw" v-for="post in posts" :key="post.id">
-      <router-link :to="`post/${ post.id }`">Title:{{ post.title }}</router-link>
+      <router-link :to="`post/${ post.id }`">
+        Title:{{ post.title }}
+        <div class="replies_num" v-if="post.replies_num > 0">(返信数：{{ post.replies_num }})</div>
+      </router-link>
       <br />
       Name:{{ post.user.name }}
       <br />

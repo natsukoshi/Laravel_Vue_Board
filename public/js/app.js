@@ -1793,8 +1793,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // data() {
@@ -1803,7 +1801,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //         // userName:  'tanaka'
   //     }
   // },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('auth', ['username', 'isLoggedin'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])("auth", ["username", "isLoggedin"]), {
+    isLoginPage: function isLoginPage() {
+      return this.$route.path == "/login";
+    } // username () {
+    //     return this.$store.getters['auth/username']
+    // },
+    // isLoggedin() {
+    //     return this.$sotre.getters['auth/isLoggedin']
+    // }
+
+  }),
   methods: {
     logout: function () {
       var _logout = _asyncToGenerator(
@@ -1814,10 +1822,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return this.$store.dispatch('auth/logout');
+                return this.$store.dispatch("auth/logout");
 
               case 2:
-                this.$router.push('/login');
+                this.$router.push("/login");
 
               case 3:
               case "end":
@@ -2551,6 +2559,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -38875,13 +38886,26 @@ var render = function() {
             [_vm._v("Logout")]
           )
         ])
+      : _vm.isLoginPage
+      ? _c(
+          "div",
+          [
+            _c(
+              "RouterLink",
+              { staticClass: "login-logout", attrs: { to: "/" } },
+              [_vm._v("Top")]
+            )
+          ],
+          1
+        )
       : _c(
           "div",
-          { staticClass: "login-logout" },
           [
-            _c("RouterLink", { attrs: { to: "/login" } }, [
-              _vm._v("\n      Login / Register\n      ")
-            ])
+            _c(
+              "RouterLink",
+              { staticClass: "login-logout", attrs: { to: "/login" } },
+              [_vm._v("Login / Register")]
+            )
           ],
           1
         )
@@ -39154,6 +39178,7 @@ var render = function() {
     _c(
       "form",
       {
+        staticClass: "post_form",
         on: {
           submit: function($event) {
             $event.preventDefault()
@@ -39247,6 +39272,7 @@ var render = function() {
     _c(
       "form",
       {
+        staticClass: "post_form",
         on: {
           submit: function($event) {
             $event.preventDefault()
@@ -39558,7 +39584,12 @@ var render = function() {
           { key: post.id, staticClass: "postRaw" },
           [
             _c("router-link", { attrs: { to: "post/" + post.id } }, [
-              _vm._v("Title:" + _vm._s(post.title))
+              _vm._v("\n      Title:" + _vm._s(post.title) + "\n      "),
+              post.replies_num > 0
+                ? _c("div", { staticClass: "replies_num" }, [
+                    _vm._v("(返信数：" + _vm._s(post.replies_num) + ")")
+                  ])
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("br"),

@@ -3,9 +3,28 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Reply;
 
 class Post extends Model
 {
+    /**
+     * モデルの配列形態に追加するアクセサ
+     *
+     * @var array
+     */
+    protected $appends = ['replies_num'];
+
+
+    /**
+     * 返信の数を取得
+     *
+     * @return string
+     */
+    public function getRepliesNumAttribute()
+    {
+        return Reply::where('parent_id', $this->id)->count();
+    }
+
     /**
      * リレーションシップ - usersテーブル　投稿の投稿者を取得する
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo

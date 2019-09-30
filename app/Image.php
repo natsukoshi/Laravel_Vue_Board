@@ -11,17 +11,6 @@ use Illuminate\Notifications\Notifiable;
 
 class Image extends Model
 {
-    // use Notifiable;
-    // /**
-    //  * モデルのイベントマップ
-    //  *
-    //  * @var array
-    //  */
-    // protected $dispatchesEvents = [
-    //     'deleting' => ImageDeleting::class,
-    // ];
-
-
     /**
      * モデルの配列形態に追加するアクセサ
      *
@@ -30,6 +19,15 @@ class Image extends Model
     protected $appends = ['file_url'];
 
 
+    /**
+     * 画像のパスを取得
+     *
+     * @return string
+     */
+    public function getFileUrlAttribute()
+    {
+        return "/storage" . "/img/" . $this->file_name;
+    }
 
 
     /**
@@ -46,15 +44,6 @@ class Image extends Model
         //$this->delete();
     }
 
-    /**
-     * 画像のパスを取得
-     *
-     * @return string
-     */
-    public function getFileUrlAttribute()
-    {
-        return "/storage" . "/img/" . $this->file_name;
-    }
 
     /**
      * 画像にユニークなファイル名を保存し、モデルをDBにも格納
