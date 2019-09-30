@@ -1864,7 +1864,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     currentPage: {
@@ -2619,10 +2618,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts/?page=".concat(this.page));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("https://laravel-board.herokuapp.com/api/posts/?page=1");
 
               case 2:
                 response = _context.sent;
+                //   const response = await axios.get(`https://laravel-board.herokuapp.com/api/posts/?page=${this.page}`);
+                //   const response = await axios.get(`/api/posts/?page=${this.page}`);
                 //to-do 投稿エラーだった場合の処理
                 //   if (response.status !== OK) {
                 //     this.$store.commit('error/setCode', response.status)
@@ -38938,14 +38939,6 @@ var render = function() {
       "div",
       { staticClass: "pagination" },
       [
-        !_vm.isFirstPage
-          ? _c(
-              "router-link",
-              { attrs: { to: "?page=" + (_vm.currentPage - 1), append: "" } },
-              [_vm._v("前ページ")]
-            )
-          : _vm._e(),
-        _vm._v(" "),
         !_vm.isFirstPage
           ? _c(
               "router-link",

@@ -1,7 +1,6 @@
 <template>
   <div class="pagination-block">
     <div class="pagination">
-      <router-link :to="`?page=${currentPage - 1}`" v-if="! isFirstPage" append>前ページ</router-link>
       <router-link :to="{ query: {page: `${currentPage - 1}` }}" v-if="! isFirstPage" append>前ページ</router-link>
       <router-link :to="{ query: {page: `${currentPage + 1}` }}" v-if="! isLastPage" append>次ページ</router-link>
     </div>
