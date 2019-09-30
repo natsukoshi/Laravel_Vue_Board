@@ -10,7 +10,7 @@ use App\Image;
 use App\Observers\ReplyObserver;
 use App\Reply;
 
-
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Reply::observe(ReplyObserver::class);
         Image::observe(ImageObserver::class);
+
+        Schema::defaultStringLength(191);
     }
 }
