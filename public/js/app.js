@@ -2618,7 +2618,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("https://laravel-board.herokuapp.com/api/posts/?page=1");
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("api/posts/?page=1");
 
               case 2:
                 response = _context.sent;

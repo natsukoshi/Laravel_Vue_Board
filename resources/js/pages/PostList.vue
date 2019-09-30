@@ -52,7 +52,7 @@ export default {
     //投稿を全て取得する
     async fetchPosts() {
       const response = await axios.get(
-        `https://laravel-board.herokuapp.com/api/posts/?page=1`
+        `api/posts/?page=1`
       );
       //   const response = await axios.get(`https://laravel-board.herokuapp.com/api/posts/?page=${this.page}`);
       //   const response = await axios.get(`/api/posts/?page=${this.page}`);
