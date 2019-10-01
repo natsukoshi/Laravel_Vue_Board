@@ -65,7 +65,12 @@ class Image extends Model
 
         // ファイルを保存
         // $file->move(config("const.IMAGE_SAVE_PATH"), $imgFileName);
-        $file->storeAs(config("const.IMAGE_SAVE_PATH"), $imgFileName);
+        $isSuccses = $file->storeAs(config("const.IMAGE_SAVE_PATH"), $imgFileName);
+        if ($isSuccses === false) {
+            \Log::channel('errorlog')->debug("ファイル保存失敗" . $imgFileName);
+        } else {
+            \Log::channel('errorlog')->debug("ファイル保存成功" . $isSuccses);
+        }
 
         \Log::channel('errorlog')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
 
