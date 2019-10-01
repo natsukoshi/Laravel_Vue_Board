@@ -54,7 +54,7 @@ class Image extends Model
     {
         // todo エラー時にExceptionを投げる
 
-        \Log::channel('single')->debug("Imageモデル：ファイル保存する前");
+        \Log::channel('errorlog')->debug("Imageモデル：ファイル保存する前");
 
         //ユニークなファイル名を作成
         $imgFileName = \uniqid("img_") . '.' . $file->extension();
@@ -67,13 +67,13 @@ class Image extends Model
         // $file->move(config("const.IMAGE_SAVE_PATH"), $imgFileName);
         $file->storeAs(config("const.IMAGE_SAVE_PATH"), $imgFileName);
 
-        \Log::channel('single')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
+        \Log::channel('errorlog')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
 
         // $img = new App\Image;
         $this->file_name = $imgFileName;
         $this->save();
 
-        \Log::channel('single')->debug("Imageモデル：DBに保存した後");
+        \Log::channel('errorlog')->debug("Imageモデル：DBに保存した後");
     }
 
     /**

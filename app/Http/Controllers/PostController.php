@@ -37,38 +37,38 @@ class PostController extends Controller
         // dd(request()->all());
         //\Log::channel('single')->debug($request->img->extension());
 
-        \Log::channel('single')->debug("バリデーション通過前");
+        \Log::channel('errorlog')->debug("バリデーション通過前");
 
 
         //todo エラーメッセージの日本語化　下記メソッドにメッセージを渡す
         $this->validate($request, $validateRule);
 
-        \Log::channel('single')->debug("バリデーション通過");
+        \Log::channel('errorlog')->debug("バリデーション通過");
 
         $post = new Post;
         $post->message = $request->message;
         $post->title = $request->title;
         $post->attachment_id = null;
 
-        \Log::channel('single')->debug($request->hasFile('img') ? "OK" : "NG");
-        \Log::channel('single')->debug($request->file('img') ? "OK" : "NG");
+        \Log::channel('errorlog')->debug($request->hasFile('img') ? "OK" : "NG");
+        \Log::channel('errorlog')->debug($request->file('img') ? "OK" : "NG");
 
         //　todoエラーをキャッチする
         // img保存,取得したImageモデルのIDを格納
         if ($request->hasFile('img')) {
-            \Log::channel('single')->debug("ファイル保存する前");
+            \Log::channel('errorlog')->debug("ファイル保存する前");
             $img = new Image;
             $img->saveImage($request->file('img'));
             $post->attachment_id = $img->id;
         }
 
-        \Log::channel('single')->debug("POSTをDB保存する前");
+        \Log::channel('errorlog')->debug("POSTをDB保存する前");
 
         // Auth::user()：現在認証されているユーザの取得
         //    ->posts()：リレーションシップ\Illuminate\Database\Eloquent\Relations\HasManyが返る
         //      ->save(<Model>)：Attach a model instance to the parent model.
         Auth::user()->posts()->save($post);
-        \Log::channel('single')->debug("POSTをDB保存した後");
+        \Log::channel('errorlog')->debug("POSTをDB保存した後");
 
 
         // リソースの新規作成なのでレスポンスコードはCREATED(201)を返却
