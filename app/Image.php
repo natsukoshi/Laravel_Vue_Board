@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image as ImageLib;
+// use Intervention\Image\Facades\Image as ImageLib;
 
 // use App\Events\ImageDeleting;
 use Illuminate\Notifications\Notifiable;
@@ -60,13 +60,12 @@ class Image extends Model
         $imgFileName = \uniqid("img_") . '.' . $file->extension();
 
         // 画像サイズが大きすぎる場合比率を保って縮小
-        $image = $this->downsizeImage($file);
-
-        $image->save(config("const.IMAGE_SAVE_PATH") . $imgFileName);
+        // $image = $this->downsizeImage($file);
+        // $image->save(config("const.IMAGE_SAVE_PATH") . $imgFileName);
 
         // ファイルを保存
         // $file->move(config("const.IMAGE_SAVE_PATH"), $imgFileName);
-        // $file->storeAs(config("const.IMAGE_SAVE_PATH"), $imgFileName);
+        $file->storeAs(config("const.IMAGE_SAVE_PATH"), $imgFileName);
 
         \Log::channel('single')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
 
