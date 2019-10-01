@@ -76,7 +76,7 @@ export default {
     //投稿と返信を取得する
     async fetchPost() {
       const response = await axios
-        .get(`/api/posts/${this.$route.params.id}/?page=${this.page}`)
+        .get(`/api/posts/${this.$route.params.id}?page=${this.page}`)
         .catch(function(err) {
           return err.response || err;
         });
