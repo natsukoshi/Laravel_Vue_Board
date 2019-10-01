@@ -51,7 +51,7 @@ export default {
   methods: {
     //投稿を全て取得する
     async fetchPosts() {
-      const response = await axios.get(`api/posts?page=${this.page}`);
+      const response = await axios.get(`/api/posts?page=${this.page}`);
 
       //to-do 投稿エラーだった場合の処理
       //   if (response.status !== OK) {

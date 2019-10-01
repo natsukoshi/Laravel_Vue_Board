@@ -1966,7 +1966,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(this.whichPage);
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
@@ -1984,35 +1983,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log(this.$route.params.id); // パラメータの有無によって切り分け
 
                 if (!(typeof this.$route.params.id === "undefined")) {
-                  _context.next = 15;
+                  _context.next = 14;
                   break;
                 }
 
                 console.log("投稿");
-                _context.next = 12;
+                _context.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 12:
+              case 11:
                 response = _context.sent;
-                _context.next = 20;
+                _context.next = 19;
                 break;
 
-              case 15:
+              case 14:
                 console.log("返信");
                 formData.append("parentID", this.$route.params.id);
-                _context.next = 19;
+                _context.next = 18;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/reply/".concat(this.$route.params.id), formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 19:
+              case 18:
                 response = _context.sent;
 
-              case 20:
+              case 19:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 25;
+                  _context.next = 24;
                   break;
                 }
 
@@ -2021,18 +2020,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log(this.postErrors);
                 return _context.abrupt("return");
 
-              case 25:
+              case 24:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["INTERNAL_SERVER_ERROR"])) {
-                  _context.next = 30;
+                  _context.next = 29;
                   break;
                 }
 
-                console.log("バリデーションエラー");
+                console.log("500エラー");
                 this.postErrors = response.data.errors;
                 console.log(this.postErrors);
                 return _context.abrupt("return");
 
-              case 30:
+              case 29:
                 console.log("エラー判定後"); //to-do 投稿エラーだった場合の処理
                 // エラーレスポンスを受け取ったときエラーページへ飛ばす
 
@@ -2048,7 +2047,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log("emit前");
                 this.$emit("reloadPosts");
 
-              case 37:
+              case 36:
               case "end":
                 return _context.stop();
             }
@@ -2615,7 +2614,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("api/posts?page=".concat(this.page));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/posts?page=".concat(this.page));
 
               case 2:
                 response = _context.sent;

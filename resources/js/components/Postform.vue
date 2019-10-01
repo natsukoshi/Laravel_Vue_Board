@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     async postMessage() {
-      console.log(this.whichPage);
       let response;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
@@ -82,7 +81,7 @@ export default {
         return;
       }
       if(response.status === INTERNAL_SERVER_ERROR){
-          console.log("バリデーションエラー");
+          console.log("500エラー");
 
         this.postErrors = response.data.errors;
         console.log(this.postErrors);
