@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-// use Intervention\Image\Facades\Image as ImageLib;
+use Intervention\Image\Facades\Image as ImageLib;
 use Illuminate\Support\Facades\DB;
 
 
@@ -82,6 +82,8 @@ class Image extends Model
             Storage::cloud()->delete($imgFileName);
             throw $exception;
         }
+
+        $image = $this->downsizeImage($file);
 
 
         \Log::channel('errorlog')->debug("Imageモデル：DBに保存した後");
