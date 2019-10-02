@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Post;
 use App\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 
 class PostSubmitApiTest extends TestCase
 {
@@ -26,6 +28,11 @@ class PostSubmitApiTest extends TestCase
      */
     public function should_APIを使って投稿できる（ユーザ認証有り）()
     {
+        // S3ではなくテスト用のストレージを使用する
+        // → storage/framework/testing
+        // Storage::fake('s3');
+
+
         $testMessage = 'test message';
         $testTitle = "test title";
         $testImageFileName = 'image.jpg';
@@ -56,8 +63,12 @@ class PostSubmitApiTest extends TestCase
 
         //保存されたファイル名のファイルが存在すること
         // dump(config("IMAGE_SAVE_PATH") . $post->image->file_name);
-        $this->assertFileExists("/home/vagrant/laravel/board/storage/app/public/img/" . $post->image->file_name);
+        // $this->assertFileExists("/home/vagrant/laravel/board/storage/app/public/img/" . $post->image->file_name);
+        // DBに挿入されたファイル名のファイルがストレージに保存されていること
+        Storage::cloud()->assertExists($post->image->file_name);
 
-        var_dump($post->user->name);
+        var_dump($post->image->file_name);
+        $url = Storage::disk('s3')->url($post->image->file_name);
+        var_dump($url);
     }
 }

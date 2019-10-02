@@ -50,7 +50,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->attachment_id = null;
 
-        \Log::channel('errorlog')->debug($request->hasFile('img') ? "OK" : "NG");
+        \Log::channel('single')->debug($request->hasFile('img') ? "OK" : "NG");
         \Log::channel('errorlog')->debug($request->file('img') ? "OK" : "NG");
 
         //　todoエラーをキャッチする
