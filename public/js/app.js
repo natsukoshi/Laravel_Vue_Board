@@ -21002,13 +21002,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
-/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -21020,9 +21018,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+// require('./bootstrap');
+// window.Vue = require('vue');
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21039,9 +21037,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
- //axios使用時にCSRF対策用のトークンを付与
-
+// import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
  // ルーティングの定義をインポートする
 
  // ストアのインデックスをインポートする
@@ -21061,17 +21057,17 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch('auth/loggedinUser');
+            return _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch('auth/loggedinUser');
 
           case 2:
-            new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
+            new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
               el: '#app',
-              router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
+              router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
               //ルーティング定義の読み込み
-              store: _store__WEBPACK_IMPORTED_MODULE_4__["default"],
+              store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
               //ストアの使用宣言
               components: {
-                App: _App_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+                App: _App_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
               },
               //ルートコンポーネントの使用宣言
               template: '<App />' //ルートコンポーネントの描画
@@ -21092,71 +21088,6 @@ function () {
 }();
 
 createApp();
-
-/***/ }),
-
-/***/ "./resources/js/bootstrap.js":
-/*!***********************************!*\
-  !*** ./resources/js/bootstrap.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// window._ = require('lodash');
-
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-// try {
-//     window.Popper = require('popper.js').default;
-//     window.$ = window.jQuery = require('jquery');
-//     require('bootstrap');
-// } catch (e) {}
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-// window.axios = require('axios');
-// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
-// let token = document.head.querySelector('meta[name="csrf-token"]');
-// if (token) {
-//     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-// } else {
-//     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-// }
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-// import Echo from 'laravel-echo'
-// window.Pusher = require('pusher-js');
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
-// import { getCookieValue } from './util'
-// window.axios = require('axios')
-// // Ajaxリクエストであることを示すヘッダーを付与する
-// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-// window.axios.interceptors.request.use(config => {
-//   // クッキーからトークンを取り出してヘッダーに添付する
-//   config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
-//   return config
-// })
 
 /***/ }),
 

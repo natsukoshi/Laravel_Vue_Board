@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as ImageLib;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\File;
 
 
 class Image extends Model
@@ -60,12 +61,14 @@ class Image extends Model
         $imgFileName = \uniqid("img_") . '.' . $file->extension();
 
         // 画像サイズが大きすぎる場合比率を保って縮小
-        // $image = $this->downsizeImage($file);
-        // $image->save(config("const.IMAGE_SAVE_PATH") . $imgFileName);
+        $image = $this->downsizeImage($file);
+        // 一時保存
+        $tmpSavePath = '/tmp/' . $imgFileName;
+        $image->save($tmpSavePath);
 
         // S3にファイルを保存する
         // 第三引数の'public'はファイルを公開状態で保存するため
-        Storage::cloud()->putFileAs('', $file, $imgFileName, 'public');
+        Storage::cloud()->putFileAs('', new File($tmpSavePath), $imgFileName, 'public');
         \Log::channel('errorlog')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
 
         // データベースエラー時にファイル削除を行うため
@@ -82,9 +85,6 @@ class Image extends Model
             Storage::cloud()->delete($imgFileName);
             throw $exception;
         }
-
-        $image = $this->downsizeImage($file);
-
 
         \Log::channel('errorlog')->debug("Imageモデル：DBに保存した後");
     }
