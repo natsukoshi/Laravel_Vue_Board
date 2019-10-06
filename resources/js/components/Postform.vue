@@ -25,7 +25,12 @@
 <script>
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
-import { OK, UNPROCESSABLE_ENTITY, INTERNAL_SERVER_ERROR } from "../util";
+import {
+  OK,
+  UNPROCESSABLE_ENTITY,
+  INTERNAL_SERVER_ERROR,
+  CSRF_TOKEN_ERROR
+} from "../util";
 import { POST_PAGE, REPLY_PAGE } from "../util";
 
 export default {
@@ -45,6 +50,7 @@ export default {
   },
   methods: {
     async postMessage() {
+      console.log(getCookieArray());
       let response;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
@@ -61,7 +67,12 @@ export default {
       // パラメータの有無によって切り分け
       if (typeof this.$route.params.id === "undefined") {
         console.log("投稿");
-        response = await axios
+        var axiosPost = axios.create({
+          //   xsrfHeaderName: "X-XSRF-TOKEN",
+          xsrfCookieName: "XSRF-TOKEN",
+          withCredentials: true
+        });
+        response = await axiosPost
           .post("/api/posts", formData, config)
           .catch(err => err.response || err);
       } else {
@@ -80,8 +91,17 @@ export default {
         console.log(this.postErrors);
         return;
       }
-      if(response.status === INTERNAL_SERVER_ERROR){
-          console.log("500エラー");
+      if (response.status === CSRF_TOKEN_ERROR) {
+        console.log("CSRFTOKEN ERROR");
+
+        this.postErrors = response.data.errors;
+        console.log(this.postErrors);
+        console.log(response);
+
+        return;
+      }
+      if (response.status === INTERNAL_SERVER_ERROR) {
+        console.log("500エラー");
 
         this.postErrors = response.data.errors;
         console.log(this.postErrors);
@@ -112,4 +132,18 @@ export default {
     }
   }
 };
+
+//cookie値を連想配列として取得する
+function getCookieArray() {
+  var arr = new Array();
+  if (document.cookie != "") {
+    var tmp = document.cookie.split("; ");
+    for (var i = 0; i < tmp.length; i++) {
+      var data = tmp[i].split("=");
+      arr[data[0]] = decodeURIComponent(data[1]);
+    }
+  }
+  return arr["XSRF-TOKEN"];
+}
+console.log(getCookieArray());
 </script>

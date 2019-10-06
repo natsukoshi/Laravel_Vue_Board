@@ -3,6 +3,7 @@ export const CREATED = 201
 export const INTERNAL_SERVER_ERROR = 500
 export const UNPROCESSABLE_ENTITY = 422 //Laravelではバリデーションエラー時に422を返す
 export const NOT_FOUND = 404 //404エラー
+export const CSRF_TOKEN_ERROR = 419 //CSRFTOKENエラー
 
 //フォーム用定数　どのフォームか判定用
 export const POST_PAGE = 1

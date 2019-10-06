@@ -27,7 +27,7 @@
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
+// import './bootstrap'    //axios使用時にCSRF対策用のトークンを付与
 import Vue from 'vue'
 
 // ルーティングの定義をインポートする
@@ -36,9 +36,6 @@ import router from './router'
 import store from './store'
 // ルートコンポーネントをインポートする
 import App from './App.vue'
-
-
-
 
 
 const createApp = async () => {
