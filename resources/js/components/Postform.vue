@@ -1,5 +1,5 @@
 <template>
-  <div class="post_form">
+  <div>
     <div v-if="postErrors" class="error">
       <ul v-if="postErrors.title">
         <li v-for="msg in postErrors.title" :key="msg">{{ msg }}</li>
@@ -11,13 +11,19 @@
         <li v-for="msg in postErrors.img" :key="msg">{{ msg }}</li>
       </ul>
     </div>
-    <form @submit.prevent="postMessage" v-if="isLoggedin">
-      タイトル：
-      <input type="text" v-model="titleContent" />
-      <br />メッセージ：
-      <textarea v-model="messasgeContent"></textarea>
-      <br />
-      <input type="file" name="img" @change="selectedFile" id="imgSelectForm" />
+    <form @submit.prevent="postMessage" v-if="isLoggedin" class="post_form">
+      <div class="form_box">
+        <label for="post-title">タイトル</label>
+        <input type="text" id="post-title" v-model="titleContent" />
+      </div>
+      <div class="form_box">
+        <label for="post-message">メッセージ</label>
+        <textarea id="post-message" v-model="messasgeContent"></textarea>
+      </div>
+      <div class="form_box">
+        <label for="imgSelectForm">画像</label>
+        <input type="file" name="img" @change="selectedFile" id="imgSelectForm" />
+      </div>
       <button>メッセージ送信</button>
     </form>
   </div>

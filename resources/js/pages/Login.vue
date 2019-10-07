@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Login</h1>
+    <h1>ログイン</h1>
     <div v-if="loginErrors" class="error">
       <ul v-if="loginErrors.email">
         <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
@@ -10,17 +10,18 @@
       </ul>
     </div>
     <form @submit.prevent="login" class="post_form">
-      <label for="login-email">Email</label>
-      <input type="text" id="login-email" v-model="loginForm.email" />
-      <br />
-      <label for="login-password">Password</label>
-      <input type="password" id="login-password" v-model="loginForm.password" />
-      <br />
-      <button type="submit">Login</button>
+      <div class="form_box">
+        <label for="login-email" class="left_label">メールアドレス</label>
+        <input type="text" class="right_input" id="login-email" v-model="loginForm.email" />
+      </div>
+      <div class="form_box">
+        <label for="login-password">パスワード</label>
+        <input type="password" id="login-password" v-model="loginForm.password" />
+      </div>
+      <button type="submit">ログイン</button>
     </form>
-    <p>Password:{{loginForm.password}}</p>
 
-    <h1>Register</h1>
+    <h1>新規登録</h1>
     <div v-if="registerErrors" class="error">
       <ul v-if="registerErrors.email">
         <li v-for="msg in registerErrors.email" :key="msg">{{ msg }}</li>
@@ -30,32 +31,42 @@
       </ul>
     </div>
     <form @submit.prevent="register" class="post_form">
-      <p>
-        <label for="register-name">Name</label>
+      <div class="form_box">
+        <label for="register-name">名前</label>
         <input type="text" id="register-name" v-model="registerForm.name" />
-      </p>
-      <p>
-        <label for="register-email">Email</label>
+      </div>
+      <div class="form_box">
+        <label for="register-email">メールアドレス</label>
         <input type="text" id="register-email" v-model="registerForm.email" />
-      </p>
-      <p>
-        <label for="register-password">Password</label>
+      </div>
+      <div class="form_box">
+        <label for="register-password">パスワード</label>
         <input type="password" id="register-password" v-model="registerForm.password" />
-      </p>
-      <p>
-        <label for="register-password">Password Confirm</label>
+      </div>
+      <div class="form_box">
+        <label for="register-password">
+          パスワード
+          <br />(確認)
+        </label>
         <input
           type="password"
           id="register-password_confirmation"
           v-model="registerForm.password_confirmation"
         />
-      </p>
+      </div>
       <button type="submit">Register</button>
     </form>
-    <p>Password:{{registerForm.password}}</p>
-    <a href="/auth/google">
-      <button>google認証</button>
-    </a>
+
+    <h1>googleアカウントでログイン</h1>
+    <div class="form_box">
+      <a href="/auth/google">
+        <img
+          src="css/btn_google_signin_dark_normal_web.png"
+          class="google_button"
+          alt="googleアカウントでログイン"
+        />
+      </a>
+    </div>
   </div>
 </template>
 

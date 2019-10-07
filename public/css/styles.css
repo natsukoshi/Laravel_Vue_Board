@@ -3,6 +3,7 @@ body{
 }
 .container{
     margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 /* .postRaw {
@@ -83,7 +84,7 @@ body{
     font-size: 18px;
 }
 
-.post_form input, textarea {
+/* .post_form input, textarea {
 	font: 15px/24px sans-serif;
 	box-sizing: border-box;
 	width: 80%;
@@ -93,12 +94,68 @@ body{
 	border: 1px solid #1b2538;
 	border-radius: 4px;
 	outline: none;
+} */
+
+.form_box{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    text-align: center;
 }
+.form_box > label {
+    width: 130px;
+    text-align: center;
+}
+.form_box > input, textarea {
+     display: block;
+    height: 48px;
+    padding: 10px 16px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+    line-height: 1.5;
+    margin-left: 10px;
+    width: calc(100% - 130px);
+    position: relative;
+}
+
 
 .post_form input:focus, textarea:focus {
     /* border-color: #da3c41; */
-    border: 1.5px solid #da3c41;
+    border: 2px solid #da3c41;
 }
+
+.post_form > button {
+    background-color: #F5DEB3;
+    border: 1px solid #F5DEB3;
+    border-radius: 4px;
+    color: #000;
+    display: block;
+    width: 250px;
+    margin: 15px auto 0;
+    line-height: 48px;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.post_form > button:hover {
+    opacity: 0.8;
+}
+
+.form_box a {
+    display: block;
+    text-align: center;
+    /* 画像サイズに合わせる */
+    width: 191px;
+    height: 46px;
+    margin: 0px auto;
+
+}
+.google_button {
+    display: block;
+}
+
 
 /* ページネーション */
 .pagination {
