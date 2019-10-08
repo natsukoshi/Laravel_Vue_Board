@@ -52,8 +52,9 @@ class LoginController extends Controller
     // AuthenticatesUsersトレイトのメソッドの上書き
     protected function loggedOut(Request $request)
     {
-        // セッションを再生成する→logoutメソッドで同じことをしているため不要
-        // $request->session()->regenerate();
+        //CSRFトークンを再生成する。
+        //セッションIDは再生成されるが、一度セッションを破棄するためトークンもなくなるため
+        $request->session()->regenerateToken();
 
         // データとしては空で、ステータスコード200だけを返す
         // (jsonメソッドのデフォルト値が200になっている）
