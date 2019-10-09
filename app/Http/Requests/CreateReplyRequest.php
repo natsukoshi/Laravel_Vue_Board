@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateReplyRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'message' => 'required',
+            'title' => 'required|max:255',
+            'img' => 'mimes:jpg,jpeg,png,gif',
+            'parentID' => 'required | exists:posts,id',
+        ];
+    }
+
+
+    /**
+     * 定義済みバリデーションルールのエラーメッセージ取得
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'message.required' => 'メッセージを入力してください。',
+            'title.required'  => 'タイトルを入力してください。',
+            'img.mimes' => '画像はjpg,png,gifのみ投稿可能です。',
+            'parentID.required' => '不正な操作です。',
+            'parentID.exists' => '存在しない投稿への返信です。すでに削除済みの可能性があります。画面をリロードしてください。',
+
+        ];
+    }
+}

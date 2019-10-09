@@ -23,7 +23,7 @@ class PostController extends Controller
 
     /**
      * 投稿
-     * @param App\Http\Requests\CreatePostRequest $request
+     * @param \App\Http\Requests\CreatePostRequest $request
      * @return \Illuminate\Http\Response
      */
     public function create(\App\Http\Requests\CreatePostRequest $request)
@@ -114,7 +114,7 @@ class PostController extends Controller
      * @param App\Http\Requests\DeletePostRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function delete(App\Http\Requests\DeletePostRequest $request, $id)
+    public function delete(\App\Http\Requests\DeletePostRequest $request, $id)
     {
         $post = Post::where('id', $id)->with(['reply'])->first();
 

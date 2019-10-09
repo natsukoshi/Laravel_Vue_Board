@@ -1944,6 +1944,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4321,6 +4330,16 @@ var render = function() {
                 }),
                 0
               )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.postErrors.parentID
+            ? _c(
+                "ul",
+                _vm._l(_vm.postErrors.parentID, function(msg) {
+                  return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+                }),
+                0
+              )
             : _vm._e()
         ])
       : _vm._e(),
@@ -4398,7 +4417,12 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("input", {
-                attrs: { type: "file", name: "img", id: "imgSelectForm" },
+                attrs: {
+                  type: "file",
+                  accept: ".jpg, .jpeg, .gif, .png",
+                  name: "img",
+                  id: "imgSelectForm"
+                },
                 on: { change: _vm.selectedFile }
               })
             ]),

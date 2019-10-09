@@ -10,6 +10,9 @@
       <ul v-if="postErrors.img">
         <li v-for="msg in postErrors.img" :key="msg">{{ msg }}</li>
       </ul>
+      <ul v-if="postErrors.parentID">
+        <li v-for="msg in postErrors.parentID" :key="msg">{{ msg }}</li>
+      </ul>
     </div>
     <form @submit.prevent="postMessage" v-if="isLoggedin" class="post_form">
       <div class="form_box">
@@ -22,7 +25,13 @@
       </div>
       <div class="form_box">
         <label for="imgSelectForm">画像</label>
-        <input type="file" name="img" @change="selectedFile" id="imgSelectForm" />
+        <input
+          type="file"
+          accept=".jpg, .jpeg, .gif, .png"
+          name="img"
+          @change="selectedFile"
+          id="imgSelectForm"
+        />
       </div>
       <button>メッセージ送信</button>
     </form>
