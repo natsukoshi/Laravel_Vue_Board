@@ -23,42 +23,27 @@ class PostController extends Controller
 
     /**
      * 投稿
-     * @param Request $request
+     * @param App\Http\Requests\CreatePostRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(\App\Http\Requests\CreatePostRequest $request)
     {
-
-        $validateRule = [
-            'message' => 'required',
-            'title' => 'required|max:255',
-            'img' => 'mimes:jpg,jpeg,png,gif'
-        ];
-        // dd(request()->all());
-        //\Log::channel('single')->debug($request->img->extension());
-
-        \Log::channel('errorlog')->debug("バリデーション通過前");
-
-
-        //todo エラーメッセージの日本語化　下記メソッドにメッセージを渡す
-        $this->validate($request, $validateRule);
-
-        \Log::channel('errorlog')->debug("バリデーション通過");
 
         $post = new Post;
         $post->message = $request->message;
         $post->title = $request->title;
         $post->attachment_id = null;
 
-        \Log::channel('single')->debug($request->hasFile('img') ? "OK" : "NG");
-        \Log::channel('errorlog')->debug($request->file('img') ? "OK" : "NG");
-
         //　todoエラーをキャッチする
         // img保存,取得したImageモデルのIDを格納
         if ($request->hasFile('img')) {
-            \Log::channel('errorlog')->debug("ファイル保存する前");
-            $img = new Image;
-            $img->saveImage($request->file('img'));
+            try {
+                \Log::channel('errorlog')->debug("ファイル保存する前");
+                $img = new Image;
+                $img->saveImage($request->file('img'));
+            } catch (\Exception $e) {
+                return response(500);
+            }
             $post->attachment_id = $img->id;
         }
 
@@ -126,10 +111,10 @@ class PostController extends Controller
 
     /**
      * 投稿と紐づく返信を削除
-     * @param DeletePostRequest $request
+     * @param App\Http\Requests\DeletePostRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function delete(DeletePostRequest $request, $id)
+    public function delete(App\Http\Requests\DeletePostRequest $request, $id)
     {
         $post = Post::where('id', $id)->with(['reply'])->first();
 

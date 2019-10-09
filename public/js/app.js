@@ -1972,7 +1972,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(getCookieArray());
                 config = {
                   headers: {
                     "content-type": "multipart/form-data"
@@ -1990,7 +1989,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log(this.$route.params.id); // パラメータの有無によって切り分け
 
                 if (!(typeof this.$route.params.id === "undefined")) {
-                  _context.next = 16;
+                  _context.next = 15;
                   break;
                 }
 
@@ -2000,30 +1999,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   xsrfCookieName: "XSRF-TOKEN",
                   withCredentials: true
                 });
-                _context.next = 13;
+                _context.next = 12;
                 return axiosPost.post("/api/posts", formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 13:
+              case 12:
                 response = _context.sent;
-                _context.next = 21;
+                _context.next = 20;
                 break;
 
-              case 16:
+              case 15:
                 console.log("返信");
                 formData.append("parentID", this.$route.params.id);
-                _context.next = 20;
+                _context.next = 19;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/reply/".concat(this.$route.params.id), formData, config)["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 20:
+              case 19:
                 response = _context.sent;
 
-              case 21:
+              case 20:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 26;
+                  _context.next = 25;
                   break;
                 }
 
@@ -2032,7 +2031,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log(this.postErrors);
                 return _context.abrupt("return");
 
-              case 26:
+              case 25:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["CSRF_TOKEN_ERROR"])) {
                   _context.next = 32;
                   break;
@@ -2042,6 +2041,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.postErrors = response.data.errors;
                 console.log(this.postErrors);
                 console.log(response);
+                this.$router.push("/500");
                 return _context.abrupt("return");
 
               case 32:
@@ -2050,9 +2050,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   break;
                 }
 
-                console.log("500エラー");
                 this.postErrors = response.data.errors;
                 console.log(this.postErrors);
+                this.$router.push("/500");
                 return _context.abrupt("return");
 
               case 37:
@@ -2093,23 +2093,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }
 }); //cookie値を連想配列として取得する
+// function getCookieArray() {
+//   var arr = new Array();
+//   if (document.cookie != "") {
+//     var tmp = document.cookie.split("; ");
+//     for (var i = 0; i < tmp.length; i++) {
+//       var data = tmp[i].split("=");
+//       arr[data[0]] = decodeURIComponent(data[1]);
+//     }
+//   }
+//   return arr["XSRF-TOKEN"];
+// }
+// console.log(getCookieArray());
 
-function getCookieArray() {
-  var arr = new Array();
+/***/ }),
 
-  if (document.cookie != "") {
-    var tmp = document.cookie.split("; ");
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CSRFError.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CSRFError.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-    for (var i = 0; i < tmp.length; i++) {
-      var data = tmp[i].split("=");
-      arr[data[0]] = decodeURIComponent(data[1]);
-    }
-  }
-
-  return arr["XSRF-TOKEN"];
-}
-
-console.log(getCookieArray());
+//
+//
+//
+//
+//
+//
+// export default {
+//   watch: {
+//     $route: {
+//       async handler() {
+//         setTimeout("redirect()", 3);
+//       },
+//       immediate: true
+//     }
+//   }
+// };
+// setTimeout(redirect(), 3);
+// function redirect() {
+//   location.href = "/index";
+// }
 
 /***/ }),
 
@@ -4391,6 +4416,43 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CSRFError.vue?vue&type=template&id=a7b54eaa&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CSRFError.vue?vue&type=template&id=a7b54eaa& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("p", [
+        _vm._v("エラーが発生しました。自動的にトップページへ移動します。")
+      ]),
+      _vm._v(" "),
+      _c("br")
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/Error.vue?vue&type=template&id=94ed5362&":
 /*!***************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/Error.vue?vue&type=template&id=94ed5362& ***!
@@ -4406,7 +4468,17 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("\n    システムエラーが発生しました。\n")])
+  return _c(
+    "div",
+    [
+      _c("p", [_vm._v("システムエラーが発生しました。")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("router-link", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -21353,6 +21425,78 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/CSRFError.vue":
+/*!******************************************!*\
+  !*** ./resources/js/pages/CSRFError.vue ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CSRFError_vue_vue_type_template_id_a7b54eaa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CSRFError.vue?vue&type=template&id=a7b54eaa& */ "./resources/js/pages/CSRFError.vue?vue&type=template&id=a7b54eaa&");
+/* harmony import */ var _CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CSRFError.vue?vue&type=script&lang=js& */ "./resources/js/pages/CSRFError.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CSRFError_vue_vue_type_template_id_a7b54eaa___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CSRFError_vue_vue_type_template_id_a7b54eaa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/CSRFError.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/CSRFError.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/pages/CSRFError.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CSRFError.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CSRFError.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/CSRFError.vue?vue&type=template&id=a7b54eaa&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/pages/CSRFError.vue?vue&type=template&id=a7b54eaa& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_template_id_a7b54eaa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./CSRFError.vue?vue&type=template&id=a7b54eaa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CSRFError.vue?vue&type=template&id=a7b54eaa&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_template_id_a7b54eaa___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CSRFError_vue_vue_type_template_id_a7b54eaa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/pages/Error.vue":
 /*!**************************************!*\
   !*** ./resources/js/pages/Error.vue ***!
@@ -21683,10 +21827,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_Error_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Error.vue */ "./resources/js/pages/Error.vue");
 /* harmony import */ var _pages_Notfound_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Notfound.vue */ "./resources/js/pages/Notfound.vue");
 /* harmony import */ var _pages_PostDetaile_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/PostDetaile.vue */ "./resources/js/pages/PostDetaile.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
+/* harmony import */ var _pages_CSRFError_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/CSRFError.vue */ "./resources/js/pages/CSRFError.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
 
  // ページコンポーネントをインポートする
+
 
 
 
@@ -21717,7 +21863,7 @@ var routes = [{
   // ログイン済みでloginページにアクセスした場合、indexへリダイレクト(ページコンポーネントを切り替える)
   beforeEnter: function beforeEnter(to, from, next) {
     // ページコンポーネントが切り替わる直前に呼び出される関数
-    if (_store__WEBPACK_IMPORTED_MODULE_7__["default"].getters['auth/isLoggedin']) {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__["default"].getters['auth/isLoggedin']) {
       next('/');
     } else {
       next();
@@ -21731,7 +21877,11 @@ var routes = [{
   //見つかりませんでしたエラーページ
   path: '/404',
   component: _pages_Notfound_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-}, {
+}, // {//見つかりませんでしたエラーページ
+//     path: '/412',
+//     component: CSRFError
+// },
+{
   //投稿の詳細ページ
   path: '/post/:id',
   name: 'post',

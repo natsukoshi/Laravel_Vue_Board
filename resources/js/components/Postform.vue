@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     async postMessage() {
-      console.log(getCookieArray());
       let response;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
@@ -103,14 +102,13 @@ export default {
         this.postErrors = response.data.errors;
         console.log(this.postErrors);
         console.log(response);
-
+        this.$router.push("/500");
         return;
       }
       if (response.status === INTERNAL_SERVER_ERROR) {
-        console.log("500エラー");
-
         this.postErrors = response.data.errors;
         console.log(this.postErrors);
+        this.$router.push("/500");
         return;
       }
 
@@ -140,16 +138,16 @@ export default {
 };
 
 //cookie値を連想配列として取得する
-function getCookieArray() {
-  var arr = new Array();
-  if (document.cookie != "") {
-    var tmp = document.cookie.split("; ");
-    for (var i = 0; i < tmp.length; i++) {
-      var data = tmp[i].split("=");
-      arr[data[0]] = decodeURIComponent(data[1]);
-    }
-  }
-  return arr["XSRF-TOKEN"];
-}
-console.log(getCookieArray());
+// function getCookieArray() {
+//   var arr = new Array();
+//   if (document.cookie != "") {
+//     var tmp = document.cookie.split("; ");
+//     for (var i = 0; i < tmp.length; i++) {
+//       var data = tmp[i].split("=");
+//       arr[data[0]] = decodeURIComponent(data[1]);
+//     }
+//   }
+//   return arr["XSRF-TOKEN"];
+// }
+// console.log(getCookieArray());
 </script>

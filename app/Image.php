@@ -60,16 +60,20 @@ class Image extends Model
         //ユニークなファイル名を作成
         $imgFileName = \uniqid("img_") . '.' . $file->extension();
 
-        // 画像サイズが大きすぎる場合比率を保って縮小
-        $image = $this->downsizeImage($file);
-        // 一時保存
-        $tmpSavePath = '/tmp/' . $imgFileName;
-        $image->save($tmpSavePath);
+        try {
+            // 画像サイズが大きすぎる場合比率を保って縮小
+            $image = $this->downsizeImage($file);
+            // 一時保存
+            $tmpSavePath = '/tmp/' . $imgFileName;
+            $image->save($tmpSavePath);
 
-        // S3にファイルを保存する
-        // 第三引数の'public'はファイルを公開状態で保存するため
-        Storage::cloud()->putFileAs('', new File($tmpSavePath), $imgFileName, 'public');
-        \Log::channel('errorlog')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
+            // S3にファイルを保存する
+            // 第三引数の'public'はファイルを公開状態で保存するため
+            Storage::cloud()->putFileAs('', new File($tmpSavePath), $imgFileName, 'public');
+            \Log::channel('errorlog')->debug("Imageモデル：ファイル保存した後" . $imgFileName);
+        } catch (\Exception $e) {
+            throw $e;
+        }
 
         // データベースエラー時にファイル削除を行うため
         // トランザクションを利用する
@@ -79,11 +83,11 @@ class Image extends Model
             $this->file_name = $imgFileName;
             $this->save();
             DB::commit();
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             DB::rollBack();
             // DBとの不整合を避けるためアップロードしたファイルを削除
             Storage::cloud()->delete($imgFileName);
-            throw $exception;
+            throw $e;
         }
 
         \Log::channel('errorlog')->debug("Imageモデル：DBに保存した後");

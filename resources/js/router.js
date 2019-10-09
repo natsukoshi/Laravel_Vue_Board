@@ -7,7 +7,7 @@ import Login from './pages/Login.vue'
 import SystemError from './pages/Error.vue'
 import Notfound from './pages/Notfound.vue'
 import PostDetaile from './pages/PostDetaile.vue'
-
+import CSRFError from './pages/CSRFError.vue'
 // ストア
 import store from './store'
 
@@ -49,6 +49,10 @@ const routes = [
         path: '/404',
         component: Notfound
     },
+    // {//見つかりませんでしたエラーページ
+    //     path: '/412',
+    //     component: CSRFError
+    // },
     {//投稿の詳細ページ
         path: '/post/:id',
         name: 'post',
