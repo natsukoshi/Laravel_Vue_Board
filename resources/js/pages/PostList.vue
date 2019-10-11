@@ -1,10 +1,8 @@
 <template>
   <div>
-    <!-- コンポーネント MyModal -->
     <ModalWindow @close="closeModal" v-if="showModal">
-      <!-- default スロットコンテンツ -->
       <template slot="message">
-        <p>本当に投稿を削除しますか？</p>
+        <p>本当にこの投稿を削除しますか？</p>
       </template>
       <template slot="footer">
         <button @click="deletePost(deleteTargetID)">削除する</button>
@@ -69,11 +67,6 @@ export default {
     async fetchPosts() {
       const response = await axios.get(`/api/posts?page=${this.page}`);
 
-      //to-do 投稿エラーだった場合の処理
-      //   if (response.status !== OK) {
-      //     this.$store.commit('error/setCode', response.status)
-      //     return false
-      //   }
       console.log("現在ページ：" + this.page);
       console.log("fetchPost呼ばれたよ");
       this.posts = response.data.data;
@@ -125,9 +118,6 @@ export default {
     closeModal() {
       this.showModal = false;
       this.deleteTargetID = null;
-    },
-    doSend() {
-      alert("ボタンがおされました");
     }
   },
   computed: {

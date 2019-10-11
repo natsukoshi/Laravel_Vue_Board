@@ -2413,8 +2413,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Postform.vue */ "./resources/js/components/Postform.vue");
 /* harmony import */ var _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Pagination.vue */ "./resources/js/components/Pagination.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var _components_ModalWindow_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/ModalWindow.vue */ "./resources/js/components/ModalWindow.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2471,6 +2472,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2479,7 +2490,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Postform: _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Pagination: _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    Pagination: _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    ModalWindow: _components_ModalWindow_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
     page: {
@@ -2494,7 +2506,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       replies: null,
       messasgeContent: "",
       currentPage: 0,
-      lastPage: 0
+      lastPage: 0,
+      showModal: false,
+      deleteTargetID: null
     };
   },
   methods: {
@@ -2517,9 +2531,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context.sent;
 
                 // 取得エラー時の処理
-                if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["NOT_FOUND"]) {
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["NOT_FOUND"]) {
                   this.$router.push("/404");
-                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["INTERNAL_SERVER_ERROR"]) {
                   this.$router.push("/500");
                 }
 
@@ -2564,16 +2578,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context2.sent;
 
                 // 取得エラー時の処理
-                if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["NOT_FOUND"]) {
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["NOT_FOUND"]) {
                   this.$router.push("/404");
-                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["INTERNAL_SERVER_ERROR"]) {
                   this.$router.push("/500");
                 }
 
+                this.closeModal();
                 this.fetchPost();
                 console.log("削除完了");
 
-              case 6:
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -2586,7 +2601,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return deleteReply;
-    }()
+    }(),
+    deleteConfirm: function deleteConfirm(targetID) {
+      this.showModal = true;
+      this.deleteTargetID = targetID;
+    },
+    closeModal: function closeModal() {
+      this.showModal = false;
+      this.deleteTargetID = null;
+    }
   },
   watch: {
     $route: {
@@ -2618,7 +2641,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       immediate: true
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])("auth", [//ストア内のパスを指定
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])("auth", [//ストア内のパスを指定
   "isLoggedin"]), {
     userID: function userID() {
       return this.$store.getters["auth/userID"];
@@ -2658,8 +2681,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
 //
 //
 //
@@ -2737,11 +2758,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
-                //to-do 投稿エラーだった場合の処理
-                //   if (response.status !== OK) {
-                //     this.$store.commit('error/setCode', response.status)
-                //     return false
-                //   }
                 console.log("現在ページ：" + this.page);
                 console.log("fetchPost呼ばれたよ");
                 this.posts = response.data.data;
@@ -2851,9 +2867,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     closeModal: function closeModal() {
       this.showModal = false;
       this.deleteTargetID = null;
-    },
-    doSend: function doSend() {
-      alert("ボタンがおされました");
     }
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])("auth", [//ストア内のパスを指定
@@ -4917,6 +4930,33 @@ var render = function() {
     [
       _c("router-link", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")]),
       _vm._v(" "),
+      _vm.showModal
+        ? _c(
+            "ModalWindow",
+            { on: { close: _vm.closeModal } },
+            [
+              _c("template", { slot: "message" }, [
+                _c("p", [_vm._v("本当にこの返信を削除しますか？")])
+              ]),
+              _vm._v(" "),
+              _c("template", { slot: "footer" }, [
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteReply(_vm.deleteTargetID)
+                      }
+                    }
+                  },
+                  [_vm._v("削除する")]
+                )
+              ])
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _vm.post
         ? _c("div", { staticClass: "postRaw" }, [
             _vm._v("\n    Title:" + _vm._s(_vm.post.title) + "\n    "),
@@ -4976,7 +5016,7 @@ var render = function() {
                           staticClass: "delete_button",
                           on: {
                             click: function($event) {
-                              return _vm.deleteReply(reply.id)
+                              return _vm.deleteConfirm(reply.id)
                             }
                           }
                         },
@@ -5032,7 +5072,7 @@ var render = function() {
             { on: { close: _vm.closeModal } },
             [
               _c("template", { slot: "message" }, [
-                _c("p", [_vm._v("本当に投稿を削除しますか？")])
+                _c("p", [_vm._v("本当にこの投稿を削除しますか？")])
               ]),
               _vm._v(" "),
               _c("template", { slot: "footer" }, [

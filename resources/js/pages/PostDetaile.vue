@@ -2,6 +2,15 @@
   <div>
     <router-link to="/">Topへ戻る</router-link>
 
+    <ModalWindow @close="closeModal" v-if="showModal">
+      <template slot="message">
+        <p>本当にこの返信を削除しますか？</p>
+      </template>
+      <template slot="footer">
+        <button @click="deleteReply(deleteTargetID)">削除する</button>
+      </template>
+    </ModalWindow>
+
     <div v-if="post" class="postRaw">
       Title:{{ post.title }}
       <br />
@@ -31,7 +40,7 @@
         <button
           class="delete_button"
           v-if="reply.user.id == userID"
-          @click="deleteReply(reply.id)"
+          @click="deleteConfirm(reply.id)"
         >削除</button>
       </div>
     </div>
@@ -46,13 +55,15 @@
 import axios from "axios";
 import Postform from "../components/Postform.vue";
 import Pagination from "../components/Pagination.vue";
+import ModalWindow from "../components/ModalWindow.vue";
 import { mapGetters } from "vuex";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "../util";
 
 export default {
   components: {
     Postform,
-    Pagination
+    Pagination,
+    ModalWindow
   },
   props: {
     page: {
@@ -68,7 +79,9 @@ export default {
       replies: null,
       messasgeContent: "",
       currentPage: 0,
-      lastPage: 0
+      lastPage: 0,
+      showModal: false,
+      deleteTargetID: null
     };
   },
 
@@ -112,9 +125,19 @@ export default {
         this.$router.push("/500");
       }
 
+      this.closeModal();
       this.fetchPost();
 
       console.log("削除完了");
+    },
+
+    deleteConfirm(targetID) {
+      this.showModal = true;
+      this.deleteTargetID = targetID;
+    },
+    closeModal() {
+      this.showModal = false;
+      this.deleteTargetID = null;
     }
   },
 
