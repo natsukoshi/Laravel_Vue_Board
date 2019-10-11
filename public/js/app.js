@@ -2643,8 +2643,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Postform.vue */ "./resources/js/components/Postform.vue");
 /* harmony import */ var _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Pagination.vue */ "./resources/js/components/Pagination.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var _components_ModalWindow_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/ModalWindow.vue */ "./resources/js/components/ModalWindow.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2680,6 +2681,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2688,7 +2701,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Postform: _components_Postform_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Pagination: _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    Pagination: _components_Pagination_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    ModalWindow: _components_ModalWindow_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
     page: {
@@ -2702,7 +2716,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       posts: [],
       messasgeContent: "",
       currentPage: 0,
-      lastPage: 0
+      lastPage: 0,
+      showModal: false,
+      deleteTargetID: null
     };
   },
   methods: {
@@ -2803,14 +2819,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context3.sent;
 
                 // 取得エラー時の処理
-                if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["NOT_FOUND"]) {
+                if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["NOT_FOUND"]) {
                   this.$router.push("/404");
-                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
+                } else if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["INTERNAL_SERVER_ERROR"]) {
                   this.$router.push("/500");
                 }
 
+                this.closeModal();
                 console.log("削除後リロード");
-                this.tryMethod();
                 this.fetchPosts();
                 console.log("削除完了");
 
@@ -2828,32 +2844,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return deletePost;
     }(),
-    tryMethod: function () {
-      var _tryMethod = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                console.log("ｔｒｙメソッド");
-
-              case 1:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }));
-
-      function tryMethod() {
-        return _tryMethod.apply(this, arguments);
-      }
-
-      return tryMethod;
-    }()
+    deleteConfirm: function deleteConfirm(targetID) {
+      this.showModal = true;
+      this.deleteTargetID = targetID;
+    },
+    closeModal: function closeModal() {
+      this.showModal = false;
+      this.deleteTargetID = null;
+    },
+    doSend: function doSend() {
+      alert("ボタンがおされました");
+    }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])("auth", [//ストア内のパスを指定
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])("auth", [//ストア内のパスを指定
   "isLoggedin"]), {
     userID: function userID() {
       return this.$store.getters["auth/userID"];
@@ -2864,7 +2867,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //算出プロパティerrorCodeに変更があったときに
       handler: function handler(val) {
         //呼ばれるコールバック関数。valはerrorCode()によって新しく取得された値（変更後の値）
-        if (val === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
+        if (val === _util__WEBPACK_IMPORTED_MODULE_6__["INTERNAL_SERVER_ERROR"]) {
           this.$router.push("/500");
         }
       },
@@ -2875,13 +2878,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
                   console.log("fetchPost呼ぶ前");
-                  _context5.next = 3;
+                  _context4.next = 3;
                   return this.fetchPosts();
 
                 case 3:
@@ -2889,10 +2892,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 case 4:
                 case "end":
-                  return _context5.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee5, this);
+          }, _callee4, this);
         }));
 
         function handler() {
@@ -4227,6 +4230,52 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c& ***!
+  \**************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "modal", appear: "" } }, [
+    _c(
+      "div",
+      {
+        staticClass: "modal modal-overlay",
+        on: {
+          click: function($event) {
+            if ($event.target !== $event.currentTarget) {
+              return null
+            }
+            return _vm.$emit("close")
+          }
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-window" }, [
+          _c("div", { staticClass: "modal-content" }, [_vm._t("message")], 2),
+          _vm._v(" "),
+          _c("footer", { staticClass: "modal-footer" }, [_vm._t("footer")], 2)
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Pagination.vue?vue&type=template&id=d7acf176&":
 /*!*************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Pagination.vue?vue&type=template&id=d7acf176& ***!
@@ -4977,6 +5026,33 @@ var render = function() {
   return _c(
     "div",
     [
+      _vm.showModal
+        ? _c(
+            "ModalWindow",
+            { on: { close: _vm.closeModal } },
+            [
+              _c("template", { slot: "message" }, [
+                _c("p", [_vm._v("本当に投稿を削除しますか？")])
+              ]),
+              _vm._v(" "),
+              _c("template", { slot: "footer" }, [
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.deletePost(_vm.deleteTargetID)
+                      }
+                    }
+                  },
+                  [_vm._v("削除する")]
+                )
+              ])
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("p", [_c("Postform", { on: { reloadPosts: _vm.fetchPosts } })], 1),
       _vm._v(" "),
       _vm._l(_vm.posts, function(post) {
@@ -5018,7 +5094,7 @@ var render = function() {
                     staticClass: "delete_button",
                     on: {
                       click: function($event) {
-                        return _vm.deletePost(post.id)
+                        return _vm.deleteConfirm(post.id)
                       }
                     }
                   },
@@ -21306,6 +21382,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_template_id_1f42fb90___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_template_id_1f42fb90___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ModalWindow.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/ModalWindow.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ModalWindow_vue_vue_type_template_id_2ffcfd3c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalWindow.vue?vue&type=template&id=2ffcfd3c& */ "./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _ModalWindow_vue_vue_type_template_id_2ffcfd3c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalWindow_vue_vue_type_template_id_2ffcfd3c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ModalWindow.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c& ***!
+  \********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalWindow_vue_vue_type_template_id_2ffcfd3c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ModalWindow.vue?vue&type=template&id=2ffcfd3c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalWindow_vue_vue_type_template_id_2ffcfd3c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalWindow_vue_vue_type_template_id_2ffcfd3c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

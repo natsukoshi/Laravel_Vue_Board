@@ -1,5 +1,16 @@
 <template>
   <div>
+    <!-- コンポーネント MyModal -->
+    <ModalWindow @close="closeModal" v-if="showModal">
+      <!-- default スロットコンテンツ -->
+      <template slot="message">
+        <p>本当に投稿を削除しますか？</p>
+      </template>
+      <template slot="footer">
+        <button @click="deletePost(deleteTargetID)">削除する</button>
+      </template>
+    </ModalWindow>
+
     <p>
       <Postform v-on:reloadPosts="fetchPosts" />
     </p>
@@ -16,7 +27,7 @@
       </div>
       <div class="space">{{ post.message }}</div>
       <div class="created_at">Time:{{ post.created_at }}</div>
-      <button class="delete_button" v-if="post.user.id == userID" @click="deletePost(post.id)">削除</button>
+      <button class="delete_button" v-if="post.user.id == userID" @click="deleteConfirm(post.id)">削除</button>
     </div>
     <Pagination :currentPage="currentPage" :lastPage="lastPage" />
   </div>
@@ -25,13 +36,16 @@
 import axios from "axios";
 import Postform from "../components/Postform.vue";
 import Pagination from "../components/Pagination.vue";
+import ModalWindow from "../components/ModalWindow.vue";
+
 import { mapGetters } from "vuex";
 import { POST_PAGE, INTERNAL_SERVER_ERROR, NOT_FOUND } from "../util";
 
 export default {
   components: {
     Postform,
-    Pagination
+    Pagination,
+    ModalWindow
   },
   props: {
     page: {
@@ -45,7 +59,9 @@ export default {
       posts: [],
       messasgeContent: "",
       currentPage: 0,
-      lastPage: 0
+      lastPage: 0,
+      showModal: false,
+      deleteTargetID: null
     };
   },
   methods: {
@@ -96,13 +112,22 @@ export default {
         this.$router.push("/500");
       }
 
+      this.closeModal();
       console.log("削除後リロード");
-      this.tryMethod();
       this.fetchPosts();
       console.log("削除完了");
     },
-    async tryMethod() {
-      console.log("ｔｒｙメソッド");
+
+    deleteConfirm(targetID) {
+      this.showModal = true;
+      this.deleteTargetID = targetID;
+    },
+    closeModal() {
+      this.showModal = false;
+      this.deleteTargetID = null;
+    },
+    doSend() {
+      alert("ボタンがおされました");
     }
   },
   computed: {
