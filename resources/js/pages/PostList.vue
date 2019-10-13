@@ -9,9 +9,9 @@
       </template>
     </ModalWindow>
 
-    <p>
-      <Postform v-on:reloadPosts="fetchPosts" />
-    </p>
+    <Postform v-on:reloadPosts="fetchPosts" v-if="isLoggedin">
+      <template v-slot:formTitle>新規投稿</template>
+    </Postform>
     <div class="postRaw" v-for="post in posts" :key="post.id">
       <router-link :to="`post/${ post.id }`">
         Title:{{ post.title }}
@@ -47,6 +47,7 @@ export default {
   },
   props: {
     page: {
+      //pagenation
       type: Number,
       required: false,
       default: 1
@@ -67,31 +68,15 @@ export default {
     async fetchPosts() {
       const response = await axios.get(`/api/posts?page=${this.page}`);
 
-      console.log("現在ページ：" + this.page);
-      console.log("fetchPost呼ばれたよ");
       this.posts = response.data.data;
       this.currentPage = response.data.current_page;
       this.lastPage = response.data.last_page;
-      console.log(this.posts);
+
       console.log(response.data);
-    },
-
-    //フォームのメッセージを投稿する
-    async postMessage() {
-      const response = await axios.post("/api/posts", {
-        message: this.messasgeContent
-      });
-
-      //to-do 投稿エラーだった場合の処理
-
-      this.messasgeContent = "";
-      this.fetchPosts();
     },
 
     // 投稿を削除する
     async deletePost(targetID) {
-      console.log("削除開始");
-
       const response = await axios
         .delete(`/api/posts/${targetID}`)
         .catch(function(err) {
@@ -106,9 +91,7 @@ export default {
       }
 
       this.closeModal();
-      console.log("削除後リロード");
       this.fetchPosts();
-      console.log("削除完了");
     },
 
     deleteConfirm(targetID) {
@@ -150,10 +133,6 @@ export default {
       },
       immediate: true
     }
-    // $route () {
-    //      console.log('fetchPost呼ぶ前')
-    //   this.$store.commit('error/setStatusCode', null)
-    // }
   }
 };
 </script>

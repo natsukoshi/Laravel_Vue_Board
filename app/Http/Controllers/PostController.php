@@ -100,10 +100,12 @@ class PostController extends Controller
     public function detaile(string $id)
     {
         $post = Post::where('id', $id)->with(['user', 'image'])->first();
-        // $post = Post::where('id', $id)->with(['user', 'reply.user'])->first();
         $replies = Reply::where('parent_id', $id)->with(['user', 'image'])->paginate(3);
 
-        \Log::channel('single')->debug($post);
+        \Log::channel('single')->debug("replies出力");
+        \Log::channel('single')->debug($replies);
+
+
 
         // ??　はNULL合体演算子　前半の式が存在するときその式を、存在しないときは後半の式を返す
         return ['post' => $post, 'replies' => $replies] ?? abort(404);

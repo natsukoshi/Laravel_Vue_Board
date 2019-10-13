@@ -23,7 +23,7 @@
       <br />
     </div>
 
-    <div v-if="post && replies">
+    <template v-if="replies.length > 0">
       <h2>返信</h2>
       <div class="postRaw" v-for="reply in replies" :key="reply.id">
         Title:{{ reply.title }}
@@ -35,19 +35,18 @@
         </div>
         <div class="space">{{ reply.message }}</div>
         <div class="created_at">Time:{{ reply.created_at }}</div>
-        <br />
-
         <button
           class="delete_button"
           v-if="reply.user.id == userID"
           @click="deleteConfirm(reply.id)"
         >削除</button>
       </div>
-    </div>
+    </template>
     <Pagination :currentPage="currentPage" :lastPage="lastPage" />
 
-    <h2>返信フォーム</h2>
-    <Postform v-on:reloadPosts="fetchPost" />
+    <Postform v-on:reloadPosts="fetchPost" v-if="isLoggedin">
+      <template v-slot:formTitle>返信フォーム</template>
+    </Postform>
   </div>
 </template>
 
@@ -76,7 +75,7 @@ export default {
   data() {
     return {
       post: null,
-      replies: null,
+      replies: [],
       messasgeContent: "",
       currentPage: 0,
       lastPage: 0,
@@ -108,6 +107,10 @@ export default {
       this.lastPage = response.data.replies.last_page;
       console.log(this.post);
       console.log(this.replies);
+      console.log(this.replies.length);
+      if (this.replies) {
+        console.log("trueじゃよ");
+      }
     },
 
     //返信を削除する

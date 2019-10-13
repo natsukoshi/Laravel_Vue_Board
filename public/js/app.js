@@ -1953,6 +1953,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2101,19 +2104,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(this.uploadFile);
     }
   }
-}); //cookie値を連想配列として取得する
-// function getCookieArray() {
-//   var arr = new Array();
-//   if (document.cookie != "") {
-//     var tmp = document.cookie.split("; ");
-//     for (var i = 0; i < tmp.length; i++) {
-//       var data = tmp[i].split("=");
-//       arr[data[0]] = decodeURIComponent(data[1]);
-//     }
-//   }
-//   return arr["XSRF-TOKEN"];
-// }
-// console.log(getCookieArray());
+});
 
 /***/ }),
 
@@ -2480,7 +2471,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -2503,7 +2493,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       post: null,
-      replies: null,
+      replies: [],
       messasgeContent: "",
       currentPage: 0,
       lastPage: 0,
@@ -2544,8 +2534,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.lastPage = response.data.replies.last_page;
                 console.log(this.post);
                 console.log(this.replies);
+                console.log(this.replies.length);
 
-              case 11:
+                if (this.replies) {
+                  console.log("trueじゃよ");
+                }
+
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -2727,6 +2722,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   props: {
     page: {
+      //pagenation
       type: Number,
       required: false,
       "default": 1
@@ -2758,15 +2754,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
-                console.log("現在ページ：" + this.page);
-                console.log("fetchPost呼ばれたよ");
                 this.posts = response.data.data;
                 this.currentPage = response.data.current_page;
                 this.lastPage = response.data.last_page;
-                console.log(this.posts);
                 console.log(response.data);
 
-              case 10:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -2780,59 +2773,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return fetchPosts;
     }(),
-    //フォームのメッセージを投稿する
-    postMessage: function () {
-      var _postMessage = _asyncToGenerator(
+    // 投稿を削除する
+    deletePost: function () {
+      var _deletePost = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(targetID) {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/posts", {
-                  message: this.messasgeContent
-                });
-
-              case 2:
-                response = _context2.sent;
-                //to-do 投稿エラーだった場合の処理
-                this.messasgeContent = "";
-                this.fetchPosts();
-
-              case 5:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function postMessage() {
-        return _postMessage.apply(this, arguments);
-      }
-
-      return postMessage;
-    }(),
-    // 投稿を削除する
-    deletePost: function () {
-      var _deletePost = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(targetID) {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                console.log("削除開始");
-                _context3.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/posts/".concat(targetID))["catch"](function (err) {
                   return err.response || err;
                 });
 
-              case 3:
-                response = _context3.sent;
+              case 2:
+                response = _context2.sent;
 
                 // 取得エラー時の処理
                 if (response.status === _util__WEBPACK_IMPORTED_MODULE_6__["NOT_FOUND"]) {
@@ -2842,16 +2799,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 this.closeModal();
-                console.log("削除後リロード");
                 this.fetchPosts();
-                console.log("削除完了");
 
-              case 9:
+              case 6:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee2, this);
       }));
 
       function deletePost(_x) {
@@ -2891,13 +2846,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context4.prev = _context4.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
                   console.log("fetchPost呼ぶ前");
-                  _context4.next = 3;
+                  _context3.next = 3;
                   return this.fetchPosts();
 
                 case 3:
@@ -2905,10 +2860,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 case 4:
                 case "end":
-                  return _context4.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee4, this);
+          }, _callee3, this);
         }));
 
         function handler() {
@@ -2917,11 +2872,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         return handler;
       }(),
-      immediate: true // $route () {
-      //      console.log('fetchPost呼ぶ前')
-      //   this.$store.commit('error/setStatusCode', null)
-      // }
-
+      immediate: true
     }
   }
 });
@@ -4362,6 +4313,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h2", [_vm._t("formTitle")], 2),
+    _vm._v(" "),
     _vm.postErrors
       ? _c("div", { staticClass: "error" }, [
           _vm.postErrors.title
@@ -4976,69 +4929,77 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.post && _vm.replies
-        ? _c(
-            "div",
-            [
-              _c("h2", [_vm._v("返信")]),
-              _vm._v(" "),
-              _vm._l(_vm.replies, function(reply) {
-                return _c("div", { key: reply.id, staticClass: "postRaw" }, [
-                  _vm._v("\n      Title:" + _vm._s(reply.title) + "\n      "),
-                  _c("br"),
-                  _vm._v(
-                    "\n      Name:" + _vm._s(reply.user.name) + "\n      "
-                  ),
-                  _c("br"),
-                  _vm._v(" "),
-                  reply.image
-                    ? _c("div", { staticClass: "img" }, [
-                        _c("img", {
-                          attrs: { src: reply.image.file_url, alt: "投稿画像" }
-                        })
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "space" }, [
-                    _vm._v(_vm._s(reply.message))
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "created_at" }, [
-                    _vm._v("Time:" + _vm._s(reply.created_at))
-                  ]),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  reply.user.id == _vm.userID
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "delete_button",
-                          on: {
-                            click: function($event) {
-                              return _vm.deleteConfirm(reply.id)
-                            }
+      _vm.replies.length > 0
+        ? [
+            _c("h2", [_vm._v("返信")]),
+            _vm._v(" "),
+            _vm._l(_vm.replies, function(reply) {
+              return _c("div", { key: reply.id, staticClass: "postRaw" }, [
+                _vm._v("\n      Title:" + _vm._s(reply.title) + "\n      "),
+                _c("br"),
+                _vm._v("\n      Name:" + _vm._s(reply.user.name) + "\n      "),
+                _c("br"),
+                _vm._v(" "),
+                reply.image
+                  ? _c("div", { staticClass: "img" }, [
+                      _c("img", {
+                        attrs: { src: reply.image.file_url, alt: "投稿画像" }
+                      })
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "space" }, [
+                  _vm._v(_vm._s(reply.message))
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "created_at" }, [
+                  _vm._v("Time:" + _vm._s(reply.created_at))
+                ]),
+                _vm._v(" "),
+                reply.user.id == _vm.userID
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "delete_button",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteConfirm(reply.id)
                           }
-                        },
-                        [_vm._v("削除")]
-                      )
-                    : _vm._e()
-                ])
-              })
-            ],
-            2
-          )
+                        }
+                      },
+                      [_vm._v("削除")]
+                    )
+                  : _vm._e()
+              ])
+            })
+          ]
         : _vm._e(),
       _vm._v(" "),
       _c("Pagination", {
         attrs: { currentPage: _vm.currentPage, lastPage: _vm.lastPage }
       }),
       _vm._v(" "),
-      _c("h2", [_vm._v("返信フォーム")]),
-      _vm._v(" "),
-      _c("Postform", { on: { reloadPosts: _vm.fetchPost } })
+      _vm.isLoggedin
+        ? _c("Postform", {
+            on: { reloadPosts: _vm.fetchPost },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "formTitle",
+                  fn: function() {
+                    return [_vm._v("返信フォーム")]
+                  },
+                  proxy: true
+                }
+              ],
+              null,
+              false,
+              1489387774
+            )
+          })
+        : _vm._e()
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -5093,7 +5054,25 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c("p", [_c("Postform", { on: { reloadPosts: _vm.fetchPosts } })], 1),
+      _vm.isLoggedin
+        ? _c("Postform", {
+            on: { reloadPosts: _vm.fetchPosts },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "formTitle",
+                  fn: function() {
+                    return [_vm._v("新規投稿")]
+                  },
+                  proxy: true
+                }
+              ],
+              null,
+              false,
+              2842016318
+            )
+          })
+        : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.posts, function(post) {
         return _c(

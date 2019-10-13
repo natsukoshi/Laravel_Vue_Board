@@ -20,6 +20,28 @@ class PostDetaileTest extends TestCase
         $this->user = factory(User::class)->create();
     }
 
+
+    /**
+     * @test
+     */
+    public function should_返信がない投稿をAPIを使って取得()
+    {
+        //テストデータを1つ生成
+        factory(Post::class, 1)->create();
+
+        //ひとつ取得
+        $post = Post::first();
+
+        //API経由でIDを指定して投稿を取得
+        $response = $this->json('GET', route('post.detaile', [
+            'id' => $post->id
+        ]));
+
+        $response->dump();
+
+        $response->assertJsonFragment(["data" => []]);
+    }
+
     /**
      * @test
      */
@@ -185,41 +207,4 @@ class PostDetaileTest extends TestCase
         $reply = Reply::first();
         $this->assertNull($reply);
     }
-
-    /**
-     *
-     */
-    // public function should_APIを使って特定の投稿（とその返信）を取得できる()
-    // {
-    //     //テストデータを５つ生成
-    //     factory(Post::class, 5)->create();
-    //     factory(Reply::class, 5)->create();
-
-    //     //ひとつ取得
-    //     $post = Post::first();
-    //     var_dump($post);
-
-    //     $reply = Reply::first();
-    //     var_dump($reply);
-
-    //     //API経由でIDを指定して投稿を取得
-    //     $response = $this->json('GET', route('post.detaile', [
-    //         'id' => $post->id
-    //     ] ));
-
-    //     var_dump($response);
-    //     $response->assertStatus(200);
-
-    //     $response
-    //         ->assertJsonFragment([
-    //                     'id' => $post->id,
-    //                     'message' => $post->message,
-    //                     ])
-    //         ->assertJsonFragment([
-    //                     'name' => $post->user->name,
-    //                     ]);
-
-    //     //todo 返信が取得できることの確認
-
-    // }
 }
