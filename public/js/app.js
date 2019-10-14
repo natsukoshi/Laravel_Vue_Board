@@ -1795,22 +1795,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // data() {
-  //     return {
-  //         // isLoggedin: false,
-  //         // userName:  'tanaka'
-  //     }
-  // },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])("auth", ["username", "isLoggedin"]), {
     isLoginPage: function isLoginPage() {
       return this.$route.path == "/login";
-    } // username () {
-    //     return this.$store.getters['auth/username']
-    // },
-    // isLoggedin() {
-    //     return this.$sotre.getters['auth/isLoggedin']
-    // }
-
+    }
   }),
   methods: {
     logout: function () {

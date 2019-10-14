@@ -65,14 +65,15 @@ body{
     background-color: #6091d3;
     color: #FFF;
     display: block;
-    margin: 0 0 0 auto;
+    margin: 0 0 0 10px;
 }
 .login-logout:hover{
     opacity: 0.8;
     border-style: none;
 }
-.username{
+.userName{
     text-align: left;
+    margin-left: 10px;
 }
 
 h1{
