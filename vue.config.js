@@ -4,4 +4,7 @@ module.exports = {
         disableHostCheck: true
         // port: '8080',
     },
+    configureWebpack: {
+        devtool: 'source-map'
+    }
 }

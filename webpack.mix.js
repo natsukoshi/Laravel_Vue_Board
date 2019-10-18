@@ -19,3 +19,12 @@ mix.browserSync('192.168.33.10')
     // コンパイルしたファイルのバージョニングが有効になる
     // キャッシュでファイル更新が反映されないの防ぐ
     .version();
+//デバッグ用にソースマップを出力する
+
+
+
+if (!mix.inProduction()) {
+    mix.webpackConfig({
+        devtool: 'source-map'
+    }).sourceMaps();
+}
