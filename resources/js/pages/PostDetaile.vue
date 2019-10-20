@@ -23,7 +23,7 @@
       <br />
     </div>
 
-    <template v-if="replies.length > 0">
+    <div v-if="replies.length > 0">
       <h2>返信</h2>
       <div class="postRaw" v-for="reply in replies" :key="reply.id">
         Title:{{ reply.title }}
@@ -41,7 +41,7 @@
           @click="deleteConfirm(reply.id)"
         >削除</button>
       </div>
-    </template>
+    </div>
     <Pagination :currentPage="currentPage" :lastPage="lastPage" />
 
     <Postform v-on:reloadPosts="fetchPost" v-if="isLoggedin">

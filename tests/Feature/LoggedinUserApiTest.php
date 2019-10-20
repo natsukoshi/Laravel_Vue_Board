@@ -14,11 +14,12 @@ class LoggedinUserApiTest extends TestCase
     use RefreshDatabase;
 
     //テスト前に実行したい前処理
-    public function setUp():void{
+    public function setUp(): void
+    {
         parent::setUp();    //前処理をしたい場合必須
 
-         // テストユーザー作成（デフォルトのものを使用）
-         $this->user = factory(User::class)->create();
+        // テストユーザー作成（デフォルトのものを使用）
+        $this->user = factory(User::class)->create();
     }
 
     /**

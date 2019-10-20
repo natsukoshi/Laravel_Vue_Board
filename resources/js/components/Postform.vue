@@ -36,7 +36,7 @@
           id="imgSelectForm"
         />
       </div>
-      <button>メッセージ送信</button>
+      <button>メッセージ投稿</button>
     </form>
   </div>
 </template>
@@ -78,22 +78,13 @@ export default {
       if (this.uploadFile !== "") {
         formData.append("img", this.uploadFile);
       }
-      console.log(formData);
-      console.log(this.$route.params.id);
 
       // パラメータの有無によって切り分け
       if (typeof this.$route.params.id === "undefined") {
-        console.log("投稿");
-        var axiosPost = axios.create({
-          //   xsrfHeaderName: "X-XSRF-TOKEN",
-          xsrfCookieName: "XSRF-TOKEN",
-          withCredentials: true
-        });
-        response = await axiosPost
+        response = await axios
           .post("/api/posts", formData, config)
           .catch(err => err.response || err);
       } else {
-        console.log("返信");
         formData.append("parentID", this.$route.params.id);
         response = await axios
           .post(`/api/reply/${this.$route.params.id}`, formData, config)
@@ -124,10 +115,6 @@ export default {
         return;
       }
 
-      console.log("エラー判定後");
-      //to-do 投稿エラーだった場合の処理
-      // エラーレスポンスを受け取ったときエラーページへ飛ばす
-
       this.titleContent = "";
       this.messasgeContent = "";
       this.postErrors = "";
@@ -136,7 +123,6 @@ export default {
         document.getElementById("imgSelectForm").value = "";
       }
 
-      console.log("emit前");
       this.$emit("reloadPosts");
     },
 

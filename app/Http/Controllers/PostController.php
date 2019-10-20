@@ -8,7 +8,6 @@ use App\Http\Requests\DeletePostRequest;
 
 use App\Post;
 use App\Reply;
-use App\User;
 use App\Image;
 
 class PostController extends Controller
@@ -28,7 +27,6 @@ class PostController extends Controller
      */
     public function create(\App\Http\Requests\CreatePostRequest $request)
     {
-
         $post = new Post;
         $post->message = $request->message;
         $post->title = $request->title;
@@ -66,13 +64,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        \Log::channel('single')->debug("index呼ばれたよ");
-
         $posts = Post::with(['user', 'image'])-> //リレーションシップuser＝投稿者情報も合わせて取得
             orderBy('CREATED_AT', 'desc')->paginate(5);
         // orderBy('CREATED_AT', 'desc')->get();
-
-        \Log::channel('single')->debug("indexでpost取得後");
 
         return $posts;
     }
@@ -102,18 +96,13 @@ class PostController extends Controller
         $post = Post::where('id', $id)->with(['user', 'image'])->first();
         $replies = Reply::where('parent_id', $id)->with(['user', 'image'])->paginate(3);
 
-        \Log::channel('single')->debug("replies出力");
-        \Log::channel('single')->debug($replies);
-
-
-
         // ??　はNULL合体演算子　前半の式が存在するときその式を、存在しないときは後半の式を返す
         return ['post' => $post, 'replies' => $replies] ?? abort(404);
     }
 
     /**
      * 投稿と紐づく返信を削除
-     * @param App\Http\Requests\DeletePostRequest $request
+     * @param \App\Http\Requests\DeletePostRequest $request
      * @return \Illuminate\Http\Response
      */
     public function delete(\App\Http\Requests\DeletePostRequest $request, $id)

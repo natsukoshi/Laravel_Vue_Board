@@ -67,12 +67,9 @@ export default {
     //投稿を全て取得する
     async fetchPosts() {
       const response = await axios.get(`/api/posts?page=${this.page}`);
-
       this.posts = response.data.data;
       this.currentPage = response.data.current_page;
       this.lastPage = response.data.last_page;
-
-      console.log(response.data);
     },
 
     // 投稿を削除する

@@ -58,3 +58,18 @@ Route::post('/reply/{id}', 'ReplyController@create')->name('reply.create');
 
 //指定したIDの返信投稿を削除する
 Route::delete('/reply/{id}', 'ReplyController@delete')->name('reply.delete');
+
+////////////////////////ReplyController////////////////////////////////////////
+
+
+////////////////////////UserController////////////////////////////////////////
+
+//ユーザの一覧を取得(管理用)
+Route::get('/admin/users', 'UserController@index')->name('user.index');
+
+//ユーザを削除(管理用)
+Route::delete('/admin/users/{id}', 'UserController@delete')->name('user.delete');
+
+
+
+////////////////////////UserController////////////////////////////////////////

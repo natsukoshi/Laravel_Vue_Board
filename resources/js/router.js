@@ -7,7 +7,9 @@ import Login from './pages/Login.vue'
 import SystemError from './pages/Error.vue'
 import Notfound from './pages/Notfound.vue'
 import PostDetaile from './pages/PostDetaile.vue'
-import CSRFError from './pages/CSRFError.vue'
+import UserList from './pages/UserList.vue'
+
+// import CSRFError from './pages/CSRFError.vue'
 // ストア
 import store from './store'
 
@@ -23,6 +25,15 @@ const routes = [
     {
         path: '/',
         component: PostList,
+        props: route => {
+            const page = route.query.page
+            // pageというpropsを返却：queryのpageが数字以外の場合は1となる
+            return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+        }
+    },
+    {
+        path: '/admin/users',
+        component: UserList,
         props: route => {
             const page = route.query.page
             // pageというpropsを返却：queryのpageが数字以外の場合は1となる

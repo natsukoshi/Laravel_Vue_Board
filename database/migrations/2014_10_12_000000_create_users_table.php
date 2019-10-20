@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(); //google認証用
+            $table->boolean('admin_flg')->default(false);   //管理者フラグ ture:管理者を示す
+            $table->boolean('delete_flg')->default(false);  //削除フラグ　ture:削除済を示す
             $table->rememberToken();
             $table->timestamps();
 

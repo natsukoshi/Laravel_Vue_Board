@@ -2863,6 +2863,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2882,7 +2895,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       users: [],
       currentPage: 0,
-      lastPage: 0
+      lastPage: 0,
+      errors: ""
     };
   },
   methods: {
@@ -2897,16 +2911,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/admin/users?page=".concat(this.page));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/admin/users?page=".concat(this.page))["catch"](function (err) {
+                  return err.response || err;
+                });
 
               case 2:
                 response = _context.sent;
+
+                if (!(response.status == "403")) {
+                  _context.next = 8;
+                  break;
+                }
+
+                // this.$router.push("/404");
                 console.log(response.data);
+                console.log(response.status);
+                this.errors = response.data.message;
+                return _context.abrupt("return");
+
+              case 8:
+                console.log(response.data);
+                console.log(response.status);
                 this.users = response.data.data;
                 this.currentPage = response.data.current_page;
-                this.lastPage = response.data.last_page;
+                this.lastPage = response.data.last_page; // 投稿を削除する
+                // async deletePost(targetID) {
+                //   const response = await axios
+                //     .delete(`/api/posts/${targetID}`)
+                //     .catch(function(err) {
+                //       return err.response || err;
+                //     });
+                //   // 取得エラー時の処理
+                //   if (response.status === NOT_FOUND) {
+                //     this.$router.push("/404");
+                //   } else if (response.status === INTERNAL_SERVER_ERROR) {
+                //     this.$router.push("/500");
+                //   }
+                //   this.closeModal();
+                //   this.fetchPosts();
+                // },
+                // deleteConfirm(targetID) {
+                //   this.showModal = true;
+                //   this.deleteTargetID = targetID;
+                // },
+                // closeModal() {
+                //   this.showModal = false;
+                //   this.deleteTargetID = null;
+                // }
 
-              case 7:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -2919,31 +2972,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return fetchUsers;
-    }() // 投稿を削除する
-    // async deletePost(targetID) {
-    //   const response = await axios
-    //     .delete(`/api/posts/${targetID}`)
-    //     .catch(function(err) {
-    //       return err.response || err;
-    //     });
-    //   // 取得エラー時の処理
-    //   if (response.status === NOT_FOUND) {
-    //     this.$router.push("/404");
-    //   } else if (response.status === INTERNAL_SERVER_ERROR) {
-    //     this.$router.push("/500");
-    //   }
-    //   this.closeModal();
-    //   this.fetchPosts();
-    // },
-    // deleteConfirm(targetID) {
-    //   this.showModal = true;
-    //   this.deleteTargetID = targetID;
-    // },
-    // closeModal() {
-    //   this.showModal = false;
-    //   this.deleteTargetID = null;
-    // }
-
+    }()
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])("auth", [//ストア内のパスを指定
   "isLoggedin"]), {
@@ -5243,30 +5272,62 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm._l(_vm.users, function(user) {
-        return _c("div", { key: user.id, staticClass: "postRaw" }, [
-          _vm._v("\n    ID:" + _vm._s(user.id) + "\n    "),
-          _c("br"),
-          _vm._v("\n    Name:" + _vm._s(user.name) + "\n    "),
-          _c("br"),
-          _vm._v(" "),
-          _c("div", { staticClass: "created_at" }, [
-            _vm._v("Time:" + _vm._s(user.created_at))
-          ])
-        ])
-      }),
-      _vm._v(" "),
-      _c("Pagination", {
-        attrs: { currentPage: _vm.currentPage, lastPage: _vm.lastPage }
-      })
-    ],
-    2
-  )
+  return _c("div", [
+    _vm.errors
+      ? _c("div", { staticClass: "error" }, [_vm._v(_vm._s(_vm.errors))])
+      : _c(
+          "div",
+          [
+            _c(
+              "table",
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.users, function(user) {
+                  return _c("tr", { key: user.id }, [
+                    _c("td", [_vm._v(_vm._s(user.id))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.created_at))]),
+                    _vm._v(" "),
+                    _vm._m(1, true)
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("Pagination", {
+              attrs: { currentPage: _vm.currentPage, lastPage: _vm.lastPage }
+            })
+          ],
+          1
+        )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("ID")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("名前")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("登録日時")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("ユーザ削除")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [_c("button", [_vm._v("未実装")])])
+  }
+]
 render._withStripped = true
 
 
@@ -22162,7 +22223,7 @@ var routes = [{
     };
   }
 }, {
-  path: '/users',
+  path: '/admin/users',
   component: _pages_UserList_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
   props: function props(route) {
     var page = route.query.page; // pageというpropsを返却：queryのpageが数字以外の場合は1となる
