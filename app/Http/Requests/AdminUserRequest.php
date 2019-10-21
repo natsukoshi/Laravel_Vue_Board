@@ -15,7 +15,8 @@ class AdminUserRequest extends FormRequest
     public function authorize()
     {
         //管理者ユーザでログインしているときのみ使用可能
-        return Auth::user()->admin_flg;
+        $user = Auth::user();
+        return $user && $user->admin_flg;
     }
 
     /**

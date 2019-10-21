@@ -2876,6 +2876,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -5274,7 +5277,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _vm.errors
-      ? _c("div", { staticClass: "error" }, [_vm._v(_vm._s(_vm.errors))])
+      ? _c(
+          "div",
+          [
+            _c("div", { staticClass: "error" }, [_vm._v(_vm._s(_vm.errors))]),
+            _vm._v(" "),
+            _c("RouterLink", { attrs: { to: "/" } }, [_vm._v("Topへ戻る")])
+          ],
+          1
+        )
       : _c(
           "div",
           [

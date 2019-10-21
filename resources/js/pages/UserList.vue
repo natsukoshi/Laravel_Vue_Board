@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="errors" class="error">{{errors}}</div>
+    <div v-if="errors">
+      <div class="error">{{errors}}</div>
+      <RouterLink to="/">Topへ戻る</RouterLink>
+    </div>
     <div v-else>
       <table>
         <tr>
