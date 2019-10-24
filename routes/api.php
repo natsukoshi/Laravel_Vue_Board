@@ -68,7 +68,7 @@ Route::delete('/reply/{id}', 'ReplyController@delete')->name('reply.delete');
 Route::get('/admin/users', 'UserController@index')->name('user.index');
 
 //ユーザを削除(管理用)
-Route::delete('/admin/users/{id}', 'UserController@delete')->name('user.delete');
+Route::delete('/admin/users', 'UserController@delete')->name('user.delete');
 
 
 

@@ -35,6 +35,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'delete_flg' => 'boolean',
+        'admin_flg' => 'boolean',
     ];
 
 
@@ -45,7 +47,7 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany('App\Post');
-                        // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
+        // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
     }
 
     /**
@@ -55,6 +57,6 @@ class User extends Authenticatable
     public function replies()
     {
         return $this->hasMany('App\Reply');
-                        // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
+        // ('対象のモデル', '子の外部キー', '親のモデルの主キー')
     }
 }

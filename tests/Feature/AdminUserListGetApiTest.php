@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\User;
 
-class UserListGetApiTest extends TestCase
+class AdminUserListGetApiTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -45,4 +45,22 @@ class UserController extends Controller
             return '';
         }
     }
+
+    /**
+     * ログイン済みのユーザを取得
+     * @return App\User or 空文字
+     */
+    public function delete(\App\Http\Requests\AdminUserDeleteRequest $request)
+    {
+        $user = User::find($request->id);
+
+        $user->delete_flg = true;
+        $user->name = "退会済み";
+        $user->email = "";
+        $user->password = "";
+
+        $user->update();
+
+        return response("", 204);
+    }
 }
