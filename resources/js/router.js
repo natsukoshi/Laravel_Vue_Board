@@ -80,7 +80,14 @@ const routes = [
 // VueRouterインスタンスを作成する
 const router = new VueRouter({
     mode: 'history', //Historyモードにする。URLから#を除く
-    routes
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { x: 0, y: 0 }
+        }
+    }
 })
 
 // VueRouterインスタンスをエクスポートする

@@ -22284,7 +22284,17 @@ var routes = [{
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
   //Historyモードにする。URLから#を除く
-  routes: routes
+  routes: routes,
+  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return {
+        x: 0,
+        y: 0
+      };
+    }
+  }
 }); // VueRouterインスタンスをエクスポートする
 // app.jsでインポートするため
 
