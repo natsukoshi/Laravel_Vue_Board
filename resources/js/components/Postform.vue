@@ -1,5 +1,10 @@
 <template >
   <div>
+    <LoadingWindow v-if="isPosting">
+      <template slot="message">
+        <p>投稿中です。しばらくお待ちください。</p>
+      </template>
+    </LoadingWindow>
     <h2>
       <slot name="formTitle"></slot>
     </h2>
@@ -50,14 +55,19 @@ import {
   CSRF_TOKEN_ERROR
 } from "../util";
 import { POST_PAGE, REPLY_PAGE } from "../util";
+import LoadingWindow from "./LoadingWindow.vue";
 
 export default {
+  components: {
+    LoadingWindow
+  },
   data() {
     return {
       titleContent: "",
       messasgeContent: "",
       postErrors: "",
-      uploadFile: ""
+      uploadFile: "",
+      isPosting: false
     };
   },
   computed: {
@@ -68,6 +78,8 @@ export default {
   },
   methods: {
     async postMessage() {
+      this.isPosting = true;
+
       let response;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
@@ -93,15 +105,12 @@ export default {
 
       //バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {
-        console.log("バリデーションエラー");
-
         this.postErrors = response.data.errors;
+        this.isPosting = false;
         console.log(this.postErrors);
         return;
       }
       if (response.status === CSRF_TOKEN_ERROR) {
-        console.log("CSRFTOKEN ERROR");
-
         this.postErrors = response.data.errors;
         console.log(this.postErrors);
         console.log(response);
@@ -124,6 +133,7 @@ export default {
       }
 
       this.$emit("reloadPosts");
+      this.isPosting = false;
     },
 
     // 画像のアップロード
