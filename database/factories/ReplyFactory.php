@@ -13,7 +13,7 @@ $factory->define(App\Reply::class, function (Faker $faker) {
         'user_id' => function () {
             return factory(App\User::class)->create()->id;
         },
-        'parent_post_id' => function () {
+        'parent_id' => function () {
             return factory(App\Post::class)->create()->id;
         },
         'attachment_id' => function () {
