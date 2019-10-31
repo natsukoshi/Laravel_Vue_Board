@@ -28,7 +28,9 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 //ログイン済みユーザの取得
-Route::get('/user', 'PostController@user')->name('user');
+// Route::get('/user', 'PostController@user')->name('user');
+Route::get('/user', 'UserController@user')->name('user');
+
 
 ////////////////////////ユーザ登録・認証など////////////////////////////////////////
 
@@ -44,6 +46,9 @@ Route::get('/posts', 'PostController@index')->name('post.index');
 
 //特定の投稿とそれに対する返信を取得
 Route::get('/posts/{id}', 'PostController@detaile')->name('post.detaile');
+
+//指定したユーザIDの投稿を全て取得する
+Route::get('/posts/user/{id}', 'PostController@userPosts')->name('post.user');
 
 //指定したIDの返信投稿を削除する
 Route::delete('/posts/{id}', 'PostController@delete')->name('posts.delete');
