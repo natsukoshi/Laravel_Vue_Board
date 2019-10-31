@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Post;
 
-class Reply extends Post
+class Reply extends Model
 {
     /**
      * リレーションシップ - usersテーブル　投稿の投稿者を取得する
