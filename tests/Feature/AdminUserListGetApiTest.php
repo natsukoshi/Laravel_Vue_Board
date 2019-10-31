@@ -18,7 +18,8 @@ class AdminUserListGetApiTest extends TestCase
         parent::setUp();    //前処理をしたい場合必須
 
         // テストユーザー作成（デフォルトのものを使用）
-        $this->users = factory(User::class, 5)->create();
+        $this->admin_user = factory(User::class)->state('管理者')->create();
+        $this->users = factory(User::class, 4)->create();
     }
 
     /**
@@ -28,45 +29,33 @@ class AdminUserListGetApiTest extends TestCase
     public function should_ユーザ一覧を取得できる()
     {
 
-        // $response = $this->json('POST', route('login'), $loginInfo);
-        // var_dump($response->content()); //JSONを取り出す
+        $response = $this->actingAs($this->admin_user)
+                        ->json('GET', route('user.index'));
 
-        // $response
-        //     ->assertStatus(200)
-        //     ->assertJson(['name' => $this->user->name]);
-
-        // $this->assertAuthenticatedAs($this->user);
-
-        $response = $this->json('GET', route('user.index'));
-
-        $response->dump();
+        // $response->dump();
 
         $response
             ->assertStatus(200)
-            ->assertJsonCount(5);
+            ->assertJsonCount(5, 'data');
 
         $users = User::all();
 
         // data項目の期待値
-        // $expected_data = $this->users->map(function ($user) {
         $expected_data = $users->map(function ($user) {
             return [
                 'id' => $user->id,
                 'provider_id' => $user->provider_id,
                 'provider_name' => $user->provider_name,
-                "created_at" =>  $user->created_at,
-                "updated_at" =>  $user->updated_at,
+                "created_at" =>  $user->created_at->format('Y-m-d H:i:s'),
+                "updated_at" =>  $user->updated_at->format('Y-m-d H:i:s'),
                 "name" => $user->name,
                 'email' => $user->email,
-                'email_verified_at' => $user->email_verified_at,
+                'email_verified_at' => $user->email_verified_at->format('Y-m-d H:i:s'),
             ];
         })->all();
 
-        // foreach ($response as $res) {
-        //     $res->assertJsonFragment(['data' => $expected_data]);
-        //     // $res->dump();
-        // }
-
-        $response->assertJsonFragment(['data' => $expected_data]);
+        foreach($expected_data as $data){
+            $response->assertJsonFragment($data);
+        }
     }
 }
