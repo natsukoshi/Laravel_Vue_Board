@@ -73,21 +73,6 @@ class PostController extends Controller
 
 
     /**
-     * ログイン済みのユーザを取得
-     * @return App\User or 空文字
-     */
-    public function user()
-    {
-        if (Auth::check()) {
-            // \Log::channel('single')->debug('ログインしてる');
-            return Auth::user();
-        } else {
-            // \Log::channel('single')->debug('ログインしてない');
-            return '';
-        }
-    }
-
-    /**
      * 指定されたIDの投稿の詳細（投稿と返信）を取得します
      * @return App\Post or 404エラー
      */
@@ -126,5 +111,21 @@ class PostController extends Controller
 
         // リソースの削除なので204(No Content)を返す
         return response($post, 204);
+    }
+
+
+    /**
+     * 指定のユーザの投稿を全て取得
+     * @return App\User or 空文字
+     */
+    public function userPosts(Request $request, $id)
+    {
+        $posts = Post::where('user_id', $id)->with(['user'])->get();
+        $replies = Reply::where('user_id', $id)->with(['user'])->get();
+
+        //一つの配列にしてソートして返す
+        $sortedData = $posts->concat($replies)->sortByDesc('updated_at');
+
+        return $sortedData ?? abort(404);
     }
 }

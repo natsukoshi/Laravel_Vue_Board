@@ -53,12 +53,6 @@ class AdminUserDeleteApiTest extends TestCase
         \PHPUnit\Framework\Assert::assertEquals($deletedUser->email, "");
         \PHPUnit\Framework\Assert::assertEquals($deletedUser->password, "");
 
-        //以下を確認する
-        //削除フラグがtrueである
-        //ユーザ名が削除済みになっている
-        //メールアドレスが空
-        //パスワードが空
-
         //todo　削除したユーザでログインできないことを確認する
     }
 

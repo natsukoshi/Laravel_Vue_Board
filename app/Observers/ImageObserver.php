@@ -37,20 +37,8 @@ class ImageObserver
     public function deleted(Image $image)
     {
         $image->deleteImageFile();
-        \Log::channel('single')->debug("ImageObserverのdeleted呼ばれた");
     }
 
-    // /**
-    //  * Handle the image "deleting" event.
-    //  * Imageのレコード削除時に画像ファイルも削除する
-    //  *
-    //  * @param  \App\Image  $image
-    //  * @return void
-    //  */
-    // public function deleting(Image $image)
-    // {
-    //     $image->deleteImageFile();
-    // }
 
     /**
      * Handle the image "restored" event.
